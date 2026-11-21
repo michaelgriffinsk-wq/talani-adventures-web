@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Talani Studio — Live Mirror Editor, Cloudinary Auto-Sync &amp; Operations</title>
+  <title>Talani Studio — Live Mirror Builder, Cloudinary Folders &amp; Operations</title>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root{--ink:#304b54;--stone:#968d80;--paper:#f8f7f3;--line:#dcded9;--mist:#e9eeec}
@@ -13,54 +13,43 @@
     .eyebrow{letter-spacing:.23em;text-transform:uppercase}
     :is(a,button,input,select,textarea):focus-visible{outline:3px solid #ad8970;outline-offset:3px}
 
-    /* Live Website Header Mirror */
+    /* Shared Live Website Header */
     .sticky-header{position:sticky;top:0;z-index:40;background:rgba(248,247,243,.97);backdrop-filter:blur(14px)}
     .header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
     .header-brand{display:flex;align-items:center;gap:12px;min-width:0}
     .header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
     .subnav-strip{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:10px 0}
-    .subnav-strip::-webkit-scrollbar,.studio-bar::-webkit-scrollbar,.toolbar-strip::-webkit-scrollbar{display:none}
+    .subnav-strip::-webkit-scrollbar,.studio-bar::-webkit-scrollbar{display:none}
     .subnav-link{flex:none;font-size:12px;font-weight:700;color:var(--ink);text-decoration:none;padding:8px 14px;border:1px solid var(--line);background:white;white-space:nowrap;cursor:pointer}
     .subnav-link.active,.subnav-link:hover{border-color:var(--ink);background:var(--mist)}
 
-    /* Studio Mode Bar */
+    /* Studio Extra Control Ribbon */
     .studio-ribbon{background:#304b54;color:white;border-bottom:1px solid #22373e}
     .studio-bar{display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;padding:10px 0}
     .mode-pill{flex:none;border:1px solid rgba(255,255,255,.35);background:transparent;color:white;padding:7px 14px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
     .mode-pill[aria-pressed=true]{background:#f8f7f3;color:#304b54;border-color:#f8f7f3}
 
-    /* Shared Top Formatting & Component Toolbar (Access/Word Style) */
-    .shared-toolbar{background:#eef1ef;border-bottom:1px solid #cfd6d2}
-    .toolbar-strip{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;padding:8px 0}
-    .tb-btn{flex:none;background:white;border:1px solid #bfc9c5;color:var(--ink);padding:6px 11px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
-    .tb-btn:hover{background:var(--mist);border-color:var(--ink)}
-    .tb-btn.primary{background:var(--ink);color:white;border-color:var(--ink)}
-    .tb-btn.danger{color:#8f2424;border-color:#d8b4b4}
-    .tb-sep{width:1px;height:20px;background:#cfd6d2;flex:none;margin:0 2px}
-
-    /* Live Mirror Stage */
+    /* Live Mirror Interactive Wrapper */
     .mirror-stage{position:relative;border:2px dashed #bfc9c5;background:var(--paper)}
-    .mirror-section{position:relative;transition:outline .15s,opacity .15s,background-color .2s;cursor:pointer}
+    .mirror-section{position:relative;transition:outline .15s,opacity .15s;cursor:pointer}
     .mirror-section:hover{outline:2px dashed #968d80;outline-offset:-2px}
     .mirror-section.selected{outline:3px solid #304b54;outline-offset:-3px}
     .mirror-section.is-hidden{opacity:.42;filter:grayscale(.6)}
-    .section-badge{display:inline-flex;align-items:center;gap:6px;background:#304b54;color:white;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;margin:8px}
-    .comp-item{position:relative;border:1px dashed transparent;padding:4px;transition:border-color .15s}
-    .comp-item:hover{border-color:#968d80}
-    .comp-item.comp-selected{border:2px solid #ad8970;background:rgba(255,255,255,.55)}
+    .section-badge{position:sticky;top:118px;z-index:15;display:inline-flex;align-items:center;gap:6px;background:#304b54;color:white;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;margin:8px}
 
     /* Shared Live Site Card Styles */
     .photo-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line)}
     .photo-strip img{width:100%;height:105px;object-fit:cover;display:block}
     .slot-badge{background:#e5eee8;color:#315d4d;padding:6px 9px;font-size:11px;font-weight:700;white-space:nowrap}
-    .upload-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}
-    .upload-thumbs img{width:100%;height:82px;object-fit:cover;border:1px solid var(--line)}
+    .upload-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:8px}
+    .upload-thumbs img{width:100%;height:84px;object-fit:cover;border:1px solid var(--line)}
     .hidden{display:none!important}
     @media(max-width:767px){.header-actions{width:100%;justify-content:flex-start}}
   </style>
   <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
 </head>
 <body class="w-full" style="background: rgb(248, 247, 243);">
+  <!-- LIVE WEBSITE HEADER MIRROR -->
   <header class="sticky-header w-full border-b border-[#dcded9]">
     <div class="max-w-7xl mx-auto px-6 md:px-10 py-3 header-top">
       <div class="header-brand">
@@ -69,17 +58,19 @@
         </a>
         <div class="min-w-0">
           <p class="display font-medium leading-tight text-[#304b54] text-lg md:text-xl">Talani Adventures <span class="text-xs font-sans font-bold uppercase tracking-wider bg-[#e9eeec] px-2 py-0.5 ml-1">Studio</span></p>
-          <p class="text-[11px] tracking-wide text-[#968d80] font-semibold">@talani.adventures • Visual Builder &amp; Cloudinary Auto-Sync</p>
+          <p class="text-[11px] tracking-wide text-[#968d80] font-semibold">@talani.adventures • Live Site Mirror &amp; Editor</p>
         </div>
       </div>
       <div class="header-actions">
+        <a href="https://www.instagram.com/talani.adventures/" target="_blank" rel="noopener noreferrer" class="border border-[#dcded9] bg-white px-3 py-1.5 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">Instagram ↗</a>
+        <a href="https://www.tiktok.com/@talani.adventures" target="_blank" rel="noopener noreferrer" class="border border-[#dcded9] bg-white px-3 py-1.5 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">TikTok ↗</a>
         <a href="./index.html" class="border border-[#304b54] bg-[#304b54] px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90">View Live Site ↗</a>
       </div>
     </div>
 
-    <!-- PAGE SWITCHER -->
+    <!-- PAGE SWITCHER (MIRRORS LIVE SUBNAV) -->
     <div class="border-t border-[#e6e8e3] bg-[#f8f7f3]">
-      <div id="page-tabs" class="max-w-7xl mx-auto px-6 md:px-10 subnav-strip" role="tablist" aria-label="Select page to mirror">
+      <div id="page-tabs" class="max-w-7xl mx-auto px-6 md:px-10 subnav-strip" role="tablist" aria-label="Select page to mirror and edit">
         <button type="button" class="subnav-link active" data-page="index">Overview (index)</button>
         <button type="button" class="subnav-link" data-page="group-ya-ile-kitu">Group ya Ile Kitu</button>
         <button type="button" class="subnav-link" data-page="outdoor-adventures">Outdoor Adventures</button>
@@ -89,58 +80,42 @@
       </div>
     </div>
 
-    <!-- STUDIO DRAWER SWITCHER -->
+    <!-- EXTRA STUDIO FUNCTIONS RIBBON -->
     <div class="studio-ribbon">
       <div class="max-w-7xl mx-auto px-6 md:px-10 studio-bar">
-        <button type="button" class="mode-pill" data-drawer="editor-drawer" aria-pressed="true">1. Page Editor</button>
-        <button type="button" class="mode-pill" data-drawer="cloudinary-drawer" aria-pressed="false">2. Cloudinary Auto-Upload &amp; Save</button>
+        <button type="button" class="mode-pill" data-drawer="editor-drawer" aria-pressed="true">1. Page Layout &amp; Buttons</button>
+        <button type="button" class="mode-pill" data-drawer="cloudinary-drawer" aria-pressed="false">2. Cloudinary Folders</button>
         <button type="button" class="mode-pill" data-drawer="trips-drawer" aria-pressed="false">3. Trips &amp; Slots</button>
         <button type="button" class="mode-pill" data-drawer="leads-drawer" aria-pressed="false">4. Group Inquiries</button>
         <span id="studio-status" class="text-[11px] text-[#d2dcd9] ml-auto whitespace-nowrap">Ready</span>
       </div>
     </div>
-
-    <!-- SHARED TOP FORMATTING & COMPONENT TOOLBAR -->
-    <div class="shared-toolbar">
-      <div class="max-w-7xl mx-auto px-6 md:px-10 toolbar-strip" role="toolbar" aria-label="Page and component editing bar">
-        <button type="button" id="tb-move-up" class="tb-btn" title="Move selected section or component up">↑ Move Up</button>
-        <button type="button" id="tb-move-down" class="tb-btn" title="Move selected section or component down">↓ Move Down</button>
-        <span class="tb-sep"></span>
-        <button type="button" id="tb-add-text" class="tb-btn">+ Text Block</button>
-        <button type="button" id="tb-edit-text" class="tb-btn">✎ Edit Text</button>
-        <button type="button" id="tb-add-photo" class="tb-btn">+ Photo Slot</button>
-        <button type="button" id="tb-add-btn" class="tb-btn">+ Button</button>
-        <button type="button" id="tb-cycle-bg" class="tb-btn">◐ Background</button>
-        <button type="button" id="tb-delete" class="tb-btn danger">✕ Delete Selected</button>
-        <span class="tb-sep"></span>
-        <button type="button" id="tb-save-draft" class="tb-btn">Save Draft</button>
-        <button type="button" id="tb-publish" class="tb-btn primary">Publish Live ↗</button>
-      </div>
-    </div>
   </header>
 
-  <section class="max-w-7xl mx-auto px-6 md:px-10 pt-5">
-    <!-- DRAWER 1: COMPACT CONTEXT INSPECTOR -->
-    <div id="editor-drawer" class="bg-white border border-[#dcded9] p-5 mb-5">
-      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+  <!-- EXTRA STUDIO WORKSPACE DRAWERS (COMPACT & PRACTICAL) -->
+  <section class="max-w-7xl mx-auto px-6 md:px-10 pt-6">
+    <!-- DRAWER 1: SELECTED SECTION INSPECTOR -->
+    <div id="editor-drawer" class="bg-white border border-[#dcded9] p-5 md:p-6 mb-6">
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-4 mb-4 border-b border-[#dcded9]">
         <div>
-          <p class="eyebrow text-[10px] font-bold text-[#968d80]">Selected Target</p>
-          <h2 id="selected-label" class="display text-lg text-[#304b54]">Tap any section or added component below</h2>
+          <p class="eyebrow text-[10px] font-bold text-[#968d80]">Selected Section on Mirrored Page</p>
+          <h2 id="selected-label" class="display text-xl text-[#304b54]">Tap any section below to edit</h2>
         </div>
-        <span id="selected-type-badge" class="text-[11px] font-bold uppercase px-2.5 py-1 bg-[#e9eeec] text-[#304b54]">Section</span>
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" id="move-up-btn" class="border border-[#dcded9] px-3 py-2 text-xs font-bold hover:bg-[#e9eeec] cursor-pointer">↑ Move Up</button>
+          <button type="button" id="move-down-btn" class="border border-[#dcded9] px-3 py-2 text-xs font-bold hover:bg-[#e9eeec] cursor-pointer">↓ Move Down</button>
+          <button type="button" id="save-draft-btn" class="border border-[#304b54] px-3.5 py-2 text-xs font-bold text-[#304b54] hover:bg-[#e9eeec] cursor-pointer">Save Draft</button>
+          <button type="button" id="publish-btn" class="bg-[#304b54] text-white px-4 py-2 text-xs font-bold uppercase tracking-wider hover:opacity-85 cursor-pointer">Publish Live ↗</button>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div class="grid md:grid-cols-4 gap-4 items-end">
         <div>
-          <label for="inp-heading" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Heading / Label</label>
-          <input id="inp-heading" type="text" placeholder="Section heading or button text" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-sm" />
+          <label for="inp-heading" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Heading Text</label>
+          <input id="inp-heading" type="text" placeholder="Default section heading" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-sm" />
         </div>
         <div>
-          <label for="inp-body" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Text / Image URL / Target</label>
-          <input id="inp-body" type="text" placeholder="Body text, https:// image URL, or link" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-sm" />
-        </div>
-        <div>
-          <label for="inp-width" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Width (%)</label>
+          <label for="inp-width" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Section Width (%)</label>
           <select id="inp-width" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-sm">
             <option value="100">100% (Full)</option>
             <option value="90">90% (Wide)</option>
@@ -149,64 +124,60 @@
           </select>
         </div>
         <div>
-          <label for="inp-bg" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Section Background</label>
-          <select id="inp-bg" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-sm">
-            <option value="default">Warm Paper (#f8f7f3)</option>
-            <option value="white">Crisp White (#ffffff)</option>
-            <option value="mist">Sage Mist (#e9eeec)</option>
-            <option value="ink">Deep Slate (#304b54)</option>
+          <label for="inp-scale" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Section Size / Scale</label>
+          <select id="inp-scale" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-sm">
+            <option value="0.92">Compact (0.92×)</option>
+            <option value="1">Standard (1.0×)</option>
+            <option value="1.05">Large (1.05×)</option>
           </select>
         </div>
+        <div class="pb-2">
+          <label class="inline-flex items-center gap-2 text-xs font-bold cursor-pointer">
+            <input id="inp-hidden" type="checkbox" />
+            Hide section on customer page
+          </label>
+        </div>
       </div>
+
+      <!-- SIMPLE BUTTON & ACTION WIRING -->
+      <div class="mt-4 pt-4 border-t border-[#dcded9] grid sm:grid-cols-[1fr_1fr_1.2fr_auto] gap-2.5 items-center">
+        <input id="btn-label" type="text" placeholder="New button text (e.g., Book Gatamaiyu)" class="border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
+        <select id="btn-action" class="border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs">
+          <option value="link">Open Page or URL</option>
+          <option value="scroll">Scroll to Section (#id)</option>
+          <option value="select-destination">Inquire Destination</option>
+        </select>
+        <input id="btn-target" type="text" placeholder="e.g., ./group-ya-ile-kitu.html or #inquiry-section" class="border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
+        <button id="add-btn" type="button" class="bg-[#304b54] text-white px-4 py-2 text-xs font-bold uppercase tracking-wider cursor-pointer">+ Add Button</button>
+      </div>
+      <div id="attached-buttons" class="flex flex-wrap gap-2 mt-3"></div>
     </div>
 
-    <!-- DRAWER 2: ONE-CLICK CLOUDINARY UPLOAD + FIRESTORE + GITHUB AUTO-COMMIT -->
-    <div id="cloudinary-drawer" class="hidden bg-white border border-[#dcded9] p-5 md:p-6 mb-5 space-y-4">
-      <div>
-        <p class="eyebrow text-[10px] font-bold text-[#968d80]">One-Click Media Automation • Nx35scok</p>
-        <h2 class="display text-xl text-[#304b54]">Upload to Cloudinary &amp; Save Live Automatically</h2>
-        <p class="text-xs text-[#52636a] mt-1">Clicking <strong>Save &amp; Upload to Live</strong> uploads photos to the destination's Cloudinary folder, saves URLs to Firestore (<code>destination_media</code>), and optionally commits directly to <code>public/itinerary-data.js</code> if your browser-only GitHub token is set.</p>
+    <!-- DRAWER 2: CLOUDINARY DESTINATION FOLDER UPLOADER -->
+    <div id="cloudinary-drawer" class="hidden bg-white border border-[#dcded9] p-5 md:p-6 mb-6 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <p class="eyebrow text-[10px] font-bold text-[#968d80]">Cloudinary Media Library · Nx35scok</p>
+          <h2 class="display text-xl text-[#304b54]">Upload Destination Photos to Folder</h2>
+        </div>
+        <button id="cld-copy-btn" type="button" class="border border-[#304b54] px-3.5 py-2 text-xs font-bold text-[#304b54] hover:bg-[#e9eeec] cursor-pointer">Copy JSON Snippet</button>
       </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div>
-          <label for="cld-dest" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Destination (All 54 + Outdoor)</label>
-          <select id="cld-dest" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2.5 text-xs font-semibold"></select>
-        </div>
-        <div>
-          <label for="cld-folder" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Cloudinary Folder Path</label>
-          <input id="cld-folder" type="text" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2.5 text-xs font-mono" />
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-[#f8f7f3] border border-[#dcded9] p-3.5">
-        <div>
-          <label for="gh-repo" class="block text-[11px] font-bold uppercase tracking-wider mb-1">GitHub Repo (owner/repo)</label>
-          <input id="gh-repo" type="text" value="michaelgriffinsk-wq/talani-adventures-web" class="w-full border border-[#dcded9] bg-white px-3 py-2 text-xs font-mono" />
-        </div>
-        <div>
-          <label for="gh-pat" class="block text-[11px] font-bold uppercase tracking-wider mb-1">GitHub Fine-Grained Token (Stored ONLY in Browser)</label>
-          <div class="flex gap-2">
-            <input id="gh-pat" type="password" placeholder="github_pat_... (Contents: Read & Write)" class="w-full border border-[#dcded9] bg-white px-3 py-2 text-xs font-mono" />
-            <button type="button" id="save-pat-btn" class="border border-[#304b54] bg-white px-3 py-2 text-xs font-bold shrink-0 cursor-pointer">Save Token</button>
-          </div>
+      <div class="grid sm:grid-cols-3 gap-3">
+        <select id="cld-dest" class="border border-[#dcded9] bg-[#f8f7f3] px-3 py-2.5 text-xs font-semibold"></select>
+        <input id="cld-folder" type="text" class="border border-[#dcded9] bg-[#f8f7f3] px-3 py-2.5 text-xs font-mono" />
+        <div class="flex gap-2">
+          <input id="cld-files" type="file" accept="image/*" multiple class="w-full border border-[#dcded9] bg-[#f8f7f3] p-1.5 text-xs" />
+          <button id="cld-upload-btn" type="button" class="bg-[#304b54] text-white px-4 py-2 text-xs font-bold shrink-0 cursor-pointer">Upload</button>
         </div>
       </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3 items-center">
-        <input id="cld-files" type="file" accept="image/*" multiple class="w-full border border-[#dcded9] bg-[#f8f7f3] p-2.5 text-xs" />
-        <button id="cld-auto-save-btn" type="button" class="bg-[#304b54] text-white px-6 py-3 text-xs font-bold uppercase tracking-wider cursor-pointer hover:opacity-85">Save &amp; Upload to Live ↗</button>
-      </div>
-
-      <p id="cld-status" class="text-xs font-bold text-[#315d4d] min-h-[1.25rem]"></p>
       <div id="cld-thumbs" class="upload-thumbs"></div>
-      <textarea id="cld-json" rows="4" readonly placeholder="Generated photos JSON snippet (also saved to Firestore & GitHub)..." class="w-full border border-[#dcded9] bg-[#f8f7f3] p-2.5 text-xs font-mono"></textarea>
+      <textarea id="cld-json" rows="4" readonly placeholder="Uploaded Cloudinary photo JSON entries appear here..." class="w-full border border-[#dcded9] bg-[#f8f7f3] p-2.5 text-xs font-mono"></textarea>
     </div>
 
     <!-- DRAWER 3: TRIPS & SLOTS -->
-    <div id="trips-drawer" class="hidden bg-white border border-[#dcded9] p-5 mb-5">
+    <div id="trips-drawer" class="hidden bg-white border border-[#dcded9] p-5 md:p-6 mb-6">
       <h2 class="display text-xl text-[#304b54] mb-3">Publish Active Departure</h2>
-      <form id="trip-form" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <form id="trip-form" class="grid sm:grid-cols-3 gap-3">
         <select id="t-brand" class="border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs font-semibold">
           <option value="Group ya Ile Kitu">Group ya Ile Kitu</option>
           <option value="Talani Adventures">Talani Adventures (Hikes &amp; Trails)</option>
@@ -224,15 +195,15 @@
     </div>
 
     <!-- DRAWER 4: GROUP INQUIRIES -->
-    <div id="leads-drawer" class="hidden bg-white border border-[#dcded9] p-5 mb-5">
+    <div id="leads-drawer" class="hidden bg-white border border-[#dcded9] p-5 md:p-6 mb-6">
       <h2 class="display text-xl text-[#304b54] mb-3">Group &amp; Destination Inquiries</h2>
-      <div id="leads-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">Loading inquiries...</div>
+      <div id="leads-list" class="grid sm:grid-cols-2 gap-3 text-xs">Loading inquiries...</div>
     </div>
   </section>
 
   <!-- LIVE WEBSITE MIRROR STAGE -->
   <main class="max-w-7xl mx-auto px-6 md:px-10 pb-16">
-    <p class="eyebrow text-[10px] font-bold text-[#968d80] mb-2">Live Customer Page Mirror (Tap a section or component to format, move, or delete)</p>
+    <p class="eyebrow text-[10px] font-bold text-[#968d80] mb-2">Live Customer Page Mirror (Click any section to select &amp; customize)</p>
     <div id="mirror-stage" class="mirror-stage"></div>
   </main>
 
@@ -249,36 +220,30 @@
   let db = null;
   try { db = getFirestore(initializeApp(TALANI_FIREBASE_CONFIG)); } catch {}
 
-  const BG_STYLES = {
-    default: "background:#f8f7f3;color:#304b54;",
-    white: "background:#ffffff;color:#304b54;",
-    mist: "background:#e9eeec;color:#304b54;",
-    ink: "background:#304b54;color:#ffffff;"
-  };
-
+  // Real page section templates mirroring the live website
   const PAGE_TEMPLATES = {
     "index": [
       {
         id: "hero",
         label: "Hero — Who We Are",
-        render: (b) => `
+        render: (title) => `
           <div class="p-8 md:p-12 grid lg:grid-cols-2 gap-8 items-center">
             <div>
-              <p class="eyebrow text-xs font-bold mb-3 opacity-75">Talani Adventures · Who We Are</p>
-              <h1 class="display text-3xl md:text-4xl">${b.customTitle || "Thoughtful journeys across forest, wild, peak, and coast."}</h1>
-              <p class="text-sm leading-7 mt-4 opacity-90">${b.bodyText || "Guided forest trails, mountain hikes, wildlife outings, multi-day retreats, and group hosting—with Adamanti hospitality coming soon."}</p>
+              <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">Talani Adventures · Who We Are</p>
+              <h1 class="display text-3xl md:text-4xl text-[#304b54]">${title || "Thoughtful journeys across forest, wild, peak, and coast."}</h1>
+              <p class="text-sm text-[#52636a] leading-7 mt-4">Guided forest trails, mountain hikes, wildlife outings, multi-day retreats, and group hosting—with Adamanti hospitality coming soon.</p>
             </div>
-            <img src="${b.imageUrl || "https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=900"}" alt="Wildlife landscape" class="w-full h-60 object-cover border border-[#dcded9]" />
+            <img src="https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Wildlife landscape" class="w-full h-60 object-cover border border-[#dcded9]" />
           </div>`
       },
       {
         id: "active-spotlight",
         label: "Active Tours, Hikes & Expeditions",
-        render: (b) => `
-          <div class="p-8 md:p-10">
-            <p class="eyebrow text-xs font-bold mb-2 opacity-75">Most recent &amp; active departures</p>
-            <h2 class="display text-2xl mb-5">${b.customTitle || "Active Tours, Hikes & Expeditions"}</h2>
-            <div class="grid md:grid-cols-2 gap-5 text-[#304b54]">
+        render: (title) => `
+          <div class="bg-[#e9eeec] p-8 md:p-10">
+            <p class="eyebrow text-xs font-bold mb-2 text-[#61767b]">Most recent &amp; active departures</p>
+            <h2 class="display text-2xl text-[#304b54] mb-5">${title || "Active Tours, Hikes & Expeditions"}</h2>
+            <div class="grid md:grid-cols-2 gap-5">
               <div class="bg-[#f8f7f3] border border-[#dcded9] p-5">
                 <div class="flex justify-between items-start gap-2">
                   <h3 class="display text-xl">Gatamaiyu Forest Reserve Hike</h3>
@@ -299,10 +264,10 @@
       {
         id: "services",
         label: "Our Divisions & Pages",
-        render: (b) => `
+        render: (title) => `
           <div class="p-8 md:p-10">
-            <h2 class="display text-2xl mb-5">${b.customTitle || "Our divisions & pages."}</h2>
-            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs text-[#304b54]">
+            <h2 class="display text-2xl text-[#304b54] mb-5">${title || "Our divisions & pages."}</h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
               <div class="bg-white border border-[#dcded9] p-5"><strong class="display text-base block mb-1">Group ya Ile Kitu</strong>Small groups, corporate &amp; families (all 54 destinations).</div>
               <div class="bg-white border border-[#dcded9] p-5"><strong class="display text-base block mb-1">Outdoor Adventures</strong>Safaris, conservancies &amp; wildlife outings.</div>
               <div class="bg-white border border-[#dcded9] p-5"><strong class="display text-base block mb-1">Talani Adventures</strong>Hikes, waterfalls, tea estates &amp; forest trails.</div>
@@ -316,27 +281,27 @@
       {
         id: "group-hero",
         label: "Group ya Ile Kitu Header & Tiers",
-        render: (b) => `
+        render: (title) => `
           <div class="p-8 md:p-10">
-            <p class="eyebrow text-xs font-bold mb-2 opacity-75">Group ya Ile Kitu · Full Destination Hub</p>
-            <h1 class="display text-3xl">${b.customTitle || "Every destination in one place for group & custom inquiries."}</h1>
-            <p class="text-sm mt-3 opacity-90">${b.bodyText || "Group Tiers: 5% off (3–5 pax) • 7% off (5–7 pax) • 10% off (7–10 pax)"}</p>
+            <p class="eyebrow text-xs font-bold mb-2 text-[#968d80]">Group ya Ile Kitu · Full Destination Hub</p>
+            <h1 class="display text-3xl text-[#304b54]">${title || "Every destination in one place for group & custom inquiries."}</h1>
+            <p class="mt-4 border-l-2 border-[#968d80] bg-[#e9eeec] px-4 py-2.5 text-xs font-semibold">Group Tiers: 5% off (3–5 pax) • 7% off (5–7 pax) • 10% off (7–10 pax)</p>
           </div>`
       },
       {
         id: "catalog-section",
         label: "All Destinations Catalog (54)",
-        render: (b) => {
+        render: (title) => {
           const sample = ITINERARY_DATA.slice(0, 6);
-          return `<div class="p-8 md:p-10">
-            <h2 class="display text-xl mb-4">${b.customTitle || `All Destinations (${ITINERARY_DATA.length} total)`}</h2>
-            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-[#304b54]">
+          return `<div class="p-8 md:p-10 pt-0">
+            <h2 class="display text-xl text-[#304b54] mb-4">${title || `All Destinations (${ITINERARY_DATA.length} total)`}</h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               ${sample.map((d) => `
                 <div class="bg-white border border-[#dcded9] overflow-hidden">
                   <div class="photo-strip">${(d.photos || []).slice(0, 3).map((p) => `<img src="${p.url}" alt="${d.title}" />`).join("")}</div>
                   <div class="p-4">
                     <span class="text-[10px] font-bold uppercase text-[#968d80]">${d.category}</span>
-                    <p class="display text-base mt-1">${d.title}</p>
+                    <p class="display text-base text-[#304b54] mt-1">${d.title}</p>
                   </div>
                 </div>`).join("")}
             </div>
@@ -348,14 +313,13 @@
       {
         id: "safari-hero",
         label: "Safaris & Wildlife Hero",
-        render: (b) => `
+        render: (title) => `
           <div class="p-8 md:p-10 grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <p class="eyebrow text-xs font-bold mb-2 opacity-75">Outdoor Adventures · Safaris &amp; Wildlife</p>
-              <h1 class="display text-3xl">${b.customTitle || "Closer to wildlife, savannah horizons, and bush country."}</h1>
-              <p class="text-sm mt-3 opacity-90">${b.bodyText || "Guided game drives, conservancy outings, and wildlife itineraries across Kenya."}</p>
+              <p class="eyebrow text-xs font-bold mb-2 text-[#968d80]">Outdoor Adventures · Safaris &amp; Wildlife</p>
+              <h1 class="display text-3xl text-[#304b54]">${title || "Closer to wildlife, savannah horizons, and bush country."}</h1>
             </div>
-            <img src="${b.imageUrl || "https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=900"}" alt="Wildlife safari" class="w-full h-56 object-cover border border-[#dcded9]" />
+            <img src="https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Wildlife safari" class="w-full h-56 object-cover border border-[#dcded9]" />
           </div>`
       }
     ],
@@ -363,18 +327,18 @@
       {
         id: "trails-hero",
         label: "Hikes & Forest Trails Directory",
-        render: (b) => {
+        render: (title) => {
           const list = [...getDestinationsByCategory("Trails").slice(0, 3), ...getDestinationsByCategory("Hikes").slice(0, 3)];
           return `<div class="p-8 md:p-10">
-            <p class="eyebrow text-xs font-bold mb-2 opacity-75">Talani Adventures · Trails &amp; Hikes</p>
-            <h1 class="display text-3xl mb-5">${b.customTitle || "Forest canopies, waterfall chases, craters, and high ridges."}</h1>
-            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-[#304b54]">
+            <p class="eyebrow text-xs font-bold mb-2 text-[#968d80]">Talani Adventures · Trails &amp; Hikes</p>
+            <h1 class="display text-3xl text-[#304b54] mb-5">${title || "Forest canopies, waterfall chases, craters, and high ridges."}</h1>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               ${list.map((d) => `
                 <div class="bg-white border border-[#dcded9] overflow-hidden">
                   <div class="photo-strip">${(d.photos || []).slice(0, 3).map((p) => `<img src="${p.url}" alt="${d.title}" />`).join("")}</div>
                   <div class="p-4">
                     <span class="text-[10px] font-bold uppercase text-[#968d80]">${d.category}</span>
-                    <p class="display text-base mt-1">${d.title}</p>
+                    <p class="display text-base text-[#304b54] mt-1">${d.title}</p>
                   </div>
                 </div>`).join("")}
             </div>
@@ -386,11 +350,11 @@
       {
         id: "adamanti-coming-soon",
         label: "Adamanti Coming Soon",
-        render: (b) => `
+        render: (title) => `
           <div class="py-20 px-6 text-center">
-            <p class="eyebrow text-xs font-bold mb-3 opacity-75">Adamanti · Concierge &amp; Hospitality</p>
-            <h1 class="display text-4xl md:text-5xl">${b.customTitle || "Coming Soon."}</h1>
-            <p class="text-sm max-w-md mx-auto mt-4 opacity-90">${b.bodyText || "Dedicated hospitality and concierge coordination across BnBs, hotels, resorts, and hosting."}</p>
+            <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">Adamanti · Concierge &amp; Hospitality</p>
+            <h1 class="display text-4xl md:text-5xl text-[#304b54]">${title || "Coming Soon."}</h1>
+            <p class="text-sm text-[#52636a] max-w-md mx-auto mt-4">Dedicated hospitality and concierge coordination across BnBs, hotels, resorts, and hosting.</p>
           </div>`
       }
     ],
@@ -398,18 +362,18 @@
       {
         id: "premium-hero",
         label: "Talani Premium Multi-Day Retreats",
-        render: (b) => {
+        render: (title) => {
           const list = getDestinationsByCategory("Multi-Day").slice(0, 6);
           return `<div class="p-8 md:p-10">
-            <p class="eyebrow text-xs font-bold mb-2 opacity-75">Talani Premium · Multi-Day Expeditions</p>
-            <h1 class="display text-3xl mb-5">${b.customTitle || "Extended expeditions across mountains, bush camps, deserts, and islands."}</h1>
-            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-[#304b54]">
+            <p class="eyebrow text-xs font-bold mb-2 text-[#968d80]">Talani Premium · Multi-Day Expeditions</p>
+            <h1 class="display text-3xl text-[#304b54] mb-5">${title || "Extended expeditions across mountains, bush camps, deserts, and islands."}</h1>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               ${list.map((d) => `
                 <div class="bg-white border border-[#dcded9] overflow-hidden">
                   <div class="photo-strip">${(d.photos || []).slice(0, 3).map((p) => `<img src="${p.url}" alt="${d.title}" />`).join("")}</div>
                   <div class="p-4">
                     <span class="text-[10px] font-bold uppercase text-[#968d80]">${d.duration || "Multi-Day"}</span>
-                    <p class="display text-base mt-1">${d.title}</p>
+                    <p class="display text-base text-[#304b54] mt-1">${d.title}</p>
                   </div>
                 </div>`).join("")}
             </div>
@@ -421,8 +385,7 @@
 
   let activePage = "index";
   let blocks = [];
-  let selectedBlockId = null;
-  let selectedCompIndex = null; // null = section itself selected; number = component inside section selected
+  let selectedId = null;
 
   function buildInitialBlocks(pageKey) {
     return (PAGE_TEMPLATES[pageKey] || []).map((tpl, idx) => ({
@@ -430,12 +393,9 @@
       label: tpl.label,
       order: idx,
       widthPct: 100,
-      bgPreset: pageKey === "index" && tpl.id === "active-spotlight" ? "mist" : "default",
+      scale: 1,
       hidden: false,
       customTitle: "",
-      bodyText: "",
-      imageUrl: "",
-      components: [], // { type: 'text' | 'photo' | 'button', title, content, target }
       buttons: []
     }));
   }
@@ -465,15 +425,10 @@
     }
 
     blocks = loaded;
-    selectedBlockId = blocks[0]?.id || null;
-    selectedCompIndex = null;
+    selectedId = blocks[0]?.id || null;
     renderMirror();
     syncControls();
     $("studio-status").textContent = `Mirroring ${pageKey}.html`;
-  }
-
-  function currentBlock() {
-    return blocks.find((x) => x.id === selectedBlockId);
   }
 
   function renderMirror() {
@@ -482,53 +437,27 @@
 
     $("mirror-stage").innerHTML = blocks.map((b, idx) => {
       const tpl = templates.get(b.id);
-      const inner = tpl ? tpl.render(b) : "";
-      const comps = Array.isArray(b.components) ? b.components : [];
-      const compsHtml = comps.length
-        ? `<div class="px-8 pb-6 space-y-3">
-            ${comps.map((c, ci) => {
-              const isSel = b.id === selectedBlockId && selectedCompIndex === ci;
-              if (c.type === "photo") {
-                return `<div class="comp-item ${isSel ? "comp-selected" : ""}" data-comp-idx="${ci}" data-parent-block="${b.id}">
-                  ${c.content
-                    ? `<img src="${c.content}" alt="${c.title || "Photo placeholder"}" class="w-full max-h-64 object-cover border border-[#dcded9]" />`
-                    : `<div class="border-2 border-dashed border-[#968d80] bg-[#f8f7f3] text-[#304b54] p-6 text-center text-xs font-bold">📷 Photo Placeholder — Paste image URL in inspector above</div>`}
-                </div>`;
-              }
-              if (c.type === "button") {
-                return `<div class="comp-item inline-block mr-2 ${isSel ? "comp-selected" : ""}" data-comp-idx="${ci}" data-parent-block="${b.id}">
-                  <button type="button" data-preview-btn="${b.id}:${ci}" class="bg-[#304b54] text-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider cursor-pointer">${c.title || "Action Button"}</button>
-                </div>`;
-              }
-              return `<div class="comp-item ${isSel ? "comp-selected" : ""}" data-comp-idx="${ci}" data-parent-block="${b.id}">
-                ${c.title ? `<h3 class="display text-lg font-medium">${c.title}</h3>` : ""}
-                <p class="text-sm leading-7">${c.content || "Editable text block — update text in the inspector above."}</p>
-              </div>`;
-            }).join("")}
+      const inner = tpl ? tpl.render(b.customTitle) : "";
+      const customBtns = (b.buttons || []).length
+        ? `<div class="px-8 pb-6 flex flex-wrap gap-2.5">${b.buttons.map((btn, bi) => `
+            <button type="button" data-preview-btn="${b.id}:${bi}" class="bg-[#304b54] text-white px-4 py-2 text-xs font-bold uppercase tracking-wider cursor-pointer">${btn.label}</button>`).join("")}
           </div>`
         : "";
 
       return `
-        <section class="mirror-section ${b.id === selectedBlockId && selectedCompIndex === null ? "selected" : ""} ${b.hidden ? "is-hidden" : ""}"
+        <section class="mirror-section ${b.id === selectedId ? "selected" : ""} ${b.hidden ? "is-hidden" : ""}"
                  data-block="${b.id}"
-                 style="width:${b.widthPct || 100}%;margin:0 auto;${BG_STYLES[b.bgPreset || "default"] || BG_STYLES.default}">
+                 style="width:${b.widthPct || 100}%;margin:0 auto;transform:scale(${b.scale || 1});transform-origin:top center;">
           <span class="section-badge">${idx + 1}. ${b.label} (${b.widthPct || 100}%)</span>
           ${inner}
-          ${compsHtml}
+          ${customBtns}
         </section>`;
     }).join("");
 
     $("mirror-stage").querySelectorAll("[data-block]").forEach((sec) => {
       sec.addEventListener("click", (e) => {
-        const compEl = e.target.closest("[data-comp-idx]");
-        if (compEl) {
-          e.stopPropagation();
-          selectedBlockId = compEl.dataset.parentBlock;
-          selectedCompIndex = Number(compEl.dataset.compIdx);
-        } else {
-          selectedBlockId = sec.dataset.block;
-          selectedCompIndex = null;
-        }
+        if (e.target.closest("[data-preview-btn]")) return;
+        selectedId = sec.dataset.block;
         renderMirror();
         syncControls();
       });
@@ -537,139 +466,93 @@
     $("mirror-stage").querySelectorAll("[data-preview-btn]").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
-        const [bid, cidx] = btn.dataset.previewBtn.split(":");
+        const [bid, bidx] = btn.dataset.previewBtn.split(":");
         const blk = blocks.find((x) => x.id === bid);
-        const comp = blk?.components?.[Number(cidx)];
-        if (comp?.content) triggerButtonAction({ actionType: "link", target: comp.content });
+        const cfg = blk?.buttons?.[Number(bidx)];
+        if (cfg) triggerButtonAction(cfg);
       });
     });
   }
 
   function syncControls() {
-    const b = currentBlock();
+    const b = blocks.find((x) => x.id === selectedId);
     if (!b) return;
-    if (selectedCompIndex !== null && b.components?.[selectedCompIndex]) {
-      const c = b.components[selectedCompIndex];
-      $("selected-label").textContent = `${b.label} → ${c.type.toUpperCase()} #${selectedCompIndex + 1}`;
-      $("selected-type-badge").textContent = c.type;
-      $("inp-heading").value = c.title || "";
-      $("inp-body").value = c.content || "";
-    } else {
-      $("selected-label").textContent = b.label;
-      $("selected-type-badge").textContent = "Section";
-      $("inp-heading").value = b.customTitle || "";
-      $("inp-body").value = b.bodyText || "";
-    }
+    $("selected-label").textContent = b.label;
+    $("inp-heading").value = b.customTitle || "";
     $("inp-width").value = String(b.widthPct || 100);
-    $("inp-bg").value = b.bgPreset || "default";
+    $("inp-scale").value = String(b.scale || 1);
+    $("inp-hidden").checked = Boolean(b.hidden);
+    renderAttachedButtons(b);
   }
 
-  ["inp-heading", "inp-body", "inp-width", "inp-bg"].forEach((id) => {
+  function renderAttachedButtons(b) {
+    $("attached-buttons").innerHTML = (b.buttons || []).map((btn, i) => `
+      <span class="inline-flex items-center gap-2 bg-[#f8f7f3] border border-[#dcded9] px-3 py-1 text-xs">
+        <strong>${btn.label}</strong> → ${btn.target}
+        <button type="button" data-rm-btn="${i}" class="text-red-700 font-bold cursor-pointer">✕</button>
+      </span>
+    `).join("");
+
+    $("attached-buttons").querySelectorAll("[data-rm-btn]").forEach((rm) => {
+      rm.addEventListener("click", () => {
+        b.buttons.splice(Number(rm.dataset.rmBtn), 1);
+        renderAttachedButtons(b);
+        renderMirror();
+      });
+    });
+  }
+
+  ["inp-heading", "inp-width", "inp-scale", "inp-hidden"].forEach((id) => {
     $(id).addEventListener("input", () => {
-      const b = currentBlock();
+      const b = blocks.find((x) => x.id === selectedId);
       if (!b) return;
-      if (selectedCompIndex !== null && b.components?.[selectedCompIndex]) {
-        const c = b.components[selectedCompIndex];
-        c.title = $("inp-heading").value;
-        c.content = $("inp-body").value;
-      } else {
-        b.customTitle = $("inp-heading").value;
-        const val = $("inp-body").value.trim();
-        if (/^https?:\/\//i.test(val)) b.imageUrl = val;
-        else b.bodyText = $("inp-body").value;
-      }
+      b.customTitle = $("inp-heading").value.trim();
       b.widthPct = Number($("inp-width").value) || 100;
-      b.bgPreset = $("inp-bg").value || "default";
+      b.scale = Number($("inp-scale").value) || 1;
+      b.hidden = $("inp-hidden").checked;
       renderMirror();
     });
   });
 
-  // Shared Top Toolbar Actions
-  $("tb-move-up").addEventListener("click", () => {
-    const b = currentBlock();
-    if (!b) return;
-    if (selectedCompIndex !== null && selectedCompIndex > 0) {
-      [b.components[selectedCompIndex - 1], b.components[selectedCompIndex]] = [b.components[selectedCompIndex], b.components[selectedCompIndex - 1]];
-      selectedCompIndex -= 1;
-    } else {
-      const i = blocks.findIndex((x) => x.id === selectedBlockId);
-      if (i > 0) [blocks[i - 1], blocks[i]] = [blocks[i], blocks[i - 1]];
-    }
+  $("move-up-btn").addEventListener("click", () => {
+    const i = blocks.findIndex((x) => x.id === selectedId);
+    if (i <= 0) return;
+    [blocks[i - 1], blocks[i]] = [blocks[i], blocks[i - 1]];
     renderMirror();
   });
 
-  $("tb-move-down").addEventListener("click", () => {
-    const b = currentBlock();
-    if (!b) return;
-    if (selectedCompIndex !== null && selectedCompIndex < (b.components?.length || 0) - 1) {
-      [b.components[selectedCompIndex + 1], b.components[selectedCompIndex]] = [b.components[selectedCompIndex], b.components[selectedCompIndex + 1]];
-      selectedCompIndex += 1;
-    } else {
-      const i = blocks.findIndex((x) => x.id === selectedBlockId);
-      if (i >= 0 && i < blocks.length - 1) [blocks[i + 1], blocks[i]] = [blocks[i], blocks[i + 1]];
-    }
+  $("move-down-btn").addEventListener("click", () => {
+    const i = blocks.findIndex((x) => x.id === selectedId);
+    if (i < 0 || i >= blocks.length - 1) return;
+    [blocks[i + 1], blocks[i]] = [blocks[i], blocks[i + 1]];
     renderMirror();
   });
 
-  function appendComponent(comp) {
-    const b = currentBlock();
-    if (!b) return;
-    b.components = b.components || [];
-    b.components.push(comp);
-    selectedCompIndex = b.components.length - 1;
-    renderMirror();
-    syncControls();
-    $("inp-heading").focus();
-  }
-
-  $("tb-add-text").addEventListener("click", () => appendComponent({ type: "text", title: "New Subheading", content: "Write your custom paragraph here." }));
-  $("tb-edit-text").addEventListener("click", () => { $("inp-heading").focus(); });
-  $("tb-add-photo").addEventListener("click", () => appendComponent({ type: "photo", title: "Photo", content: "" }));
-  $("tb-add-btn").addEventListener("click", () => appendComponent({ type: "button", title: "Explore Details →", content: "./group-ya-ile-kitu.html" }));
-
-  $("tb-cycle-bg").addEventListener("click", () => {
-    const b = currentBlock();
-    if (!b) return;
-    const order = ["default", "white", "mist", "ink"];
-    b.bgPreset = order[(order.indexOf(b.bgPreset || "default") + 1) % order.length];
-    $("inp-bg").value = b.bgPreset;
+  $("add-btn").addEventListener("click", () => {
+    const b = blocks.find((x) => x.id === selectedId);
+    const label = $("btn-label").value.trim();
+    const target = $("btn-target").value.trim();
+    if (!b || !label || !target) return;
+    b.buttons = b.buttons || [];
+    b.buttons.push({ label, actionType: $("btn-action").value, target, style: "primary" });
+    $("btn-label").value = "";
+    $("btn-target").value = "";
+    renderAttachedButtons(b);
     renderMirror();
   });
 
-  $("tb-delete").addEventListener("click", () => {
-    const b = currentBlock();
-    if (!b) return;
-    if (selectedCompIndex !== null && b.components?.[selectedCompIndex]) {
-      b.components.splice(selectedCompIndex, 1);
-      selectedCompIndex = null;
-    } else {
-      b.hidden = !b.hidden;
-    }
-    renderMirror();
-    syncControls();
-  });
-
-  $("tb-save-draft").addEventListener("click", () => {
+  $("save-draft-btn").addEventListener("click", () => {
     localStorage.setItem(`talani_mirror_draft_${activePage}`, JSON.stringify(blocks));
     $("studio-status").textContent = `Draft saved for ${activePage}.html`;
   });
 
-  $("tb-publish").addEventListener("click", async () => {
+  $("publish-btn").addEventListener("click", async () => {
     if (!db) { $("studio-status").textContent = "Connect Firestore to publish live."; return; }
     $("studio-status").textContent = "Publishing...";
     try {
-      const payload = blocks.map((b) => ({
-        ...b,
-        buttons: (b.components || []).filter((c) => c.type === "button").map((c) => ({
-          label: c.title || "Open",
-          actionType: String(c.content || "").startsWith("#") ? "scroll" : "link",
-          target: c.content || "./group-ya-ile-kitu.html",
-          style: "primary"
-        }))
-      }));
       await setDoc(doc(db, "site_layouts", activePage), {
         pageKey: activePage,
-        blocks: payload,
+        blocks,
         updatedAt: serverTimestamp()
       });
       localStorage.removeItem(`talani_mirror_draft_${activePage}`);
@@ -684,6 +567,7 @@
     if (btn) selectPage(btn.dataset.page);
   });
 
+  // Studio Ribbon Drawer Toggle
   document.querySelectorAll(".mode-pill").forEach((pill) => {
     pill.addEventListener("click", () => {
       document.querySelectorAll(".mode-pill").forEach((p) => p.setAttribute("aria-pressed", String(p === pill)));
@@ -693,7 +577,7 @@
     });
   });
 
-  // --- ONE-CLICK CLOUDINARY UPLOAD + FIRESTORE + GITHUB ITINERARY-DATA.JS COMMIT ---
+  // Cloudinary Destination Folder Uploader
   const folderFor = (d) => `talani/${d.category === "Trails" ? "trails" : d.category === "Hikes" ? "hikes" : "multi-day"}/${d.id}`;
   $("cld-dest").innerHTML = [
     ...ITINERARY_DATA.map((d) => `<option value="${d.id}" data-folder="${folderFor(d)}">${d.title} (${d.category})</option>`),
@@ -703,107 +587,33 @@
   $("cld-dest").addEventListener("change", syncCldFolder);
   syncCldFolder();
 
-  const savedPat = localStorage.getItem("talani_gh_pat");
-  if (savedPat) $("gh-pat").value = savedPat;
-  $("save-pat-btn").addEventListener("click", () => {
-    const val = $("gh-pat").value.trim();
-    if (val) {
-      localStorage.setItem("talani_gh_pat", val);
-      $("cld-status").textContent = "✓ GitHub token saved in this browser only.";
-    } else {
-      localStorage.removeItem("talani_gh_pat");
-      $("cld-status").textContent = "GitHub token cleared from browser.";
-    }
-  });
-
-  async function commitPhotosToGitHub(repoFull, pat, destId, photosArray) {
-    const apiUrl = `https://api.github.com/repos/${repoFull}/contents/public/itinerary-data.js`;
-    const headers = {
-      "Authorization": `Bearer ${pat}`,
-      "Accept": "application/vnd.github+json",
-      "Content-Type": "application/json"
-    };
-    const getRes = await fetch(apiUrl, { headers });
-    if (!getRes.ok) throw new Error(`GitHub read failed (${getRes.status})`);
-    const fileJson = await getRes.json();
-    const decoded = decodeURIComponent(escape(atob(fileJson.content.replace(/
-/g, ""))));
-
-    const escapedId = destId.replace(/[.*+?^${}()|[\]\]/g, "\$&");
-    const blockRegex = new RegExp(`(id:\s*["']${escapedId}["'][\s\S]*?photos:\s*)\[[\s\S]*?\]`, "m");
-    if (!blockRegex.test(decoded)) throw new Error(`Destination "${destId}" not found in public/itinerary-data.js`);
-
-    const formattedPhotos = JSON.stringify(photosArray, null, 6).replace(/
-\]$/, "
-    ]");
-    const updatedSource = decoded.replace(blockRegex, `$1${formattedPhotos}`);
-    const encoded = btoa(unescape(encodeURIComponent(updatedSource)));
-
-    const putRes = await fetch(apiUrl, {
-      method: "PUT",
-      headers,
-      body: JSON.stringify({
-        message: `Update ${destId} photos via Talani Studio`,
-        content: encoded,
-        sha: fileJson.sha
-      })
-    });
-    if (!putRes.ok) throw new Error(`GitHub commit failed (${putRes.status})`);
-  }
-
-  $("cld-auto-save-btn").addEventListener("click", async () => {
+  $("cld-upload-btn").addEventListener("click", async () => {
     const files = Array.from($("cld-files").files || []).slice(0, 8);
-    if (!files.length) {
-      $("cld-status").textContent = "Choose at least one photo first.";
-      return;
-    }
-    const destId = $("cld-dest").value;
+    if (!files.length) { $("studio-status").textContent = "Select photos first"; return; }
     const folder = $("cld-folder").value.trim() || "talani/general";
-    $("cld-status").textContent = `1/3 Uploading ${files.length} photo(s) to Cloudinary (${folder})...`;
+    $("studio-status").textContent = `Uploading ${files.length} photo(s)...`;
     $("cld-thumbs").innerHTML = "";
     const uploaded = [];
-
-    try {
-      for (const file of files) {
-        const fd = new FormData();
-        fd.append("file", file);
-        fd.append("upload_preset", UPLOAD_PRESET);
-        fd.append("folder", folder);
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: "POST", body: fd });
-        if (!res.ok) throw new Error(`Cloudinary error ${res.status}`);
-        const data = await res.json();
-        uploaded.push({
-          url: data.secure_url,
-          caption: file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ")
-        });
+    for (const file of files) {
+      const fd = new FormData();
+      fd.append("file", file);
+      fd.append("upload_preset", UPLOAD_PRESET);
+      fd.append("folder", folder);
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.secure_url) {
+        uploaded.push({ url: data.secure_url, caption: file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ") });
         $("cld-thumbs").innerHTML += `<img src="${data.secure_url}" alt="${file.name}" />`;
       }
+    }
+    $("cld-json").value = JSON.stringify(uploaded, null, 2);
+    $("studio-status").textContent = `✓ Uploaded ${uploaded.length} to ${folder}`;
+  });
 
-      $("cld-json").value = JSON.stringify(uploaded, null, 2);
-
-      // Step 2: Save to Firestore destination_media
-      if (db) {
-        $("cld-status").textContent = "2/3 Saving URLs to Firestore live database...";
-        await setDoc(doc(db, "destination_media", destId), {
-          destinationId: destId,
-          folder,
-          photos: uploaded,
-          updatedAt: serverTimestamp()
-        });
-      }
-
-      // Step 3: Commit directly to public/itinerary-data.js if browser GitHub token is present
-      const pat = $("gh-pat").value.trim() || localStorage.getItem("talani_gh_pat");
-      const repo = $("gh-repo").value.trim();
-      if (pat && repo && destId !== "outdoor-adventures") {
-        $("cld-status").textContent = "3/3 Committing updated photos to public/itinerary-data.js on GitHub...";
-        await commitPhotosToGitHub(repo, pat, destId, uploaded);
-        $("cld-status").textContent = `✓ All done! Uploaded to Cloudinary, saved to Firestore, and committed to GitHub (${destId}).`;
-      } else {
-        $("cld-status").textContent = `✓ Uploaded to Cloudinary & saved to Firestore! (Add GitHub token above to also auto-commit itinerary-data.js)`;
-      }
-    } catch (err) {
-      $("cld-status").textContent = "Error: " + err.message;
+  $("cld-copy-btn").addEventListener("click", async () => {
+    if ($("cld-json").value) {
+      await navigator.clipboard?.writeText($("cld-json").value);
+      $("studio-status").textContent = "✓ Copied JSON";
     }
   });
 
