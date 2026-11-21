@@ -60,13 +60,13 @@
   </header>
 
   <main class="max-w-7xl mx-auto px-6 md:px-10 py-14 md:py-20">
-    <section class="max-w-3xl mb-14">
+    <section data-block-id="premium-hero" class="max-w-3xl mb-14">
       <p class="eyebrow text-xs font-bold mb-4 text-[#968d80]">Talani Premium · Multi-Day Expeditions &amp; Retreats</p>
       <h1 class="display text-3xl md:text-5xl leading-[1.1] tracking-[-.04em] text-[#304b54]">Extended expeditions across mountains, bush camps, deserts, and islands.</h1>
       <p class="leading-8 mt-5 text-[#52636a] text-base">Multi-day itineraries spanning Zanzibar, Lamu, coastal escapes, mountain peaks, and overland routes.</p>
     </section>
 
-    <section aria-labelledby="multiday-list-heading">
+    <section data-block-id="premium-grid-section" aria-labelledby="multiday-list-heading">
       <h2 id="multiday-list-heading" class="display text-2xl text-[#304b54] mb-6">Multi-Day Expeditions &amp; Retreats</h2>
       <div id="premium-grid" class="exp-grid"></div>
     </section>
@@ -89,7 +89,10 @@
   </footer>
 
   <script type="module">
+    import { applyPublishedLayout } from "./layout-runtime.js";
     import { getDestinationsByCategory } from "./itinerary-data.js";
+
+    applyPublishedLayout("talani-premium");
 
     const items = getDestinationsByCategory("Multi-Day");
 
