@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Talani Creator Studio — Admin</title>
+  <title>Talani Adventures & Group ya Ile Kitu</title>
   <style>
     :root {
       --bg: #090d16;
@@ -14,216 +14,150 @@
       --muted: #9ca3af;
       --accent: #10b981;
       --gold: #f59e0b;
-      --blue: #38bdf8;
-      --danger: #f87171;
+      --ring: linear-gradient(45deg, #f59e0b, #10b981, #38bdf8);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: var(--bg); color: var(--text); max-width: 780px; margin: 0 auto; padding: 14px 14px 60px; }
+    body { background: var(--bg); color: var(--text); max-width: 680px; margin: 0 auto; padding-bottom: 60px; }
     .hidden { display: none !important; }
 
-    header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 14px; }
-    header h1 { font-size: 1.12rem; font-weight: 800; }
-    .muted { color: var(--muted); font-size: 0.8rem; }
-    .small { font-size: 0.74rem; }
-
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
-    .card h3 { font-size: 0.94rem; margin-bottom: 8px; }
-    label.field-label { display: block; font-size: 0.73rem; color: var(--muted); margin-top: 6px; }
-    input, select, textarea {
-      width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--border);
-      background: var(--surface-2); color: var(--text); font-size: 0.86rem; margin: 4px 0 6px;
+    /* Top Nav */
+    header {
+      position: sticky; top: 0; z-index: 20; background: rgba(9, 13, 22, 0.9);
+      backdrop-filter: blur(10px); border-bottom: 1px solid var(--border);
+      padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;
     }
-    .form-row { display: flex; gap: 8px; flex-wrap: wrap; }
-    .form-row > * { flex: 1; min-width: 140px; }
-
-    .btn {
-      width: 100%; padding: 10px 14px; border-radius: 10px; border: none;
-      background: var(--accent); color: #052e16; font-weight: 800; font-size: 0.86rem; cursor: pointer;
+    .brand-title { font-weight: 800; font-size: 1.1rem; letter-spacing: -0.3px; }
+    .brand-sub { font-size: 0.72rem; color: var(--accent); font-weight: 600; }
+    .studio-link {
+      font-size: 0.74rem; color: var(--muted); text-decoration: none;
+      border: 1px solid var(--border); padding: 5px 10px; border-radius: 99px;
     }
-    .btn-mini {
-      padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border);
-      background: var(--surface-2); color: var(--text); font-size: 0.74rem; font-weight: 700;
-      cursor: pointer; text-decoration: none; display: inline-block;
-    }
-    .btn-mini.ok { background: rgba(16, 185, 129, 0.16); color: var(--accent); border-color: rgba(16, 185, 129, 0.4); }
-    .btn-mini.blue { background: rgba(56, 189, 248, 0.16); color: var(--blue); border-color: rgba(56, 189, 248, 0.4); }
-    .btn-mini.danger { background: rgba(248, 113, 113, 0.16); color: var(--danger); border-color: rgba(248, 113, 113, 0.4); }
 
-    .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 14px; }
-    .tab-btn {
+    /* Instagram-Style Stories Bar */
+    .stories-bar {
+      display: flex; gap: 14px; overflow-x: auto; padding: 14px 16px;
+      border-bottom: 1px solid var(--border); scrollbar-width: none;
+    }
+    .stories-bar::-webkit-scrollbar { display: none; }
+    .story-item { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; flex-shrink: 0; width: 68px; }
+    .story-ring {
+      width: 62px; height: 62px; border-radius: 50%; padding: 2.5px;
+      background: var(--ring); display: flex; align-items: center; justify-content: center;
+    }
+    .story-ring img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 2px solid var(--bg); }
+    .story-label { font-size: 0.7rem; color: var(--text); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+
+    /* Section Headers & Brand Filter Pills */
+    .sec-head { padding: 16px 16px 8px; display: flex; justify-content: space-between; align-items: center; }
+    .sec-head h2 { font-size: 1rem; font-weight: 700; }
+    .pills { display: flex; gap: 6px; padding: 0 16px 12px; overflow-x: auto; }
+    .pill {
       background: var(--surface); color: var(--muted); border: 1px solid var(--border);
-      padding: 9px 4px; border-radius: 10px; font-size: 0.78rem; font-weight: 700; cursor: pointer;
+      padding: 6px 12px; border-radius: 99px; font-size: 0.75rem; font-weight: 600; cursor: pointer; white-space: nowrap;
     }
-    .tab-btn.active { background: var(--accent); color: #052e16; border-color: var(--accent); }
+    .pill.active { background: var(--accent); color: #052e16; border-color: var(--accent); }
 
-    .list-item {
-      display: flex; justify-content: space-between; align-items: center; gap: 10px;
-      padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.84rem;
+    /* Trip Profile Cards ("Accounts") */
+    .trip-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+      margin: 0 16px 16px; overflow: hidden;
     }
-    .list-item:last-child { border-bottom: none; }
-    .badge { font-size: 0.68rem; padding: 3px 8px; border-radius: 8px; font-weight: 700; }
+    .trip-cover { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; background: var(--surface-2); display: block; }
+    .trip-body { padding: 14px; }
+    .trip-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
+    .trip-title { font-size: 1.05rem; font-weight: 800; }
+    .badge { font-size: 0.68rem; font-weight: 700; padding: 3px 8px; border-radius: 8px; white-space: nowrap; }
     .badge.ok { background: rgba(16, 185, 129, 0.16); color: var(--accent); }
-    .badge.warn { background: rgba(245, 158, 11, 0.18); color: var(--gold); }
-    .badge.blue { background: rgba(56, 189, 248, 0.16); color: var(--blue); }
+    .badge.warn { background: rgba(245, 158, 11, 0.16); color: var(--gold); }
+    .trip-meta { font-size: 0.78rem; color: var(--muted); margin-bottom: 8px; }
+    .trip-bio { font-size: 0.84rem; line-height: 1.45; color: #e5e7eb; margin-bottom: 10px; white-space: pre-line; }
+    .tier-box {
+      background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px;
+      padding: 8px 10px; font-size: 0.76rem; color: var(--gold); margin-bottom: 12px;
+    }
+    .trip-footer { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .price-tag { font-size: 1.1rem; font-weight: 800; color: var(--accent); }
+    .price-sub { font-size: 0.72rem; color: var(--muted); display: block; }
+    .btn-book {
+      background: var(--accent); color: #052e16; font-weight: 800; font-size: 0.84rem;
+      padding: 10px 16px; border-radius: 10px; text-decoration: none; border: none; cursor: pointer;
+    }
+
+    /* D-Day Posts & Reels Grid (Instagram Profile Grid) */
+    .ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; padding: 0 16px; }
+    .ig-tile { position: relative; aspect-ratio: 1 / 1; background: var(--surface-2); overflow: hidden; cursor: pointer; }
+    .ig-tile img, .ig-tile video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .reel-icon {
+      position: absolute; top: 6px; right: 6px; background: rgba(0, 0, 0, 0.65);
+      color: #fff; font-size: 0.68rem; padding: 2px 6px; border-radius: 6px; font-weight: 700;
+    }
+
+    /* Fullscreen Modal (Story & Post Viewer) */
+    .modal {
+      position: fixed; inset: 0; z-index: 50; background: rgba(0, 0, 0, 0.94);
+      display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 16px;
+    }
+    .modal-inner { max-width: 460px; width: 100%; text-align: center; }
+    .modal-media { width: 100%; max-height: 70vh; object-fit: contain; border-radius: 12px; margin-bottom: 10px; }
+    .modal-caption { font-size: 0.88rem; margin-bottom: 12px; color: #f3f4f6; }
+    .modal-actions { display: flex; gap: 10px; justify-content: center; }
+    .btn-outline {
+      background: transparent; color: var(--text); border: 1px solid var(--border);
+      padding: 8px 14px; border-radius: 10px; font-size: 0.8rem; text-decoration: none; cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <header>
     <div>
-      <h1>Talani Creator Studio</h1>
-      <div class="muted" id="studio-sub">Instagram-Style Admin • Trips, Stories, Reels & Leads</div>
+      <div class="brand-title">Talani Adventures</div>
+      <div class="brand-sub">Group ya Ile Kitu • Curated Expeditions</div>
     </div>
-    <div style="display:flex; gap:6px; align-items:center;">
-      <a href="./index.html" target="_blank" class="btn-mini blue">View Site ↗</a>
-      <button id="logout-btn" class="btn-mini danger hidden">Sign Out</button>
-    </div>
+    <a href="./studio.html" class="studio-link">Creator Studio</a>
   </header>
 
-  <!-- LOGIN CARD -->
-  <div id="login-card" class="card">
-    <h3>Admin Sign In</h3>
-    <p class="muted" style="margin-bottom:8px;">Sign in with your Firebase admin email and password to manage trips, stories, D-Day media, and customer leads.</p>
-    <label class="field-label">Email</label>
-    <input type="email" id="auth-email" placeholder="tiffany@talaniadventures.co.ke" />
-    <label class="field-label">Password</label>
-    <input type="password" id="auth-pass" placeholder="••••••••" />
-    <button id="login-btn" class="btn" style="margin-top:8px;">Sign In to Studio</button>
-    <div id="auth-err" class="muted small" style="color:var(--danger); margin-top:8px;"></div>
+  <!-- STORIES BAR -->
+  <div class="stories-bar" id="stories-bar"></div>
+
+  <!-- BRAND FILTER -->
+  <div class="sec-head">
+    <h2>Upcoming Expeditions</h2>
+    <span id="live-status" class="brand-sub">● Live</span>
+  </div>
+  <div class="pills" id="brand-pills">
+    <button class="pill active" data-brand="ALL">All Experiences</button>
+    <button class="pill" data-brand="Group ya Ile Kitu">Group ya Ile Kitu</button>
+    <button class="pill" data-brand="Talani Premium Tours">Talani Premium</button>
+    <button class="pill" data-brand="Adamanti Hospitality">Adamanti Stays</button>
   </div>
 
-  <!-- STUDIO WORKSPACE -->
-  <div id="studio-body" class="hidden">
-    <nav class="tabs">
-      <button class="tab-btn active" data-tab="st-trips">Trips</button>
-      <button class="tab-btn" data-tab="st-stories">Stories</button>
-      <button class="tab-btn" data-tab="st-posts">D-Day Grid</button>
-      <button class="tab-btn" data-tab="st-leads">Leads (<span id="leads-count">0</span>)</button>
-    </nav>
+  <!-- UPCOMING TRIPS FEED -->
+  <div id="trips-feed"></div>
 
-    <!-- 1. CREATE / MANAGE TRIP "ACCOUNTS" -->
-    <section id="st-trips" class="st-panel">
-      <div class="card">
-        <h3>+ Create Trip Profile ("Account")</h3>
-        <div class="form-row">
-          <div>
-            <label class="field-label">Brand / Arm</label>
-            <select id="tr-brand">
-              <option value="Group ya Ile Kitu">Group ya Ile Kitu</option>
-              <option value="Talani Premium Tours">Talani Premium Tours</option>
-              <option value="Adamanti Hospitality">Adamanti Hospitality</option>
-            </select>
-          </div>
-          <div>
-            <label class="field-label">Expedition Date</label>
-            <input type="date" id="tr-date" value="2026-12-05" />
-          </div>
-        </div>
+  <!-- D-DAY REELS & PHOTO GRID -->
+  <div class="sec-head">
+    <h2>D-Day Memories & Reels</h2>
+    <span style="font-size:0.74rem; color:var(--muted);">Tap for HD</span>
+  </div>
+  <div class="ig-grid" id="posts-grid"></div>
 
-        <label class="field-label">Trip Title</label>
-        <input type="text" id="tr-title" placeholder="e.g., Gatamaiyu Forest Waterfall Hike" />
-
-        <div class="form-row">
-          <div>
-            <label class="field-label">Ticket Price (KSh)</label>
-            <input type="number" id="tr-price" placeholder="3000" />
-          </div>
-          <div>
-            <label class="field-label">Minimum Deposit (KSh)</label>
-            <input type="number" id="tr-deposit" placeholder="1800" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div>
-            <label class="field-label">Total Slots</label>
-            <input type="number" id="tr-slots-total" value="22" />
-          </div>
-          <div>
-            <label class="field-label">Slots Remaining</label>
-            <input type="number" id="tr-slots-left" value="22" />
-          </div>
-        </div>
-
-        <label class="field-label">Trip Bio, Inclusions & Itinerary</label>
-        <textarea id="tr-bio" rows="3" placeholder="What's included, meeting point, gear checklist..."></textarea>
-
-        <label class="field-label">Group Discount Tiers Note</label>
-        <input type="text" id="tr-tiers" placeholder="e.g., 5% off (3–5 pax) • 7% off (5–7 pax) • 10% off (7–10 pax)" />
-
-        <label class="field-label">Google Form Booking Link</label>
-        <input type="url" id="tr-form-url" placeholder="https://docs.google.com/forms/d/..." />
-
-        <label class="field-label">Cover Photo (Uploads to Cloudinary)</label>
-        <input type="file" id="tr-cover-file" accept="image/*" />
-
-        <button id="create-trip-btn" class="btn" style="margin-top:8px;">Publish Trip Account</button>
-        <div id="tr-status" class="muted small" style="margin-top:6px;"></div>
+  <!-- LIGHTBOX MODAL (STORIES & POSTS) -->
+  <div id="viewer-modal" class="modal hidden">
+    <div class="modal-inner">
+      <div id="modal-media-wrap"></div>
+      <div id="modal-caption" class="modal-caption"></div>
+      <div class="modal-actions">
+        <a id="modal-hd-link" href="#" target="_blank" download class="btn-outline hidden">⬇ Download Original HD</a>
+        <button id="modal-close-btn" class="btn-outline">✕ Close</button>
       </div>
-
-      <div class="card">
-        <h3>Published Trips (Quick Slot Adjuster)</h3>
-        <div id="st-trips-list"></div>
-      </div>
-    </section>
-
-    <!-- 2. POST STORIES (POSTERS, SLOT ALERTS, TIPS) -->
-    <section id="st-stories" class="st-panel hidden">
-      <div class="card">
-        <h3>+ Post Story Update</h3>
-        <label class="field-label">Story Bubble Label (Short)</label>
-        <input type="text" id="story-label" placeholder="e.g., 9 Slots Left!" />
-        <label class="field-label">Story Caption / Poster Message</label>
-        <input type="text" id="story-caption" placeholder="e.g., Dec 5 Gatamaiyu hike—pack good hiking shoes & water." />
-        <label class="field-label">Poster / Story Photo</label>
-        <input type="file" id="story-file" accept="image/*" />
-        <button id="publish-story-btn" class="btn" style="margin-top:8px;">Publish Story</button>
-        <div id="story-status" class="muted small" style="margin-top:6px;"></div>
-      </div>
-
-      <div class="card">
-        <h3>Active Stories</h3>
-        <div id="st-stories-list"></div>
-      </div>
-    </section>
-
-    <!-- 3. D-DAY PHOTOS & REELS (CLOUDINARY WEB + HIGH-RES ORIGINAL) -->
-    <section id="st-posts" class="st-panel hidden">
-      <div class="card">
-        <h3>+ Upload D-Day Photo or Reel</h3>
-        <p class="muted" style="margin-bottom:8px;">Uploads to Cloudinary with a fast web display URL plus a high-res / original download URL.</p>
-        <label class="field-label">Caption / Trip Tag</label>
-        <input type="text" id="post-caption" placeholder="e.g., Gatamaiyu Dec 5 — Waterfall squad!" />
-        <label class="field-label">Photo or Short Reel Video</label>
-        <input type="file" id="post-file" accept="image/*,video/*" />
-        <button id="publish-post-btn" class="btn" style="margin-top:8px;">Upload & Publish to Grid</button>
-        <div id="post-status" class="muted small" style="margin-top:6px;"></div>
-      </div>
-
-      <div class="card">
-        <h3>Published D-Day Posts & Reels</h3>
-        <div id="st-posts-list"></div>
-      </div>
-    </section>
-
-    <!-- 4. GOOGLE FORM LEADS (WHATSAPP & CALL FOLLOW-UP) -->
-    <section id="st-leads" class="st-panel hidden">
-      <div class="card">
-        <h3>Incoming Bookings & Inquiries (Google Forms)</h3>
-        <p class="muted" style="margin-bottom:8px;">Tap <strong>WhatsApp</strong> or <strong>Call</strong> to follow up immediately, then update the lead status.</p>
-        <div id="st-leads-list"></div>
-      </div>
-    </section>
+    </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import {
-      getFirestore, collection, addDoc, updateDoc, deleteDoc, doc,
-      query, orderBy, onSnapshot, serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // PASTE YOUR FIREBASE WEB CONFIG FROM STEP 1
+    // PASTE YOUR FIREBASE WEB CONFIG HERE
     const FIREBASE_CONFIG = {
       apiKey: "YOUR_API_KEY",
       authDomain: "talani-adventures.firebaseapp.com",
@@ -233,232 +167,154 @@
       appId: "YOUR_APP_ID"
     };
 
-    const CLOUDINARY_CLOUD_NAME = "Nx35scok";
-    const CLOUDINARY_UPLOAD_PRESET = "talani_unsigned"; // Create this Unsigned preset in Cloudinary
-
-    const app = initializeApp(FIREBASE_CONFIG);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    const esc = (s) => String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    const cleanPhone = (p) => {
-      let d = String(p || "").replace(/[^0-9]/g, "");
-      if (d.startsWith("0") && d.length === 10) d = "254" + d.slice(1);
-      return d;
-    };
-
-    async function uploadToCloudinary(file, folder = "talani") {
-      const resourceType = file.type.startsWith("video/") ? "video" : "image";
-      const fd = new FormData();
-      fd.append("file", file);
-      fd.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-      fd.append("folder", folder);
-
-      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`, {
-        method: "POST",
-        body: fd
-      });
-      if (!res.ok) {
-        const errText = await res.text();
-        throw new Error(`Cloudinary upload failed (${res.status}): ${errText}`);
+    // Sample skeleton data shown until live Firestore items are added
+    let tripsData = [
+      {
+        id: "demo_gatamaiyu",
+        brand: "Group ya Ile Kitu",
+        title: "Gatamaiyu Forest Waterfall Hike",
+        date: "2026-12-05",
+        price: 3000,
+        deposit: 1800,
+        slotsTotal: 22,
+        slotsLeft: 9,
+        coverUrl: "https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=900&q=80",
+        bio: "Lush bamboo trails, river crossings & waterfall picnic in Kiambu.\nIncludes: Overland transport from Nairobi CBD, KFS entry, armed rangers, guides, trail snacks & pro photography.",
+        groupDiscountNote: "Group Discounts: 5% off (3–5 pax) • 7% off (5–7 pax) • 10% off (7–10 pax)",
+        formUrl: "https://docs.google.com/forms/"
       }
-      const data = await res.json();
-      const rawUrl = data.secure_url;
-      // For images, inject auto-format/auto-quality/width for fast web display while keeping rawUrl untouched
-      const webUrl = resourceType === "image"
-        ? rawUrl.replace("/upload/", "/upload/f_auto,q_auto:good,w_1440/")
-        : rawUrl;
-      return { webUrl, rawUrl };
+    ];
+    let storiesData = [
+      {
+        id: "st_1",
+        label: "Gatamaiyu",
+        caption: "Only 9 slots left for Dec 5th! Tap Reserve Slot to lock yours with KSh 1,800 deposit.",
+        mediaUrl: "https://images.unsplash.com/photo-1501555088652-021faa106b9b?auto=format&fit=crop&w=700&q=80"
+      }
+    ];
+    let postsData = [
+      {
+        id: "pt_1",
+        type: "image",
+        webUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80",
+        rawUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=95",
+        caption: "Summit squad energy from our last ridge expedition!"
+      }
+    ];
+
+    let activeBrand = "ALL";
+    const esc = (s) => String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+    function renderStories() {
+      document.getElementById("stories-bar").innerHTML = storiesData.map((s, i) => `
+        <div class="story-item" data-idx="${i}">
+          <div class="story-ring"><img src="${esc(s.mediaUrl)}" alt="${esc(s.label)}" loading="lazy" /></div>
+          <span class="story-label">${esc(s.label || "Update")}</span>
+        </div>`).join("");
+
+      document.querySelectorAll(".story-item").forEach((el) => {
+        el.addEventListener("click", () => {
+          const s = storiesData[Number(el.dataset.idx)];
+          openModal("image", s.mediaUrl, null, s.caption);
+        });
+      });
     }
 
-    document.getElementById("login-btn").addEventListener("click", async () => {
-      const email = document.getElementById("auth-email").value.trim();
-      const pass = document.getElementById("auth-pass").value;
-      const err = document.getElementById("auth-err");
-      err.textContent = "Signing in...";
-      try {
-        await signInWithEmailAndPassword(auth, email, pass);
-        err.textContent = "";
-      } catch (e) { err.textContent = e.message; }
-    });
-
-    document.getElementById("logout-btn").addEventListener("click", () => signOut(auth));
-
-    let unsubs = [];
-    onAuthStateChanged(auth, (user) => {
-      unsubs.forEach((u) => u());
-      unsubs = [];
-      if (!user) {
-        document.getElementById("login-card").classList.remove("hidden");
-        document.getElementById("studio-body").classList.add("hidden");
-        document.getElementById("logout-btn").classList.add("hidden");
-        return;
-      }
-      document.getElementById("login-card").classList.add("hidden");
-      document.getElementById("studio-body").classList.remove("hidden");
-      document.getElementById("logout-btn").classList.remove("hidden");
-      document.getElementById("studio-sub").textContent = "Signed in as " + user.email;
-
-      unsubs.push(onSnapshot(query(collection(db, "trips"), orderBy("date", "asc")), (snap) => {
-        document.getElementById("st-trips-list").innerHTML = snap.docs.map((d) => {
-          const t = d.data();
-          return `
-            <div class="list-item">
+    function renderTrips() {
+      const list = tripsData.filter((t) => activeBrand === "ALL" || t.brand === activeBrand);
+      document.getElementById("trips-feed").innerHTML = list.map((t) => `
+        <article class="trip-card">
+          ${t.coverUrl ? `<img class="trip-cover" src="${esc(t.coverUrl)}" alt="${esc(t.title)}" loading="lazy" />` : ""}
+          <div class="trip-body">
+            <div class="trip-top">
+              <h3 class="trip-title">${esc(t.title)}</h3>
+              <span class="badge ${t.slotsLeft > 4 ? "ok" : "warn"}">${t.slotsLeft} / ${t.slotsTotal} slots left</span>
+            </div>
+            <div class="trip-meta">${esc(t.brand)} • 📅 ${esc(t.date)}</div>
+            <p class="trip-bio">${esc(t.bio)}</p>
+            ${t.groupDiscountNote ? `<div class="tier-box">🎟 ${esc(t.groupDiscountNote)}</div>` : ""}
+            <div class="trip-footer">
               <div>
-                <strong>${esc(t.title)}</strong>
-                <div class="muted small">${esc(t.brand)} • ${esc(t.date)} • KSh ${Number(t.price || 0).toLocaleString()}</div>
+                <span class="price-tag">KSh ${Number(t.price || 0).toLocaleString()}</span>
+                <span class="price-sub">Deposit: KSh ${Number(t.deposit || 0).toLocaleString()}</span>
               </div>
-              <div style="display:flex; gap:6px; align-items:center;">
-                <button class="btn-mini" onclick="adjustSlots('${d.id}', ${Number(t.slotsLeft || 0) - 1})">−1 Slot</button>
-                <span class="badge ok">${t.slotsLeft} left</span>
-                <button class="btn-mini" onclick="adjustSlots('${d.id}', ${Number(t.slotsLeft || 0) + 1})">+1 Slot</button>
-              </div>
-            </div>`;
-        }).join("") || `<div class="muted small">No trips published yet.</div>`;
-      }));
+              <a class="btn-book" href="${esc(t.formUrl || "#")}" target="_blank" rel="noopener">Reserve Slot →</a>
+            </div>
+          </div>
+        </article>`).join("") || `<p style="padding:16px; color:var(--muted);">No upcoming trips listed under this brand yet.</p>`;
+    }
 
-      unsubs.push(onSnapshot(query(collection(db, "stories"), orderBy("createdAt", "desc")), (snap) => {
-        document.getElementById("st-stories-list").innerHTML = snap.docs.map((d) => {
-          const s = d.data();
-          return `
-            <div class="list-item">
-              <div><strong>${esc(s.label)}</strong><div class="muted small">${esc(s.caption)}</div></div>
-              <button class="btn-mini danger" onclick="delDoc('stories', '${d.id}')">Delete</button>
-            </div>`;
-        }).join("") || `<div class="muted small">No active stories.</div>`;
-      }));
+    function renderPosts() {
+      document.getElementById("posts-grid").innerHTML = postsData.map((p, i) => `
+        <div class="ig-tile" data-idx="${i}">
+          ${p.type === "video"
+            ? `<video src="${esc(p.webUrl)}" muted playsinline preload="metadata"></video><span class="reel-icon">▶ REEL</span>`
+            : `<img src="${esc(p.webUrl)}" alt="${esc(p.caption)}" loading="lazy" />`}
+        </div>`).join("");
 
-      unsubs.push(onSnapshot(query(collection(db, "posts"), orderBy("createdAt", "desc")), (snap) => {
-        document.getElementById("st-posts-list").innerHTML = snap.docs.map((d) => {
-          const p = d.data();
-          return `
-            <div class="list-item">
-              <div><strong>${p.type === "video" ? "▶ Reel" : "🖼 Photo"}</strong> — ${esc(p.caption || "")}</div>
-              <button class="btn-mini danger" onclick="delDoc('posts', '${d.id}')">Delete</button>
-            </div>`;
-        }).join("") || `<div class="muted small">No D-Day posts yet.</div>`;
-      }));
-
-      unsubs.push(onSnapshot(query(collection(db, "leads"), orderBy("createdAt", "desc")), (snap) => {
-        document.getElementById("leads-count").textContent = String(snap.size);
-        document.getElementById("st-leads-list").innerHTML = snap.docs.map((d) => {
-          const l = d.data();
-          const ph = cleanPhone(l.phone);
-          const waText = encodeURIComponent(`Hi ${l.name || "there"}, thanks for reaching out to Talani Adventures regarding ${l.tripName || "our upcoming expedition"}!`);
-          return `
-            <div class="list-item" style="align-items:flex-start;">
-              <div style="flex:1;">
-                <div style="display:flex; gap:8px; align-items:center;">
-                  <strong>${esc(l.name || "Inquiry")}</strong>
-                  <span class="badge ${l.status === "PAID" ? "ok" : (l.status === "CONTACTED" ? "blue" : "warn")}">${esc(l.status || "NEW")}</span>
-                </div>
-                <div class="muted small">${esc(l.phone || "")} • ${esc(l.tripName || "")} • ${esc(l.pax || 1)} pax</div>
-                ${l.aiSummary ? `<div class="small" style="margin-top:4px; color:#d1fae5;">✨ ${esc(l.aiSummary)}</div>` : ""}
-                <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
-                  ${ph ? `<a class="btn-mini ok" href="https://wa.me/${ph}?text=${waText}" target="_blank" rel="noopener">💬 WhatsApp</a>` : ""}
-                  ${ph ? `<a class="btn-mini blue" href="tel:+${ph}">📞 Call</a>` : ""}
-                  <button class="btn-mini" onclick="setLeadStatus('${d.id}', 'CONTACTED')">Mark Contacted</button>
-                  <button class="btn-mini ok" onclick="setLeadStatus('${d.id}', 'PAID')">Mark Paid</button>
-                </div>
-              </div>
-            </div>`;
-        }).join("") || `<div class="muted small">No leads received yet.</div>`;
-      }));
-    });
-
-    window.adjustSlots = async (id, nextVal) => {
-      await updateDoc(doc(db, "trips", id), { slotsLeft: Math.max(0, nextVal) });
-    };
-    window.delDoc = async (col, id) => {
-      if (confirm("Delete this item?")) await deleteDoc(doc(db, col, id));
-    };
-    window.setLeadStatus = async (id, status) => {
-      await updateDoc(doc(db, "leads", id), { status });
-    };
-
-    document.getElementById("create-trip-btn").addEventListener("click", async () => {
-      const title = document.getElementById("tr-title").value.trim();
-      const st = document.getElementById("tr-status");
-      if (!title) return alert("Enter a trip title.");
-      st.textContent = "Publishing trip...";
-      try {
-        let coverUrl = "";
-        const file = document.getElementById("tr-cover-file").files[0];
-        if (file) {
-          st.textContent = "Uploading cover to Cloudinary...";
-          const uploaded = await uploadToCloudinary(file, "talani/trips");
-          coverUrl = uploaded.webUrl;
-        }
-        await addDoc(collection(db, "trips"), {
-          brand: document.getElementById("tr-brand").value,
-          title,
-          date: document.getElementById("tr-date").value,
-          price: Number(document.getElementById("tr-price").value || 0),
-          deposit: Number(document.getElementById("tr-deposit").value || 0),
-          slotsTotal: Number(document.getElementById("tr-slots-total").value || 20),
-          slotsLeft: Number(document.getElementById("tr-slots-left").value || 20),
-          bio: document.getElementById("tr-bio").value.trim(),
-          groupDiscountNote: document.getElementById("tr-tiers").value.trim(),
-          formUrl: document.getElementById("tr-form-url").value.trim(),
-          coverUrl,
-          createdAt: serverTimestamp()
+      document.querySelectorAll(".ig-tile").forEach((el) => {
+        el.addEventListener("click", () => {
+          const p = postsData[Number(el.dataset.idx)];
+          openModal(p.type, p.webUrl, p.rawUrl, p.caption);
         });
-        document.getElementById("tr-title").value = "";
-        document.getElementById("tr-bio").value = "";
-        st.textContent = "✓ Trip published live to website!";
-      } catch (e) { st.textContent = "Error: " + e.message; }
+      });
+    }
+
+    function openModal(type, webUrl, rawUrl, caption) {
+      const wrap = document.getElementById("modal-media-wrap");
+      wrap.innerHTML = type === "video"
+        ? `<video class="modal-media" src="${esc(webUrl)}" controls autoplay playsinline></video>`
+        : `<img class="modal-media" src="${esc(webUrl)}" alt="" />`;
+      document.getElementById("modal-caption").textContent = caption || "";
+      const hd = document.getElementById("modal-hd-link");
+      if (rawUrl) { hd.href = rawUrl; hd.classList.remove("hidden"); }
+      else { hd.classList.add("hidden"); }
+      document.getElementById("viewer-modal").classList.remove("hidden");
+    }
+
+    document.getElementById("modal-close-btn").addEventListener("click", () => {
+      document.getElementById("modal-media-wrap").innerHTML = "";
+      document.getElementById("viewer-modal").classList.add("hidden");
     });
 
-    document.getElementById("publish-story-btn").addEventListener("click", async () => {
-      const label = document.getElementById("story-label").value.trim();
-      const caption = document.getElementById("story-caption").value.trim();
-      const file = document.getElementById("story-file").files[0];
-      const st = document.getElementById("story-status");
-      if (!file) return alert("Pick a story photo/poster.");
-      st.textContent = "Uploading story to Cloudinary...";
-      try {
-        const uploaded = await uploadToCloudinary(file, "talani/stories");
-        await addDoc(collection(db, "stories"), {
-          label: label || "Update",
-          caption,
-          mediaUrl: uploaded.webUrl,
-          createdAt: serverTimestamp()
-        });
-        document.getElementById("story-label").value = "";
-        document.getElementById("story-caption").value = "";
-        st.textContent = "✓ Story live!";
-      } catch (e) { st.textContent = "Error: " + e.message; }
-    });
-
-    document.getElementById("publish-post-btn").addEventListener("click", async () => {
-      const caption = document.getElementById("post-caption").value.trim();
-      const file = document.getElementById("post-file").files[0];
-      const st = document.getElementById("post-status");
-      if (!file) return alert("Select a photo or reel video.");
-      const isVid = file.type.startsWith("video/");
-      st.textContent = "Uploading media to Cloudinary...";
-      try {
-        const uploaded = await uploadToCloudinary(file, "talani/posts");
-        await addDoc(collection(db, "posts"), {
-          type: isVid ? "video" : "image",
-          webUrl: uploaded.webUrl,
-          rawUrl: uploaded.rawUrl,
-          caption,
-          createdAt: serverTimestamp()
-        });
-        document.getElementById("post-caption").value = "";
-        st.textContent = "✓ Published to D-Day grid!";
-      } catch (e) { st.textContent = "Error: " + e.message; }
-    });
-
-    document.querySelectorAll(".tab-btn").forEach((btn) => {
+    document.querySelectorAll("#brand-pills .pill").forEach((btn) => {
       btn.addEventListener("click", () => {
-        document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
-        document.querySelectorAll(".st-panel").forEach((p) => p.classList.add("hidden"));
+        document.querySelectorAll("#brand-pills .pill").forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
-        document.getElementById(btn.dataset.tab).classList.remove("hidden");
+        activeBrand = btn.dataset.brand;
+        renderTrips();
       });
     });
+
+    // Render initial skeleton immediately
+    renderStories();
+    renderTrips();
+    renderPosts();
+
+    // Connect live Firestore listeners once FIREBASE_CONFIG is filled in
+    if (FIREBASE_CONFIG.apiKey !== "YOUR_API_KEY") {
+      const app = initializeApp(FIREBASE_CONFIG);
+      const db = getFirestore(app);
+
+      onSnapshot(query(collection(db, "trips"), orderBy("date", "asc")), (snap) => {
+        if (!snap.empty) {
+          tripsData = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+          renderTrips();
+        }
+      });
+      onSnapshot(query(collection(db, "stories"), orderBy("createdAt", "desc")), (snap) => {
+        if (!snap.empty) {
+          storiesData = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+          renderStories();
+        }
+      });
+      onSnapshot(query(collection(db, "posts"), orderBy("createdAt", "desc")), (snap) => {
+        if (!snap.empty) {
+          postsData = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+          renderPosts();
+        }
+      });
+    }
   </script>
 </body>
 </html>
