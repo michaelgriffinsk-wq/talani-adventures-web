@@ -55,13 +55,15 @@
   </header>
 
   <main class="max-w-4xl mx-auto px-6 md:px-10 py-24 md:py-32 text-center">
-    <p class="eyebrow text-xs font-bold mb-5 text-[#968d80]">Adamanti · Concierge &amp; Hospitality</p>
-    <h1 class="display text-4xl md:text-6xl leading-[1.08] tracking-[-.04em] text-[#304b54]">Coming Soon.</h1>
-    <p class="leading-8 mt-6 max-w-xl mx-auto text-[#52636a] text-base">Adamanti is being prepared as our dedicated hospitality and concierge arm—covering BnBs, hotels, resorts, and hosting.</p>
-    <div class="mt-9 flex justify-center gap-4 flex-wrap">
-      <a href="./index.html" class="bg-[#304b54] text-white px-7 py-3.5 text-xs font-bold uppercase tracking-wider hover:opacity-85">Back to Overview →</a>
-      <a href="./group-ya-ile-kitu.html" class="border border-[#304b54] text-[#304b54] px-7 py-3.5 text-xs font-bold uppercase tracking-wider hover:bg-[#e9eeec]">Explore Destinations</a>
-    </div>
+    <section data-block-id="adamanti-coming-soon">
+      <p class="eyebrow text-xs font-bold mb-5 text-[#968d80]">Adamanti · Concierge &amp; Hospitality</p>
+      <h1 class="display text-4xl md:text-6xl leading-[1.08] tracking-[-.04em] text-[#304b54]">Coming Soon.</h1>
+      <p class="leading-8 mt-6 max-w-xl mx-auto text-[#52636a] text-base">Adamanti is being prepared as our dedicated hospitality and concierge arm—covering BnBs, hotels, resorts, and hosting.</p>
+      <div class="mt-9 flex justify-center gap-4 flex-wrap">
+        <a href="./index.html" class="bg-[#304b54] text-white px-7 py-3.5 text-xs font-bold uppercase tracking-wider hover:opacity-85">Back to Overview →</a>
+        <a href="./group-ya-ile-kitu.html" class="border border-[#304b54] text-[#304b54] px-7 py-3.5 text-xs font-bold uppercase tracking-wider hover:bg-[#e9eeec]">Explore Destinations</a>
+      </div>
+    </section>
   </main>
 
   <footer class="w-full border-t border-[#dcded9]">
@@ -73,5 +75,10 @@
       <p class="text-xs text-[#6f7877]">Adamanti · Coming Soon</p>
     </div>
   </footer>
+
+  <script type="module">
+    import { applyPublishedLayout } from "./layout-runtime.js";
+    applyPublishedLayout("adamanti");
+  </script>
 </body>
 </html>
