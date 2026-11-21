@@ -65,14 +65,18 @@
         </a>
         <div class="min-w-0 flex-1">
           <p class="display font-medium leading-tight text-[#304b54] text-lg md:text-xl">Talani Adventures</p>
-          <p class="text-[10px] md:text-xs tracking-wide mt-1 text-[#968d80] font-semibold">Group ya Ile Kitu • Curated Expeditions</p>
+          <p class="text-[10px] md:text-xs tracking-wide mt-1 text-[#968d80] font-semibold">@talani.adventures • Group ya Ile Kitu</p>
         </div>
         <nav aria-label="Main navigation" class="hidden lg:flex items-center gap-7">
           <a class="text-sm font-semibold hover:underline text-[#304b54]" href="#experiences">Experiences</a>
           <a class="text-sm font-semibold hover:underline text-[#304b54]" href="#travellers">Who we welcome</a>
           <a class="text-sm font-semibold hover:underline text-[#304b54]" href="#about">Our story</a>
         </nav>
-        <a href="./studio.html" class="shrink-0 border border-[#dcded9] px-3 py-2 text-[11px] md:text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">Creator Studio ↗</a>
+        <div class="flex items-center gap-2 shrink-0">
+          <a href="https://www.instagram.com/talani.adventures/" target="_blank" rel="noopener noreferrer" aria-label="Instagram @talani.adventures" class="border border-[#dcded9] px-2.5 py-2 text-[11px] md:text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">IG ↗</a>
+          <a href="https://www.tiktok.com/@talani.adventures" target="_blank" rel="noopener noreferrer" aria-label="TikTok @talani.adventures" class="border border-[#dcded9] px-2.5 py-2 text-[11px] md:text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">TT ↗</a>
+          <a href="./studio.html" class="border border-[#dcded9] px-3 py-2 text-[11px] md:text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">Creator Studio ↗</a>
+        </div>
       </div>
     </header>
 
@@ -223,9 +227,11 @@
         <div class="flex flex-wrap gap-6 items-center">
           <a class="text-sm font-semibold hover:underline text-[#304b54]" href="#experiences">Experiences</a>
           <a class="text-sm font-semibold hover:underline text-[#304b54]" href="#travellers">Travellers</a>
+          <a class="text-sm font-semibold hover:underline text-[#304b54]" href="https://www.instagram.com/talani.adventures/" target="_blank" rel="noopener noreferrer">Instagram @talani.adventures ↗</a>
+          <a class="text-sm font-semibold hover:underline text-[#304b54]" href="https://www.tiktok.com/@talani.adventures" target="_blank" rel="noopener noreferrer">TikTok @talani.adventures ↗</a>
           <a class="text-sm font-semibold hover:underline text-[#304b54]" href="#home">Back to top ↑</a>
         </div>
-        <p class="text-xs tracking-wide text-[#6f7877]">Talani Adventures · A world worth exploring</p>
+        <p class="text-xs tracking-wide text-[#6f7877]">Talani Adventures · @talani.adventures</p>
       </div>
     </footer>
   </div>
@@ -315,7 +321,7 @@
       const head=document.createElement("div");head.className="flex flex-wrap items-start justify-between gap-2";
       const title=document.createElement("h3");title.className="display text-2xl leading-tight";title.textContent=trip.title||"Upcoming expedition";
       const badge=document.createElement("span");badge.className="slot-badge"+(number(trip.slotsLeft)<=4?" low":"");
-      badge.textContent=`${fmt(trip.slotsLeft)} / ${fmt(trip.slotsTotal)} slots left`;
+      badge.textContent=`${fmt(trip.slotsLeft)} slots left`;
       head.append(title,badge);
       const meta=document.createElement("p");meta.className="text-xs font-semibold tracking-wide text-[#61767b] mt-3";
       meta.textContent=`${trip.brand||"Talani Adventures"} • ${trip.date?.toDate?.().toLocaleDateString("en-KE",{day:"numeric",month:"long",year:"numeric"})||String(trip.date||"Date to be announced")}`;
