@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Multi-Day Expeditions &amp; Retreats — Talani Premium</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#304b54;--stone:#968d80;--paper:#f8f7f3;--line:#dcded9;--mist:#e9eeec}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;width:100%;font-family:Raleway,sans-serif;color:var(--ink);background:var(--paper)}
+    .display{font-family:Fraunces,serif}
+    .eyebrow{letter-spacing:.23em;text-transform:uppercase}
+    :is(a,button):focus-visible{outline:3px solid #ad8970;outline-offset:3px}
+    .sticky-header{position:sticky;top:0;z-index:30;background:rgba(248,247,243,.96);backdrop-filter:blur(14px)}
+    .subnav-strip{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:10px 0}
+    .subnav-strip::-webkit-scrollbar{display:none}
+    .subnav-link{flex:none;font-size:12px;font-weight:700;color:var(--ink);text-decoration:none;padding:8px 14px;border:1px solid var(--line);background:white}
+    .subnav-link.active,.subnav-link:hover{border-color:var(--ink);background:var(--mist)}
+    .exp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:18px}
+    .exp-card{background:white;border:1px solid var(--line);padding:20px;display:flex;flex-direction:column;justify-content:space-between;gap:14px}
+  </style>
+  <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
+</head>
+<body class="w-full" style="background: rgb(248, 247, 243);">
+  <header class="sticky-header w-full border-b border-[#dcded9]">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 py-3 flex items-center justify-between gap-4">
+      <a href="./index.html" aria-label="Talani Adventures home" class="shrink-0">
+        <img class="w-16 h-16 md:w-20 md:h-20 object-contain" loading="lazy" src="../IMG-20261110-WA0045.jpg" alt="Talani Adventures logo">
+      </a>
+      <div class="min-w-0 flex-1">
+        <p class="display font-medium leading-tight text-[#304b54] text-lg md:text-xl">Talani Premium · Multi-Day Expeditions</p>
+        <p class="text-[10px] md:text-xs tracking-wide mt-1 text-[#968d80] font-semibold">Zanzibar • Coast • Mountains • Overland Retreats • @talani.adventures</p>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <a href="https://www.instagram.com/talani.adventures/" target="_blank" rel="noopener noreferrer" class="border border-[#dcded9] px-2.5 py-2 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">IG ↗</a>
+        <a href="https://www.tiktok.com/@talani.adventures" target="_blank" rel="noopener noreferrer" class="border border-[#dcded9] px-2.5 py-2 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">TT ↗</a>
+        <a href="./studio.html" class="border border-[#dcded9] px-3 py-2 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">Studio ↗</a>
+      </div>
+    </div>
+    <div class="border-t border-[#e6e8e3] bg-[#f8f7f3]">
+      <div class="max-w-7xl mx-auto px-6 md:px-10 subnav-strip">
+        <a class="subnav-link" href="./index.html">Overview</a>
+        <a class="subnav-link" href="./group-ya-ile-kitu.html">Group ya Ile Kitu (All Destinations)</a>
+        <a class="subnav-link" href="./outdoor-adventures.html">Outdoor Adventures (Safaris &amp; Wildlife)</a>
+        <a class="subnav-link" href="./talani-adventures.html">Talani Adventures (Hikes &amp; Trails)</a>
+        <a class="subnav-link" href="./adamanti.html">Adamanti (Concierge &amp; Stays)</a>
+        <a class="subnav-link active" href="./talani-premium.html">Talani Premium (Multi-Day Trips)</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 md:px-10 py-14 md:py-20">
+    <section class="max-w-3xl mb-14">
+      <p class="eyebrow text-xs font-bold mb-4 text-[#968d80]">Talani Premium · Multi-Day Expeditions &amp; Retreats</p>
+      <h1 class="display text-3xl md:text-5xl leading-[1.1] tracking-[-.04em] text-[#304b54]">Extended expeditions across mountains, bush camps, deserts, and islands.</h1>
+      <p class="leading-8 mt-5 text-[#52636a] text-base">Multi-day itineraries spanning Zanzibar, Lamu, and coastal escapes alongside mountain ascents and overland routes across East Africa.</p>
+    </section>
+
+    <section aria-labelledby="multiday-list-heading">
+      <h2 id="multiday-list-heading" class="display text-2xl text-[#304b54] mb-6">Multi-Day Expeditions &amp; Retreats</h2>
+      <div id="premium-grid" class="exp-grid"></div>
+    </section>
+  </main>
+
+  <footer class="w-full border-t border-[#dcded9] mt-12">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 py-9 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+      <a href="./index.html" class="flex items-center gap-3">
+        <img class="w-16 h-16 object-contain" loading="lazy" src="../IMG-20261110-WA0046.jpg" alt="Talani Adventures footer logo">
+        <span class="text-xs text-[#6f7877]">Talani Adventures · @talani.adventures</span>
+      </a>
+      <div class="flex flex-wrap gap-6 text-sm font-semibold text-[#304b54]">
+        <a href="./index.html" class="hover:underline">Main Landing</a>
+        <a href="./group-ya-ile-kitu.html" class="hover:underline">Group ya Ile Kitu</a>
+        <a href="./talani-adventures.html" class="hover:underline">Hikes &amp; Trails</a>
+        <a href="./outdoor-adventures.html" class="hover:underline">Safaris &amp; Wildlife</a>
+        <a href="./adamanti.html" class="hover:underline">Adamanti</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const MULTIDAY = [
+      { title: "Mt. Meru, Tanzania (4 Days; Cabins)", detail: "4 Days • Cabins" },
+      { title: "Mt. Kenya – Sirimon Route (4 Days; Dorms)", detail: "4 Days • Dorms" },
+      { title: "Mt. Kenya – Chogoria Route (4 Days; Camping)", detail: "4 Days • Camping" },
+      { title: "Ol Jojori Ranch Mt. Kenya", detail: "Mt. Kenya Ranch Expedition" },
+      { title: "Kilimanjaro – Marangu Route (6 Days; Cabins)", detail: "6 Days • Cabins" },
+      { title: "Zanzibar Flagship Retreat (4 Days / 3 Nights Bush-to-Beach)", detail: "4 Days / 3 Nights • Bush-to-Beach" },
+      { title: "Lake Naivasha / Lake Oloiden Bush Camp (2 Days / 1 Night)", detail: "2 Days / 1 Night • Bush Camp" },
+      { title: "Amboseli Borderlands Cultural Camp (2 Days / 1 Night)", detail: "2 Days / 1 Night • Cultural Camp" },
+      { title: "Aberdares North-to-South Moorland Traverse (3 Days / 2 Nights)", detail: "3 Days / 2 Nights • Moorland Traverse" },
+      { title: "Mt. Elgon – Koitoboss Peak & Kitum Cave (4 Days)", detail: "4 Days • Peak & Cave" },
+      { title: "Lamu Archipelago Dhow Expedition (4 Days)", detail: "4 Days • Coast & Dhow" },
+      { title: "Chalbi Desert & Lake Turkana Overland (5 Days)", detail: "5 Days • Overland Expedition" },
+      { title: "Matthews Range Trekking (Samburu)", detail: "Samburu Multi-Day Trek" },
+      { title: "Tsavo West & Shetani Lava Flows (3 Days / 2 Nights)", detail: "3 Days / 2 Nights • Bush & Lava" }
+    ];
+
+    document.getElementById("premium-grid").innerHTML = MULTIDAY.map((item) => `
+      <article class="exp-card">
+        <div>
+          <p class="eyebrow text-[10px] font-bold mb-2 text-[#968d80]">${item.detail}</p>
+          <h3 class="display text-lg text-[#304b54] leading-snug">${item.title}</h3>
+        </div>
+        <a href="./group-ya-ile-kitu.html#inquiry-section" class="text-xs font-bold uppercase tracking-wider text-[#304b54] hover:underline">Inquire or Book This Retreat →</a>
+      </article>
+    `).join("");
+  </script>
+</body>
+</html>
