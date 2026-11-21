@@ -157,17 +157,16 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // PASTE YOUR FIREBASE WEB CONFIG HERE
     const FIREBASE_CONFIG = {
-      apiKey: "YOUR_API_KEY",
+      apiKey: "AIzaSyDhdiJxS7bI4BX0E9ObXGjMA4Y95sXZftc",
       authDomain: "talani-adventures.firebaseapp.com",
       projectId: "talani-adventures",
       storageBucket: "talani-adventures.firebasestorage.app",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      messagingSenderId: "698912000783",
+      appId: "1:698912000783:web:ab04f85cb956c994558c7a",
+      measurementId: "G-X2HVRDMRDM"
     };
 
-    // Sample skeleton data shown until live Firestore items are added
     let tripsData = [
       {
         id: "demo_gatamaiyu",
@@ -286,35 +285,31 @@
       });
     });
 
-    // Render initial skeleton immediately
     renderStories();
     renderTrips();
     renderPosts();
 
-    // Connect live Firestore listeners once FIREBASE_CONFIG is filled in
-    if (FIREBASE_CONFIG.apiKey !== "YOUR_API_KEY") {
-      const app = initializeApp(FIREBASE_CONFIG);
-      const db = getFirestore(app);
+    const app = initializeApp(FIREBASE_CONFIG);
+    const db = getFirestore(app);
 
-      onSnapshot(query(collection(db, "trips"), orderBy("date", "asc")), (snap) => {
-        if (!snap.empty) {
-          tripsData = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-          renderTrips();
-        }
-      });
-      onSnapshot(query(collection(db, "stories"), orderBy("createdAt", "desc")), (snap) => {
-        if (!snap.empty) {
-          storiesData = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-          renderStories();
-        }
-      });
-      onSnapshot(query(collection(db, "posts"), orderBy("createdAt", "desc")), (snap) => {
-        if (!snap.empty) {
-          postsData = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-          renderPosts();
-        }
-      });
-    }
+    onSnapshot(query(collection(db, "trips"), orderBy("date", "asc")), (snap) => {
+      if (!snap.empty) {
+        tripsData = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        renderTrips();
+      }
+    });
+    onSnapshot(query(collection(db, "stories"), orderBy("createdAt", "desc")), (snap) => {
+      if (!snap.empty) {
+        storiesData = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        renderStories();
+      }
+    });
+    onSnapshot(query(collection(db, "posts"), orderBy("createdAt", "desc")), (snap) => {
+      if (!snap.empty) {
+        postsData = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        renderPosts();
+      }
+    });
   </script>
 </body>
 </html>
