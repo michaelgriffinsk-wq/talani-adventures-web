@@ -1,0 +1,8 @@
+{
+  "appId": "com.talani.studio",
+  "appName": "Talani Studio",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}
