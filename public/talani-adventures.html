@@ -12,50 +12,57 @@
     body{margin:0;width:100%;font-family:Raleway,sans-serif;color:var(--ink);background:var(--paper)}
     .display{font-family:Fraunces,serif}
     .eyebrow{letter-spacing:.23em;text-transform:uppercase}
-    :is(a,button,input,select,textarea):focus-visible{outline:3px solid #ad8970;outline-offset:3px}
-    .sticky-header{position:sticky;top:0;z-index:30;background:rgba(248,247,243,.96);backdrop-filter:blur(14px)}
+    :is(a,button):focus-visible{outline:3px solid #ad8970;outline-offset:3px}
+    .sticky-header{position:sticky;top:0;z-index:30;background:rgba(248,247,243,.97);backdrop-filter:blur(14px)}
+    .header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .header-brand{display:flex;align-items:center;gap:12px;min-width:0}
+    .header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
     .subnav-strip{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:10px 0}
     .subnav-strip::-webkit-scrollbar,.filter-row::-webkit-scrollbar{display:none}
-    .subnav-link{flex:none;font-size:12px;font-weight:700;color:var(--ink);text-decoration:none;padding:8px 14px;border:1px solid var(--line);background:white}
+    .subnav-link{flex:none;font-size:12px;font-weight:700;color:var(--ink);text-decoration:none;padding:8px 14px;border:1px solid var(--line);background:white;white-space:nowrap}
     .subnav-link.active,.subnav-link:hover{border-color:var(--ink);background:var(--mist)}
     .filter-row{display:flex;gap:9px;overflow-x:auto;scrollbar-width:none;padding:4px 0 18px}
     .filter-pill{flex:none;border:1px solid #bfc9c5;border-radius:99px;background:transparent;color:var(--ink);padding:10px 17px;font-size:12px;font-weight:700;cursor:pointer}
     .filter-pill[aria-pressed=true]{background:var(--ink);color:white;border-color:var(--ink)}
-    .dest-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:16px}
-    .dest-card{background:white;border:1px solid var(--line);padding:18px;display:flex;flex-direction:column;justify-content:space-between;gap:12px}
+    .dest-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:20px}
+    .dest-card{background:white;border:1px solid var(--line);overflow:hidden;display:flex;flex-direction:column;justify-content:space-between}
+    .photo-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line)}
+    .photo-strip img{width:100%;height:112px;object-fit:cover;display:block}
     .trip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:24px}
     .trip-card{background:white;border:1px solid var(--line);overflow:hidden}
     .trip-cover{width:100%;aspect-ratio:16/10;background-size:cover;background-position:center;background-color:#d6dfd9}
     .slot-badge{background:#e5eee8;color:#315d4d;padding:7px 10px;font-size:11px;font-weight:700;white-space:nowrap}
     .slot-badge.low{background:#f1e9db;color:#785a37}
-    .hidden{display:none!important}
+    @media(max-width:767px){.header-actions{width:100%;justify-content:flex-start}}
   </style>
   <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
 </head>
 <body class="w-full" style="background: rgb(248, 247, 243);">
   <header class="sticky-header w-full border-b border-[#dcded9]">
-    <div class="max-w-7xl mx-auto px-6 md:px-10 py-3 flex items-center justify-between gap-4">
-      <a href="./index.html" aria-label="Talani Adventures home" class="shrink-0">
-        <img class="w-16 h-16 md:w-20 md:h-20 object-contain" loading="lazy" src="../IMG-20261110-WA0045.jpg" alt="Talani Adventures logo">
-      </a>
-      <div class="min-w-0 flex-1">
-        <p class="display font-medium leading-tight text-[#304b54] text-lg md:text-xl">Talani Adventures · Hikes &amp; Trails</p>
-        <p class="text-[10px] md:text-xs tracking-wide mt-1 text-[#968d80] font-semibold">Forest Walks • Waterfalls • Hills • Craters • Peaks • @talani.adventures</p>
+    <div class="max-w-7xl mx-auto px-6 md:px-10 py-3 header-top">
+      <div class="header-brand">
+        <a href="./index.html" aria-label="Talani Adventures home" class="shrink-0">
+          <img class="w-12 h-12 md:w-14 md:h-14 object-contain" loading="lazy" src="../IMG-20261110-WA0045.jpg" alt="Talani Adventures logo">
+        </a>
+        <div class="min-w-0">
+          <p class="display font-medium leading-tight text-[#304b54] text-lg md:text-xl">Hikes &amp; Forest Trails</p>
+          <p class="text-[11px] tracking-wide text-[#968d80] font-semibold">Talani Adventures • @talani.adventures</p>
+        </div>
       </div>
-      <div class="flex items-center gap-2 shrink-0">
-        <a href="https://www.instagram.com/talani.adventures/" target="_blank" rel="noopener noreferrer" class="border border-[#dcded9] px-2.5 py-2 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">IG ↗</a>
-        <a href="https://www.tiktok.com/@talani.adventures" target="_blank" rel="noopener noreferrer" class="border border-[#dcded9] px-2.5 py-2 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">TT ↗</a>
-        <a href="./studio.html" class="border border-[#dcded9] px-3 py-2 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">Studio ↗</a>
+      <div class="header-actions">
+        <a href="https://www.instagram.com/talani.adventures/" target="_blank" rel="noopener noreferrer" class="border border-[#dcded9] bg-white px-3 py-1.5 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">Instagram ↗</a>
+        <a href="https://www.tiktok.com/@talani.adventures" target="_blank" rel="noopener noreferrer" class="border border-[#dcded9] bg-white px-3 py-1.5 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">TikTok ↗</a>
+        <a href="./studio.html" class="border border-[#304b54] bg-[#304b54] px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90">Studio ↗</a>
       </div>
     </div>
     <div class="border-t border-[#e6e8e3] bg-[#f8f7f3]">
       <div class="max-w-7xl mx-auto px-6 md:px-10 subnav-strip">
         <a class="subnav-link" href="./index.html">Overview</a>
-        <a class="subnav-link" href="./group-ya-ile-kitu.html">Group ya Ile Kitu (All Destinations)</a>
-        <a class="subnav-link" href="./outdoor-adventures.html">Outdoor Adventures (Safaris &amp; Wildlife)</a>
-        <a class="subnav-link active" href="./talani-adventures.html">Talani Adventures (Hikes &amp; Trails)</a>
-        <a class="subnav-link" href="./adamanti.html">Adamanti (Concierge &amp; Stays)</a>
-        <a class="subnav-link" href="./talani-premium.html">Talani Premium (Multi-Day Trips)</a>
+        <a class="subnav-link" href="./group-ya-ile-kitu.html">Group ya Ile Kitu</a>
+        <a class="subnav-link" href="./outdoor-adventures.html">Outdoor Adventures</a>
+        <a class="subnav-link active" href="./talani-adventures.html">Hikes &amp; Trails</a>
+        <a class="subnav-link" href="./adamanti.html">Adamanti (Coming Soon)</a>
+        <a class="subnav-link" href="./talani-premium.html">Talani Premium</a>
       </div>
     </div>
   </header>
@@ -64,19 +71,17 @@
     <section class="max-w-3xl mb-14">
       <p class="eyebrow text-xs font-bold mb-4 text-[#968d80]">Talani Adventures · Trails &amp; Hikes</p>
       <h1 class="display text-3xl md:text-5xl leading-[1.1] tracking-[-.04em] text-[#304b54]">Forest canopies, waterfall chases, craters, and high ridges.</h1>
-      <p class="leading-8 mt-5 text-[#52636a] text-base">From accessible woodland and tea estate walks to full crater circuits and mountain peak challenges—starting with our active Gatamaiyu Forest Reserve departure.</p>
+      <p class="leading-8 mt-5 text-[#52636a] text-base">Woodland walks, waterfalls, tea estates, crater loops, and mountain hikes across Kenya—starting with the December 5, 2026 Gatamaiyu Forest Reserve hike.</p>
     </section>
 
-    <!-- LIVE HIKES & TRAILS FROM FIRESTORE -->
     <section aria-labelledby="live-hikes-heading" class="mb-20">
       <div class="flex items-end justify-between gap-4 mb-6">
         <h2 id="live-hikes-heading" class="display text-2xl text-[#304b54]">Scheduled Hikes &amp; Trails</h2>
-        <span id="live-status" class="text-xs font-bold text-[#61767b]">● Live schedule</span>
+        <span class="text-xs font-bold text-[#61767b]">● Active schedule</span>
       </div>
       <div id="trips-feed" class="trip-grid"></div>
     </section>
 
-    <!-- FULL TRAILS & HIKES CATALOG -->
     <section aria-labelledby="trails-hikes-catalog">
       <h2 id="trails-hikes-catalog" class="display text-2xl text-[#304b54] mb-3">Trails &amp; Hikes Directory</h2>
       <div id="filter-pills" class="filter-row" role="group" aria-label="Filter trails and hikes">
@@ -89,8 +94,8 @@
 
     <section class="mt-16 bg-[#e9eeec] border border-[#dcded9] p-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <h3 class="display text-xl text-[#304b54]">Planning a group hike or custom trail date?</h3>
-        <p class="text-sm text-[#52636a] mt-1">Group ya Ile Kitu coordinates small groups, corporate teams, and families across all listed trails and hikes.</p>
+        <h3 class="display text-xl text-[#304b54]">Want to book or ask about a specific trail or hike?</h3>
+        <p class="text-sm text-[#52636a] mt-1">Reach out via Group ya Ile Kitu for open spots, small groups, corporate hikes, or family outings.</p>
       </div>
       <a href="./group-ya-ile-kitu.html#inquiry-section" class="bg-[#304b54] text-white px-6 py-3.5 text-xs font-bold uppercase tracking-wider shrink-0">Inquire via Group ya Ile Kitu →</a>
     </section>
@@ -106,8 +111,8 @@
         <a href="./index.html" class="hover:underline">Main Landing</a>
         <a href="./group-ya-ile-kitu.html" class="hover:underline">Group ya Ile Kitu</a>
         <a href="./outdoor-adventures.html" class="hover:underline">Safaris &amp; Wildlife</a>
-        <a href="./adamanti.html" class="hover:underline">Adamanti</a>
         <a href="./talani-premium.html" class="hover:underline">Talani Premium</a>
+        <a href="./adamanti.html" class="hover:underline">Adamanti</a>
       </div>
     </div>
   </footer>
@@ -126,50 +131,71 @@
     measurementId: "G-X2HVRDMRDM"
   };
 
-  const ITEMS = [
-    // Trails
-    { mode: "Trails", title: "Castle Forest & Kamweti Falls", tag: "Forest & Waterfall Trail" },
-    { mode: "Trails", title: "Kathandeni Forest & Waterfall Chase", tag: "Forest & Waterfall Chase" },
-    { mode: "Trails", title: "Ragia Forest & Falls", tag: "Forest & Falls" },
-    { mode: "Trails", title: "Kereita Forest & Waterfalls", tag: "Forest & Waterfalls" },
-    { mode: "Trails", title: "Thiririka Falls", tag: "Waterfall Chase" },
-    { mode: "Trails", title: "Kanunga Falls / Blue Pools", tag: "Waterfall & Blue Pools" },
-    { mode: "Trails", title: "Trasha Falls", tag: "Waterfall Trail" },
-    { mode: "Trails", title: "Tigoni Tea Trails", tag: "Tea Estate Walk" },
-    { mode: "Trails", title: "Kiambethu Farm & Woodlands", tag: "Woodlands & Tea Farm" },
-    { mode: "Trails", title: "Gatamaiyu Forest Reserve", tag: "Active Dec 5, 2026 Hike" },
-    { mode: "Trails", title: "Ngare Ndare Forest & Blue Pools", tag: "Canopy & Blue Pools" },
-    { mode: "Trails", title: "Zaina Falls (Nyeri)", tag: "Nyeri Forest Trail" },
-    { mode: "Trails", title: "Nthenge Njeru Falls (Embu)", tag: "Embu Waterfall Trail" },
-    { mode: "Trails", title: "Oloolua Nature Trail (Karen)", tag: "Forest Nature Trail" },
-    { mode: "Trails", title: "Ndakaini Dam / Kiplot Trails", tag: "Highland Dam Trail" },
-    { mode: "Trails", title: "Karuru Falls", tag: "Waterfall Trail" },
+  const PHOTOS = {
+    waterfalls: [
+      "https://images.pexels.com/photos/210186/pexels-photo-210186.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/145685/pexels-photo-145685.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/358457/pexels-photo-358457.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
+    ngareNdare: [
+      "https://images.pexels.com/photos/1450360/pexels-photo-1450360.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1671325/pexels-photo-1671325.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/210186/pexels-photo-210186.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
+    teaForest: [
+      "https://images.pexels.com/photos/158163/the-tea-plant-tea-plantation-farm-silver-158163.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1671325/pexels-photo-1671325.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/145685/pexels-photo-145685.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
+    peaksCraters: [
+      "https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ]
+  };
 
-    // Hikes
-    { mode: "Hikes", title: "Lake Ellis & Nithi Fall", tag: "Lake & Waterfall Hike" },
-    { mode: "Hikes", title: "Mt. Suswa (Half-Crater Circuit)", tag: "Crater Circuit" },
-    { mode: "Hikes", title: "Oldonyo Sabuk / Kilimambogo", tag: "Summit Hike" },
-    { mode: "Hikes", title: "Mount Kipipiri", tag: "Peak & Forest Hike" },
-    { mode: "Hikes", title: "Kijabe Hills", tag: "Hills Hike" },
-    { mode: "Hikes", title: "Kijabe Dark Tunnel & Hot Springs Route", tag: "Tunnel & Hot Springs" },
-    { mode: "Hikes", title: "Table Mountain (Aberdares)", tag: "Aberdares Hike" },
-    { mode: "Hikes", title: "Sleeping Warrior & Ugali Hills", tag: "Rift Hills Circuit" },
-    { mode: "Hikes", title: "Mount Longonot Crater Circuit", tag: "Crater Rim Hike" },
-    { mode: "Hikes", title: "Seven Ponds Hike", tag: "Ridge & Ponds Hike" },
-    { mode: "Hikes", title: "Elephant Hill", tag: "Aberdares Peak Climb" },
-    { mode: "Hikes", title: "Rurimeria Moorland Trek", tag: "Moorland Trek" },
-    { mode: "Hikes", title: "Teleki Valley (Mackinders Quest)", tag: "High-Altitude Route" },
-    { mode: "Hikes", title: "Eburru Forest (Western Summit)", tag: "Western Summit" },
-    { mode: "Hikes", title: "Sirimon Likii North", tag: "High-Altitude Hike" },
-    { mode: "Hikes", title: "Oldonyo Lesatima / Dragon's Teeth", tag: "High Peak & Ridge" },
-    { mode: "Hikes", title: "William Hill Soft", tag: "Scenic Hill Hike" },
-    { mode: "Hikes", title: "Menengai Crater", tag: "Caldera Hike" },
-    { mode: "Hikes", title: "Ngong Hills (7 Hills Circuit)", tag: "7-Hills Circuit" },
-    { mode: "Hikes", title: "Mount Namanga (Ol Doinyo Orok)", tag: "Peak Hike" },
-    { mode: "Hikes", title: "Mt. Kinangop (Aberdares)", tag: "Aberdares Peak" },
-    { mode: "Hikes", title: "Mt. Olorgesailie (Magadi)", tag: "Rift Hike" },
-    { mode: "Hikes", title: "Chyulu Hills (Kibwezi)", tag: "Volcanic Hills" },
-    { mode: "Hikes", title: "Mount Margaret", tag: "Hill Hike" }
+  const ITEMS = [
+    { mode: "Trails", title: "Castle Forest & Kamweti Falls", tag: "Forest & Waterfall Trail", photos: PHOTOS.waterfalls },
+    { mode: "Trails", title: "Kathandeni Forest & Waterfall Chase", tag: "Forest & Waterfall Chase", photos: PHOTOS.waterfalls },
+    { mode: "Trails", title: "Ragia Forest & Falls", tag: "Forest & Falls", photos: PHOTOS.waterfalls },
+    { mode: "Trails", title: "Kereita Forest & Waterfalls", tag: "Forest & Waterfalls", photos: PHOTOS.waterfalls },
+    { mode: "Trails", title: "Thiririka Falls", tag: "Waterfall Chase", photos: PHOTOS.waterfalls },
+    { mode: "Trails", title: "Kanunga Falls / Blue Pools", tag: "Waterfall & Blue Pools", photos: PHOTOS.ngareNdare },
+    { mode: "Trails", title: "Trasha Falls", tag: "Waterfall Trail", photos: PHOTOS.waterfalls },
+    { mode: "Trails", title: "Tigoni Tea Trails", tag: "Tea Estate Walk", photos: PHOTOS.teaForest },
+    { mode: "Trails", title: "Kiambethu Farm & Woodlands", tag: "Woodlands & Tea Farm", photos: PHOTOS.teaForest },
+    { mode: "Trails", title: "Gatamaiyu Forest Reserve", tag: "Active Dec 5, 2026 Hike", photos: PHOTOS.ngareNdare },
+    { mode: "Trails", title: "Ngare Ndare Forest & Blue Pools", tag: "Blue Pools, Canopy Walkway & Waterfalls", photos: PHOTOS.ngareNdare },
+    { mode: "Trails", title: "Zaina Falls (Nyeri)", tag: "Nyeri Forest Trail", photos: PHOTOS.waterfalls },
+    { mode: "Trails", title: "Nthenge Njeru Falls (Embu)", tag: "Embu Waterfall Trail", photos: PHOTOS.waterfalls },
+    { mode: "Trails", title: "Oloolua Nature Trail (Karen)", tag: "Forest Nature Trail", photos: PHOTOS.teaForest },
+    { mode: "Trails", title: "Ndakaini Dam / Kiplot Trails", tag: "Highland Dam Trail", photos: PHOTOS.teaForest },
+    { mode: "Trails", title: "Karuru Falls", tag: "Waterfall Trail", photos: PHOTOS.waterfalls },
+
+    { mode: "Hikes", title: "Lake Ellis & Nithi Fall", tag: "Lake & Waterfall Hike", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Mt. Suswa (Half-Crater Circuit)", tag: "Crater Circuit", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Oldonyo Sabuk / Kilimambogo", tag: "Summit Hike", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Mount Kipipiri", tag: "Peak & Forest Hike", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Kijabe Hills", tag: "Hills Hike", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Kijabe Dark Tunnel & Hot Springs Route", tag: "Tunnel & Hot Springs", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Table Mountain (Aberdares)", tag: "Aberdares Hike", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Sleeping Warrior & Ugali Hills", tag: "Rift Hills Circuit", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Mount Longonot Crater Circuit", tag: "Crater Rim Hike", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Seven Ponds Hike", tag: "Ridge & Ponds Hike", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Elephant Hill", tag: "Aberdares Peak Climb", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Rurimeria Moorland Trek", tag: "Moorland Trek", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Teleki Valley (Mackinders Quest)", tag: "High-Altitude Route", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Eburru Forest (Western Summit)", tag: "Western Summit", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Sirimon Likii North", tag: "High-Altitude Hike", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Oldonyo Lesatima / Dragon's Teeth", tag: "High Peak & Ridge", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "William Hill Soft", tag: "Scenic Hill Hike", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Menengai Crater", tag: "Caldera Hike", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Ngong Hills (7 Hills Circuit)", tag: "7-Hills Circuit", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Mount Namanga (Ol Doinyo Orok)", tag: "Peak Hike", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Mt. Kinangop (Aberdares)", tag: "Aberdares Peak", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Mt. Olorgesailie (Magadi)", tag: "Rift Hike", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Chyulu Hills (Kibwezi)", tag: "Volcanic Hills", photos: PHOTOS.peaksCraters },
+    { mode: "Hikes", title: "Mount Margaret", tag: "Hill Hike", photos: PHOTOS.peaksCraters }
   ];
 
   const fallbackTrips = [{
@@ -178,6 +204,7 @@
     price: 3000,
     deposit: 1800,
     slotsLeft: 18,
+    coverUrl: "https://images.pexels.com/photos/145685/pexels-photo-145685.jpeg?auto=compress&cs=tinysrgb&w=900",
     bio: "Forest trail, river crossings & waterfall picnic. Group discounts available for 3–5, 5–7, and 7–10 pax.",
     formUrl: "./group-ya-ile-kitu.html"
   }];
@@ -191,11 +218,18 @@
     $("directory-grid").innerHTML = list.map((item) => `
       <article class="dest-card">
         <div>
-          <span class="text-[10px] font-extrabold uppercase tracking-[.14em] text-[#968d80]">${item.mode}</span>
-          <h3 class="display text-lg text-[#304b54] mt-2">${item.title}</h3>
-          <p class="text-xs text-[#52636a] mt-1">${item.tag}</p>
+          <div class="photo-strip">
+            ${item.photos.slice(0, 3).map((u) => `<img src="${u}" alt="${item.title}" loading="lazy" />`).join("")}
+          </div>
+          <div class="p-5 pb-0">
+            <span class="text-[10px] font-extrabold uppercase tracking-[.14em] text-[#968d80]">${item.mode}</span>
+            <h3 class="display text-lg text-[#304b54] mt-2">${item.title}</h3>
+            <p class="text-xs text-[#52636a] mt-1">${item.tag}</p>
+          </div>
         </div>
-        <a href="./group-ya-ile-kitu.html#inquiry-section" class="text-xs font-bold uppercase tracking-wider text-[#304b54] hover:underline">Book or Inquire →</a>
+        <div class="p-5 pt-3">
+          <a href="./group-ya-ile-kitu.html#inquiry-section" class="text-xs font-bold uppercase tracking-wider text-[#304b54] hover:underline">Inquire or Book →</a>
+        </div>
       </article>
     `).join("");
   }
