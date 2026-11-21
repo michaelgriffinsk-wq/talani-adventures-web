@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Talani Studio — Mobile</title>
+  <style>
+    :root {
+      --bg: #090d16; --surface: #111827; --surface-2: #1f2937; --border: #283548;
+      --text: #f9fafb; --muted: #9ca3af; --accent: #10b981; --gold: #f59e0b;
+      --blue: #38bdf8; --danger: #f87171;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); max-width: 780px; margin: 0 auto; padding: calc(14px + env(safe-area-inset-top)) 14px 70px; }
+    .hidden { display: none !important; }
+    header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 14px; }
+    header h1 { font-size: 1.12rem; font-weight: 800; }
+    .muted { color: var(--muted); font-size: 0.8rem; }
+    .small { font-size: 0.74rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+    .card h3 { font-size: 0.94rem; margin-bottom: 8px; }
+    label.field-label { display: block; font-size: 0.73rem; color: var(--muted); margin-top: 6px; }
+    input, select, textarea {
+      width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--border);
+      background: var(--surface-2); color: var(--text); font-size: 0.86rem; margin: 4px 0 6px;
+    }
+    .form-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .form-row > * { flex: 1; min-width: 140px; }
+    .btn {
+      width: 100%; padding: 11px 14px; border-radius: 10px; border: none;
+      background: var(--accent); color: #052e16; font-weight: 800; font-size: 0.88rem; cursor: pointer;
+    }
+    .btn-mini {
+      padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border);
+      background: var(--surface-2); color: var(--text); font-size: 0.74rem; font-weight: 700;
+      cursor: pointer; text-decoration: none; display: inline-block;
+    }
+    .btn-mini.ok { background: rgba(16, 185, 129, 0.16); color: var(--accent); border-color: rgba(16, 185, 129, 0.4); }
+    .btn-mini.blue { background: rgba(56, 189, 248, 0.16); color: var(--blue); border-color: rgba(56, 189, 248, 0.4); }
+    .btn-mini.danger { background: rgba(248, 113, 113, 0.16); color: var(--danger); border-color: rgba(248, 113, 113, 0.4); }
+    .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 14px; }
+    .tab-btn {
+      background: var(--surface); color: var(--muted); border: 1px solid var(--border);
+      padding: 10px 4px; border-radius: 10px; font-size: 0.78rem; font-weight: 700; cursor: pointer;
+    }
+    .tab-btn.active { background: var(--accent); color: #052e16; border-color: var(--accent); }
+    .list-item {
+      display: flex; justify-content: space-between; align-items: center; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.84rem;
+    }
+    .list-item:last-child { border-bottom: none; }
+    .badge { font-size: 0.68rem; padding: 3px 8px; border-radius: 8px; font-weight: 700; }
+    .badge.ok { background: rgba(16, 185, 129, 0.16); color: var(--accent); }
+    .badge.warn { background: rgba(245, 158, 11, 0.18); color: var(--gold); }
+    .badge.blue { background: rgba(56, 189, 248, 0.16); color: var(--blue); }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Talani Studio</h1>
+      <div class="muted" id="studio-sub">Mobile Admin • Trips, Stories, Reels & Leads</div>
+    </div>
+    <div style="display:flex; gap:6px; align-items:center;">
+      <a href="https://michaelgriffinsk-wq.github.io/talani-adventures-web/public/index.html" target="_blank" class="btn-mini blue">Storefront ↗</a>
+      <button id="logout-btn" class="btn-mini danger hidden">Sign Out</button>
+    </div>
+  </header>
+
+  <div id="login-card" class="card">
+    <h3>Admin Sign In</h3>
+    <label class="field-label">Email</label>
+    <input type="email" id="auth-email" placeholder="tiffany@talaniadventures.co.ke" />
+    <label class="field-label">Password</label>
+    <input type="password" id="auth-pass" placeholder="••••••••" />
+    <button id="login-btn" class="btn" style="margin-top:8px;">Sign In to Studio</button>
+    <div id="auth-err" class="muted small" style="color:var(--danger); margin-top:8px;"></div>
+  </div>
+
+  <div id="studio-body" class="hidden">
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="st-leads">Leads (<span id="leads-count">0</span>)</button>
+      <button class="tab-btn" data-tab="st-trips">Trips</button>
+      <button class="tab-btn" data-tab="st-stories">Stories</button>
+      <button class="tab-btn" data-tab="st-posts">D-Day</button>
+    </nav>
+
+    <section id="st-leads" class="st-panel">
+      <div class="card">
+        <h3>Incoming Bookings & Inquiries</h3>
+        <div id="st-leads-list"></div>
+      </div>
+    </section>
+
+    <section id="st-trips" class="st-panel hidden">
+      <div class="card">
+        <h3>+ Create Trip Profile</h3>
+        <div class="form-row">
+          <div>
+            <label class="field-label">Brand / Arm</label>
+            <select id="tr-brand">
+              <option value="Group ya Ile Kitu">Group ya Ile Kitu</option>
+              <option value="Talani Premium Tours">Talani Premium Tours</option>
+              <option value="Adamanti Hospitality">Adamanti Hospitality</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label">Expedition Date</label>
+            <input type="date" id="tr-date" value="2026-12-05" />
+          </div>
+        </div>
+        <label class="field-label">Trip Title</label>
+        <input type="text" id="tr-title" placeholder="Gatamaiyu Forest Waterfall Hike" />
+        <div class="form-row">
+          <div><label class="field-label">Ticket Price (KSh)</label><input type="number" id="tr-price" placeholder="3000" /></div>
+          <div><label class="field-label">Minimum Deposit (KSh)</label><input type="number" id="tr-deposit" placeholder="1800" /></div>
+        </div>
+        <div class="form-row">
+          <div><label class="field-label">Total Slots</label><input type="number" id="tr-slots-total" value="22" /></div>
+          <div><label class="field-label">Slots Remaining</label><input type="number" id="tr-slots-left" value="22" /></div>
+        </div>
+        <label class="field-label">Trip Bio & Inclusions</label>
+        <textarea id="tr-bio" rows="3"></textarea>
+        <label class="field-label">Group Discount Tiers</label>
+        <input type="text" id="tr-tiers" placeholder="5% off (3–5 pax) • 7% off (5–7 pax) • 10% off (7–10 pax)" />
+        <label class="field-label">Google Form Booking Link</label>
+        <input type="url" id="tr-form-url" placeholder="https://docs.google.com/forms/d/..." />
+        <label class="field-label">Cover Photo</label>
+        <input type="file" id="tr-cover-file" accept="image/*" />
+        <button id="create-trip-btn" class="btn" style="margin-top:8px;">Publish Trip</button>
+        <div id="tr-status" class="muted small" style="margin-top:6px;"></div>
+      </div>
+      <div class="card"><h3>Published Trips</h3><div id="st-trips-list"></div></div>
+    </section>
+
+    <section id="st-stories" class="st-panel hidden">
+      <div class="card">
+        <h3>+ Post Story</h3>
+        <label class="field-label">Story Bubble Label</label>
+        <input type="text" id="story-label" placeholder="9 Slots Left!" />
+        <label class="field-label">Caption</label>
+        <input type="text" id="story-caption" />
+        <label class="field-label">Photo / Poster</label>
+        <input type="file" id="story-file" accept="image/*" />
+        <button id="publish-story-btn" class="btn" style="margin-top:8px;">Publish Story</button>
+        <div id="story-status" class="muted small" style="margin-top:6px;"></div>
+      </div>
+      <div class="card"><h3>Active Stories</h3><div id="st-stories-list"></div></div>
+    </section>
+
+    <section id="st-posts" class="st-panel hidden">
+      <div class="card">
+        <h3>+ Upload D-Day Photo or Reel</h3>
+        <label class="field-label">Caption</label>
+        <input type="text" id="post-caption" />
+        <label class="field-label">Photo or Video</label>
+        <input type="file" id="post-file" accept="image/*,video/*" />
+        <button id="publish-post-btn" class="btn" style="margin-top:8px;">Upload to Grid</button>
+        <div id="post-status" class="muted small" style="margin-top:6px;"></div>
+      </div>
+      <div class="card"><h3>Published Media</h3><div id="st-posts-list"></div></div>
+    </section>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      getFirestore, collection, addDoc, updateDoc, deleteDoc, doc,
+      query, orderBy, onSnapshot, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const FIREBASE_CONFIG = {
+      apiKey: "AIzaSyDhdiJxS7bI4BX0E9ObXGjMA4Y95sXZftc",
+      authDomain: "talani-adventures.firebaseapp.com",
+      projectId: "talani-adventures",
+      storageBucket: "talani-adventures.firebasestorage.app",
+      messagingSenderId: "698912000783",
+      appId: "1:698912000783:web:ab04f85cb956c994558c7a",
+      measurementId: "G-X2HVRDMRDM"
+    };
+
+    const CLOUDINARY_CLOUD_NAME = "Nx35scok";
+    const CLOUDINARY_UPLOAD_PRESET = "talani_unsigned";
+
+    const app = initializeApp(FIREBASE_CONFIG);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const esc = (s) => String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const cleanPhone = (p) => {
+      let d = String(p || "").replace(/[^0-9]/g, "");
+      if (d.startsWith("0") && d.length === 10) d = "254" + d.slice(1);
+      return d;
+    };
+
+    // Native Capacitor Local Notifications helper (runs safely in APK or browser)
+    async function initNativeNotifications() {
+      const cap = window.Capacitor;
+      if (!cap || !cap.Plugins || !cap.Plugins.LocalNotifications) return;
+      try {
+        await cap.Plugins.LocalNotifications.requestPermissions();
+      } catch (e) { console.warn(e); }
+    }
+
+    async function triggerLeadAlert(lead) {
+      const cap = window.Capacitor;
+      if (cap && cap.Plugins && cap.Plugins.LocalNotifications) {
+        await cap.Plugins.LocalNotifications.schedule({
+          notifications: [{
+            id: Math.floor(Date.now() % 100000),
+            title: `New Booking Lead: ${lead.name || "Hiker"}`,
+            body: `${lead.tripName || "Trip"} (${lead.pax || 1} pax) — Tap to WhatsApp`,
+            schedule: { at: new Date(Date.now() + 200) }
+          }]
+        });
+      }
+    }
+
+    async function uploadToCloudinary(file, folder = "talani") {
+      const resourceType = file.type.startsWith("video/") ? "video" : "image";
+      const fd = new FormData();
+      fd.append("file", file);
+      fd.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+      fd.append("folder", folder);
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`, {
+        method: "POST", body: fd
+      });
+      if (!res.ok) throw new Error(`Cloudinary upload failed (${res.status})`);
+      const data = await res.json();
+      const rawUrl = data.secure_url;
+      const webUrl = resourceType === "image" ? rawUrl.replace("/upload/", "/upload/f_auto,q_auto:good,w_1440/") : rawUrl;
+      return { webUrl, rawUrl };
+    }
+
+    document.getElementById("login-btn").addEventListener("click", async () => {
+      const email = document.getElementById("auth-email").value.trim();
+      const pass = document.getElementById("auth-pass").value;
+      const err = document.getElementById("auth-err");
+      err.textContent = "Signing in...";
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        err.textContent = "";
+      } catch (e) { err.textContent = e.message; }
+    });
+    document.getElementById("logout-btn").addEventListener("click", () => signOut(auth));
+
+    let unsubs = [];
+    let knownLeadIds = null;
+
+    onAuthStateChanged(auth, async (user) => {
+      unsubs.forEach((u) => u());
+      unsubs = [];
+      knownLeadIds = null;
+      if (!user) {
+        document.getElementById("login-card").classList.remove("hidden");
+        document.getElementById("studio-body").classList.add("hidden");
+        document.getElementById("logout-btn").classList.add("hidden");
+        return;
+      }
+      await initNativeNotifications();
+      document.getElementById("login-card").classList.add("hidden");
+      document.getElementById("studio-body").classList.remove("hidden");
+      document.getElementById("logout-btn").classList.remove("hidden");
+      document.getElementById("studio-sub").textContent = "Signed in as " + user.email;
+
+      unsubs.push(onSnapshot(query(collection(db, "leads"), orderBy("createdAt", "desc")), (snap) => {
+        if (knownLeadIds === null) {
+          knownLeadIds = new Set(snap.docs.map((d) => d.id));
+        } else {
+          snap.docChanges().forEach((chg) => {
+            if (chg.type === "added" && !knownLeadIds.has(chg.doc.id)) {
+              knownLeadIds.add(chg.doc.id);
+              triggerLeadAlert(chg.doc.data());
+            }
+          });
+        }
+        document.getElementById("leads-count").textContent = String(snap.size);
+        document.getElementById("st-leads-list").innerHTML = snap.docs.map((d) => {
+          const l = d.data();
+          const ph = cleanPhone(l.phone);
+          const waText = encodeURIComponent(`Hi ${l.name || "there"}, thanks for reaching out to Talani Adventures regarding ${l.tripName || "our upcoming expedition"}!`);
+          return `
+            <div class="list-item" style="align-items:flex-start;">
+              <div style="flex:1;">
+                <div style="display:flex; gap:8px; align-items:center;">
+                  <strong>${esc(l.name || "Inquiry")}</strong>
+                  <span class="badge ${l.status === "PAID" ? "ok" : (l.status === "CONTACTED" ? "blue" : "warn")}">${esc(l.status || "NEW")}</span>
+                </div>
+                <div class="muted small">${esc(l.phone || "")} • ${esc(l.tripName || "")} • ${esc(l.pax || 1)} pax</div>
+                ${l.aiSummary ? `<div class="small" style="margin-top:4px; color:#d1fae5;">✨ ${esc(l.aiSummary)}</div>` : ""}
+                <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
+                  ${ph ? `<a class="btn-mini ok" href="https://wa.me/${ph}?text=${waText}" target="_blank">💬 WhatsApp</a>` : ""}
+                  ${ph ? `<a class="btn-mini blue" href="tel:+${ph}">📞 Call</a>` : ""}
+                  <button class="btn-mini" onclick="setLeadStatus('${d.id}', 'CONTACTED')">Contacted</button>
+                  <button class="btn-mini ok" onclick="setLeadStatus('${d.id}', 'PAID')">Paid</button>
+                </div>
+              </div>
+            </div>`;
+        }).join("") || `<div class="muted small">No leads yet.</div>`;
+      }));
+
+      unsubs.push(onSnapshot(query(collection(db, "trips"), orderBy("date", "asc")), (snap) => {
+        document.getElementById("st-trips-list").innerHTML = snap.docs.map((d) => {
+          const t = d.data();
+          return `
+            <div class="list-item">
+              <div><strong>${esc(t.title)}</strong><div class="muted small">${esc(t.date)} • KSh ${Number(t.price || 0).toLocaleString()}</div></div>
+              <div style="display:flex; gap:6px; align-items:center;">
+                <button class="btn-mini" onclick="adjustSlots('${d.id}', ${Number(t.slotsLeft || 0) - 1})">−1</button>
+                <span class="badge ok">${t.slotsLeft}</span>
+                <button class="btn-mini" onclick="adjustSlots('${d.id}', ${Number(t.slotsLeft || 0) + 1})">+1</button>
+              </div>
+            </div>`;
+        }).join("") || `<div class="muted small">No trips yet.</div>`;
+      }));
+
+      unsubs.push(onSnapshot(query(collection(db, "stories"), orderBy("createdAt", "desc")), (snap) => {
+        document.getElementById("st-stories-list").innerHTML = snap.docs.map((d) => `
+          <div class="list-item"><div><strong>${esc(d.data().label)}</strong></div><button class="btn-mini danger" onclick="delDoc('stories','${d.id}')">Delete</button></div>`).join("");
+      }));
+
+      unsubs.push(onSnapshot(query(collection(db, "posts"), orderBy("createdAt", "desc")), (snap) => {
+        document.getElementById("st-posts-list").innerHTML = snap.docs.map((d) => `
+          <div class="list-item"><div><strong>${esc(d.data().caption || "Media")}</strong></div><button class="btn-mini danger" onclick="delDoc('posts','${d.id}')">Delete</button></div>`).join("");
+      }));
+    });
+
+    window.adjustSlots = (id, v) => updateDoc(doc(db, "trips", id), { slotsLeft: Math.max(0, v) });
+    window.delDoc = (col, id) => { if (confirm("Delete item?")) deleteDoc(doc(db, col, id)); };
+    window.setLeadStatus = (id, status) => updateDoc(doc(db, "leads", id), { status });
+
+    document.getElementById("create-trip-btn").addEventListener("click", async () => {
+      const title = document.getElementById("tr-title").value.trim();
+      const st = document.getElementById("tr-status");
+      if (!title) return alert("Enter a trip title.");
+      st.textContent = "Publishing...";
+      try {
+        let coverUrl = "";
+        const file = document.getElementById("tr-cover-file").files[0];
+        if (file) coverUrl = (await uploadToCloudinary(file, "talani/trips")).webUrl;
+        await addDoc(collection(db, "trips"), {
+          brand: document.getElementById("tr-brand").value, title,
+          date: document.getElementById("tr-date").value,
+          price: Number(document.getElementById("tr-price").value || 0),
+          deposit: Number(document.getElementById("tr-deposit").value || 0),
+          slotsTotal: Number(document.getElementById("tr-slots-total").value || 20),
+          slotsLeft: Number(document.getElementById("tr-slots-left").value || 20),
+          bio: document.getElementById("tr-bio").value.trim(),
+          groupDiscountNote: document.getElementById("tr-tiers").value.trim(),
+          formUrl: document.getElementById("tr-form-url").value.trim(),
+          coverUrl, createdAt: serverTimestamp()
+        });
+        st.textContent = "✓ Trip published!";
+      } catch (e) { st.textContent = "Error: " + e.message; }
+    });
+
+    document.getElementById("publish-story-btn").addEventListener("click", async () => {
+      const file = document.getElementById("story-file").files[0];
+      const st = document.getElementById("story-status");
+      if (!file) return alert("Select a photo.");
+      st.textContent = "Uploading...";
+      try {
+        const uploaded = await uploadToCloudinary(file, "talani/stories");
+        await addDoc(collection(db, "stories"), {
+          label: document.getElementById("story-label").value.trim() || "Update",
+          caption: document.getElementById("story-caption").value.trim(),
+          mediaUrl: uploaded.webUrl, createdAt: serverTimestamp()
+        });
+        st.textContent = "✓ Story live!";
+      } catch (e) { st.textContent = "Error: " + e.message; }
+    });
+
+    document.getElementById("publish-post-btn").addEventListener("click", async () => {
+      const file = document.getElementById("post-file").files[0];
+      const st = document.getElementById("post-status");
+      if (!file) return alert("Select photo or video.");
+      st.textContent = "Uploading...";
+      try {
+        const uploaded = await uploadToCloudinary(file, "talani/posts");
+        await addDoc(collection(db, "posts"), {
+          type: file.type.startsWith("video/") ? "video" : "image",
+          webUrl: uploaded.webUrl, rawUrl: uploaded.rawUrl,
+          caption: document.getElementById("post-caption").value.trim(),
+          createdAt: serverTimestamp()
+        });
+        st.textContent = "✓ Published!";
+      } catch (e) { st.textContent = "Error: " + e.message; }
+    });
+
+    document.querySelectorAll(".tab-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+        document.querySelectorAll(".st-panel").forEach((p) => p.classList.add("hidden"));
+        btn.classList.add("active");
+        document.getElementById(btn.dataset.tab).classList.remove("hidden");
+      });
+    });
+  </script>
+</body>
+</html>
