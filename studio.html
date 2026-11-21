@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Talani Studio — Live Mirror Builder, Cloudinary Folders &amp; Operations</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#304b54;--stone:#968d80;--paper:#f8f7f3;--line:#dcded9;--mist:#e9eeec}
+    *{box-sizing:border-box}
+    body{margin:0;width:100%;font-family:Raleway,sans-serif;color:var(--ink);background:var(--paper)}
+    .display{font-family:Fraunces,serif}
+    .eyebrow{letter-spacing:.23em;text-transform:uppercase}
+    :is(a,button,input,select,textarea):focus-visible{outline:3px solid #ad8970;outline-offset:3px}
+
+    /* Shared Live Website Header */
+    .sticky-header{position:sticky;top:0;z-index:40;background:rgba(248,247,243,.97);backdrop-filter:blur(14px)}
+    .header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .header-brand{display:flex;align-items:center;gap:12px;min-width:0}
+    .header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .subnav-strip{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:10px 0}
+    .subnav-strip::-webkit-scrollbar,.studio-bar::-webkit-scrollbar{display:none}
+    .subnav-link{flex:none;font-size:12px;font-weight:700;color:var(--ink);text-decoration:none;padding:8px 14px;border:1px solid var(--line);background:white;white-space:nowrap;cursor:pointer}
+    .subnav-link.active,.subnav-link:hover{border-color:var(--ink);background:var(--mist)}
+
+    /* Studio Extra Control Ribbon */
+    .studio-ribbon{background:#304b54;color:white;border-bottom:1px solid #22373e}
+    .studio-bar{display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;padding:10px 0}
+    .mode-pill{flex:none;border:1px solid rgba(255,255,255,.35);background:transparent;color:white;padding:7px 14px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+    .mode-pill[aria-pressed=true]{background:#f8f7f3;color:#304b54;border-color:#f8f7f3}
+
+    /* Live Mirror Interactive Wrapper */
+    .mirror-stage{position:relative;border:2px dashed #bfc9c5;background:var(--paper)}
+    .mirror-section{position:relative;transition:outline .15s,opacity .15s;cursor:pointer}
+    .mirror-section:hover{outline:2px dashed #968d80;outline-offset:-2px}
+    .mirror-section.selected{outline:3px solid #304b54;outline-offset:-3px}
+    .mirror-section.is-hidden{opacity:.42;filter:grayscale(.6)}
+    .section-badge{position:sticky;top:118px;z-index:15;display:inline-flex;align-items:center;gap:6px;background:#304b54;color:white;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;margin:8px}
+
+    /* Shared Live Site Card Styles */
+    .photo-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line)}
+    .photo-strip img{width:100%;height:105px;object-fit:cover;display:block}
+    .slot-badge{background:#e5eee8;color:#315d4d;padding:6px 9px;font-size:11px;font-weight:700;white-space:nowrap}
+    .upload-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:8px}
+    .upload-thumbs img{width:100%;height:84px;object-fit:cover;border:1px solid var(--line)}
+    .hidden{display:none!important}
+    @media(max-width:767px){.header-actions{width:100%;justify-content:flex-start}}
+  </style>
+  <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
+</head>
+<body class="w-full" style="background: rgb(248, 247, 243);">
+  <!-- LIVE WEBSITE HEADER MIRROR -->
+  <header class="sticky-header w-full border-b border-[#dcded9]">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 py-3 header-top">
+      <div class="header-brand">
+        <a href="./index.html" aria-label="Talani Adventures home" class="shrink-0">
+          <img class="w-12 h-12 md:w-14 md:h-14 object-contain" loading="lazy" src="../IMG-20261110-WA0045.jpg" alt="Talani Adventures logo">
+        </a>
+        <div class="min-w-0">
+          <p class="display font-medium leading-tight text-[#304b54] text-lg md:text-xl">Talani Adventures <span class="text-xs font-sans font-bold uppercase tracking-wider bg-[#e9eeec] px-2 py-0.5 ml-1">Studio</span></p>
+          <p class="text-[11px] tracking-wide text-[#968d80] font-semibold">@talani.adventures • Live Site Mirror &amp; Editor</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="https://www.instagram.com/talani.adventures/" target="_blank" rel="noopener noreferrer" class="border border-[#dcded9] bg-white px-3 py-1.5 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">Instagram ↗</a>
+        <a href="https://www.tiktok.com/@talani.adventures" target="_blank" rel="noopener noreferrer" class="border border-[#dcded9] bg-white px-3 py-1.5 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">TikTok ↗</a>
+        <a href="./index.html" class="border border-[#304b54] bg-[#304b54] px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90">View Live Site ↗</a>
+      </div>
+    </div>
+
+    <!-- PAGE SWITCHER (MIRRORS LIVE SUBNAV) -->
+    <div class="border-t border-[#e6e8e3] bg-[#f8f7f3]">
+      <div id="page-tabs" class="max-w-7xl mx-auto px-6 md:px-10 subnav-strip" role="tablist" aria-label="Select page to mirror and edit">
+        <button type="button" class="subnav-link active" data-page="index">Overview (index)</button>
+        <button type="button" class="subnav-link" data-page="group-ya-ile-kitu">Group ya Ile Kitu</button>
+        <button type="button" class="subnav-link" data-page="outdoor-adventures">Outdoor Adventures</button>
+        <button type="button" class="subnav-link" data-page="talani-adventures">Hikes &amp; Trails</button>
+        <button type="button" class="subnav-link" data-page="adamanti">Adamanti (Coming Soon)</button>
+        <button type="button" class="subnav-link" data-page="talani-premium">Talani Premium</button>
+      </div>
+    </div>
+
+    <!-- EXTRA STUDIO FUNCTIONS RIBBON -->
+    <div class="studio-ribbon">
+      <div class="max-w-7xl mx-auto px-6 md:px-10 studio-bar">
+        <button type="button" class="mode-pill" data-drawer="editor-drawer" aria-pressed="true">1. Page Layout &amp; Buttons</button>
+        <button type="button" class="mode-pill" data-drawer="cloudinary-drawer" aria-pressed="false">2. Cloudinary Folders</button>
+        <button type="button" class="mode-pill" data-drawer="trips-drawer" aria-pressed="false">3. Trips &amp; Slots</button>
+        <button type="button" class="mode-pill" data-drawer="leads-drawer" aria-pressed="false">4. Group Inquiries</button>
+        <span id="studio-status" class="text-[11px] text-[#d2dcd9] ml-auto whitespace-nowrap">Ready</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- EXTRA STUDIO WORKSPACE DRAWERS (COMPACT & PRACTICAL) -->
+  <section class="max-w-7xl mx-auto px-6 md:px-10 pt-6">
+    <!-- DRAWER 1: SELECTED SECTION INSPECTOR -->
+    <div id="editor-drawer" class="bg-white border border-[#dcded9] p-5 md:p-6 mb-6">
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-4 mb-4 border-b border-[#dcded9]">
+        <div>
+          <p class="eyebrow text-[10px] font-bold text-[#968d80]">Selected Section on Mirrored Page</p>
+          <h2 id="selected-label" class="display text-xl text-[#304b54]">Tap any section below to edit</h2>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" id="move-up-btn" class="border border-[#dcded9] px-3 py-2 text-xs font-bold hover:bg-[#e9eeec] cursor-pointer">↑ Move Up</button>
+          <button type="button" id="move-down-btn" class="border border-[#dcded9] px-3 py-2 text-xs font-bold hover:bg-[#e9eeec] cursor-pointer">↓ Move Down</button>
+          <button type="button" id="save-draft-btn" class="border border-[#304b54] px-3.5 py-2 text-xs font-bold text-[#304b54] hover:bg-[#e9eeec] cursor-pointer">Save Draft</button>
+          <button type="button" id="publish-btn" class="bg-[#304b54] text-white px-4 py-2 text-xs font-bold uppercase tracking-wider hover:opacity-85 cursor-pointer">Publish Live ↗</button>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-4 gap-4 items-end">
+        <div>
+          <label for="inp-heading" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Heading Text</label>
+          <input id="inp-heading" type="text" placeholder="Default section heading" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label for="inp-width" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Section Width (%)</label>
+          <select id="inp-width" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-sm">
+            <option value="100">100% (Full)</option>
+            <option value="90">90% (Wide)</option>
+            <option value="75">75% (Medium)</option>
+            <option value="60">60% (Compact)</option>
+          </select>
+        </div>
+        <div>
+          <label for="inp-scale" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Section Size / Scale</label>
+          <select id="inp-scale" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-sm">
+            <option value="0.92">Compact (0.92×)</option>
+            <option value="1">Standard (1.0×)</option>
+            <option value="1.05">Large (1.05×)</option>
+          </select>
+        </div>
+        <div class="pb-2">
+          <label class="inline-flex items-center gap-2 text-xs font-bold cursor-pointer">
+            <input id="inp-hidden" type="checkbox" />
+            Hide section on customer page
+          </label>
+        </div>
+      </div>
+
+      <!-- SIMPLE BUTTON & ACTION WIRING -->
+      <div class="mt-4 pt-4 border-t border-[#dcded9] grid sm:grid-cols-[1fr_1fr_1.2fr_auto] gap-2.5 items-center">
+        <input id="btn-label" type="text" placeholder="New button text (e.g., Book Gatamaiyu)" class="border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
+        <select id="btn-action" class="border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs">
+          <option value="link">Open Page or URL</option>
+          <option value="scroll">Scroll to Section (#id)</option>
+          <option value="select-destination">Inquire Destination</option>
+        </select>
+        <input id="btn-target" type="text" placeholder="e.g., ./group-ya-ile-kitu.html or #inquiry-section" class="border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
+        <button id="add-btn" type="button" class="bg-[#304b54] text-white px-4 py-2 text-xs font-bold uppercase tracking-wider cursor-pointer">+ Add Button</button>
+      </div>
+      <div id="attached-buttons" class="flex flex-wrap gap-2 mt-3"></div>
+    </div>
+
+    <!-- DRAWER 2: CLOUDINARY DESTINATION FOLDER UPLOADER -->
+    <div id="cloudinary-drawer" class="hidden bg-white border border-[#dcded9] p-5 md:p-6 mb-6 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <p class="eyebrow text-[10px] font-bold text-[#968d80]">Cloudinary Media Library · Nx35scok</p>
+          <h2 class="display text-xl text-[#304b54]">Upload Destination Photos to Folder</h2>
+        </div>
+        <button id="cld-copy-btn" type="button" class="border border-[#304b54] px-3.5 py-2 text-xs font-bold text-[#304b54] hover:bg-[#e9eeec] cursor-pointer">Copy JSON Snippet</button>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-3">
+        <select id="cld-dest" class="border border-[#dcded9] bg-[#f8f7f3] px-3 py-2.5 text-xs font-semibold"></select>
+        <input id="cld-folder" type="text" class="border border-[#dcded9] bg-[#f8f7f3] px-3 py-2.5 text-xs font-mono" />
+        <div class="flex gap-2">
+          <input id="cld-files" type="file" accept="image/*" multiple class="w-full border border-[#dcded9] bg-[#f8f7f3] p-1.5 text-xs" />
+          <button id="cld-upload-btn" type="button" class="bg-[#304b54] text-white px-4 py-2 text-xs font-bold shrink-0 cursor-pointer">Upload</button>
+        </div>
+      </div>
+      <div id="cld-thumbs" class="upload-thumbs"></div>
+      <textarea id="cld-json" rows="4" readonly placeholder="Uploaded Cloudinary photo JSON entries appear here..." class="w-full border border-[#dcded9] bg-[#f8f7f3] p-2.5 text-xs font-mono"></textarea>
+    </div>
+
+    <!-- DRAWER 3: TRIPS & SLOTS -->
+    <div id="trips-drawer" class="hidden bg-white border border-[#dcded9] p-5 md:p-6 mb-6">
+      <h2 class="display text-xl text-[#304b54] mb-3">Publish Active Departure</h2>
+      <form id="trip-form" class="grid sm:grid-cols-3 gap-3">
+        <select id="t-brand" class="border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs font-semibold">
+          <option value="Group ya Ile Kitu">Group ya Ile Kitu</option>
+          <option value="Talani Adventures">Talani Adventures (Hikes &amp; Trails)</option>
+          <option value="Outdoor Adventures">Outdoor Adventures (Safaris)</option>
+          <option value="Talani Premium Tours">Talani Premium Tours</option>
+        </select>
+        <input id="t-title" type="text" required placeholder="Trip title" class="border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
+        <input id="t-date" type="date" required class="border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
+        <input id="t-price" type="number" required placeholder="Price KSh" class="border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
+        <input id="t-deposit" type="number" required placeholder="Deposit KSh" class="border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
+        <input id="t-slots" type="number" required placeholder="Slots left" class="border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
+        <input id="t-cover" type="url" required placeholder="Cover image URL (https://...)" class="sm:col-span-2 border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
+        <button type="submit" class="bg-[#304b54] text-white px-4 py-2 text-xs font-bold uppercase cursor-pointer">Publish Trip ↗</button>
+      </form>
+    </div>
+
+    <!-- DRAWER 4: GROUP INQUIRIES -->
+    <div id="leads-drawer" class="hidden bg-white border border-[#dcded9] p-5 md:p-6 mb-6">
+      <h2 class="display text-xl text-[#304b54] mb-3">Group &amp; Destination Inquiries</h2>
+      <div id="leads-list" class="grid sm:grid-cols-2 gap-3 text-xs">Loading inquiries...</div>
+    </div>
+  </section>
+
+  <!-- LIVE WEBSITE MIRROR STAGE -->
+  <main class="max-w-7xl mx-auto px-6 md:px-10 pb-16">
+    <p class="eyebrow text-[10px] font-bold text-[#968d80] mb-2">Live Customer Page Mirror (Click any section to select &amp; customize)</p>
+    <div id="mirror-stage" class="mirror-stage"></div>
+  </main>
+
+  <script type="module">
+  import { ITINERARY_DATA, getDestinationsByCategory } from "./itinerary-data.js";
+  import { TALANI_FIREBASE_CONFIG, triggerButtonAction } from "./layout-runtime.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, doc, setDoc, getDoc, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const CLOUD_NAME = "Nx35scok";
+  const UPLOAD_PRESET = "talani_unsigned";
+  const $ = (id) => document.getElementById(id);
+
+  let db = null;
+  try { db = getFirestore(initializeApp(TALANI_FIREBASE_CONFIG)); } catch {}
+
+  // Real page section templates mirroring the live website
+  const PAGE_TEMPLATES = {
+    "index": [
+      {
+        id: "hero",
+        label: "Hero — Who We Are",
+        render: (title) => `
+          <div class="p-8 md:p-12 grid lg:grid-cols-2 gap-8 items-center">
+            <div>
+              <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">Talani Adventures · Who We Are</p>
+              <h1 class="display text-3xl md:text-4xl text-[#304b54]">${title || "Thoughtful journeys across forest, wild, peak, and coast."}</h1>
+              <p class="text-sm text-[#52636a] leading-7 mt-4">Guided forest trails, mountain hikes, wildlife outings, multi-day retreats, and group hosting—with Adamanti hospitality coming soon.</p>
+            </div>
+            <img src="https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Wildlife landscape" class="w-full h-60 object-cover border border-[#dcded9]" />
+          </div>`
+      },
+      {
+        id: "active-spotlight",
+        label: "Active Tours, Hikes & Expeditions",
+        render: (title) => `
+          <div class="bg-[#e9eeec] p-8 md:p-10">
+            <p class="eyebrow text-xs font-bold mb-2 text-[#61767b]">Most recent &amp; active departures</p>
+            <h2 class="display text-2xl text-[#304b54] mb-5">${title || "Active Tours, Hikes & Expeditions"}</h2>
+            <div class="grid md:grid-cols-2 gap-5">
+              <div class="bg-[#f8f7f3] border border-[#dcded9] p-5">
+                <div class="flex justify-between items-start gap-2">
+                  <h3 class="display text-xl">Gatamaiyu Forest Reserve Hike</h3>
+                  <span class="slot-badge">18 slots left</span>
+                </div>
+                <p class="text-xs text-[#61767b] mt-1">Group ya Ile Kitu • 5 December 2026 • KSh 3,000</p>
+              </div>
+              <div class="bg-[#f8f7f3] border border-[#dcded9] p-5">
+                <div class="flex justify-between items-start gap-2">
+                  <h3 class="display text-xl">Zanzibar Flagship Retreat (4D/3N)</h3>
+                  <span class="slot-badge">12 slots left</span>
+                </div>
+                <p class="text-xs text-[#61767b] mt-1">Talani Premium • Bush-to-Beach • KSh 48,000</p>
+              </div>
+            </div>
+          </div>`
+      },
+      {
+        id: "services",
+        label: "Our Divisions & Pages",
+        render: (title) => `
+          <div class="p-8 md:p-10">
+            <h2 class="display text-2xl text-[#304b54] mb-5">${title || "Our divisions & pages."}</h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+              <div class="bg-white border border-[#dcded9] p-5"><strong class="display text-base block mb-1">Group ya Ile Kitu</strong>Small groups, corporate &amp; families (all 54 destinations).</div>
+              <div class="bg-white border border-[#dcded9] p-5"><strong class="display text-base block mb-1">Outdoor Adventures</strong>Safaris, conservancies &amp; wildlife outings.</div>
+              <div class="bg-white border border-[#dcded9] p-5"><strong class="display text-base block mb-1">Talani Adventures</strong>Hikes, waterfalls, tea estates &amp; forest trails.</div>
+              <div class="bg-white border border-[#dcded9] p-5"><strong class="display text-base block mb-1">Talani Premium</strong>Multi-day retreats across Coast, Zanzibar &amp; peaks.</div>
+              <div class="bg-white border border-[#dcded9] p-5"><strong class="display text-base block mb-1">Adamanti</strong>Concierge &amp; hospitality — Coming Soon.</div>
+            </div>
+          </div>`
+      }
+    ],
+    "group-ya-ile-kitu": [
+      {
+        id: "group-hero",
+        label: "Group ya Ile Kitu Header & Tiers",
+        render: (title) => `
+          <div class="p-8 md:p-10">
+            <p class="eyebrow text-xs font-bold mb-2 text-[#968d80]">Group ya Ile Kitu · Full Destination Hub</p>
+            <h1 class="display text-3xl text-[#304b54]">${title || "Every destination in one place for group & custom inquiries."}</h1>
+            <p class="mt-4 border-l-2 border-[#968d80] bg-[#e9eeec] px-4 py-2.5 text-xs font-semibold">Group Tiers: 5% off (3–5 pax) • 7% off (5–7 pax) • 10% off (7–10 pax)</p>
+          </div>`
+      },
+      {
+        id: "catalog-section",
+        label: "All Destinations Catalog (54)",
+        render: (title) => {
+          const sample = ITINERARY_DATA.slice(0, 6);
+          return `<div class="p-8 md:p-10 pt-0">
+            <h2 class="display text-xl text-[#304b54] mb-4">${title || `All Destinations (${ITINERARY_DATA.length} total)`}</h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              ${sample.map((d) => `
+                <div class="bg-white border border-[#dcded9] overflow-hidden">
+                  <div class="photo-strip">${(d.photos || []).slice(0, 3).map((p) => `<img src="${p.url}" alt="${d.title}" />`).join("")}</div>
+                  <div class="p-4">
+                    <span class="text-[10px] font-bold uppercase text-[#968d80]">${d.category}</span>
+                    <p class="display text-base text-[#304b54] mt-1">${d.title}</p>
+                  </div>
+                </div>`).join("")}
+            </div>
+          </div>`;
+        }
+      }
+    ],
+    "outdoor-adventures": [
+      {
+        id: "safari-hero",
+        label: "Safaris & Wildlife Hero",
+        render: (title) => `
+          <div class="p-8 md:p-10 grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <p class="eyebrow text-xs font-bold mb-2 text-[#968d80]">Outdoor Adventures · Safaris &amp; Wildlife</p>
+              <h1 class="display text-3xl text-[#304b54]">${title || "Closer to wildlife, savannah horizons, and bush country."}</h1>
+            </div>
+            <img src="https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Wildlife safari" class="w-full h-56 object-cover border border-[#dcded9]" />
+          </div>`
+      }
+    ],
+    "talani-adventures": [
+      {
+        id: "trails-hero",
+        label: "Hikes & Forest Trails Directory",
+        render: (title) => {
+          const list = [...getDestinationsByCategory("Trails").slice(0, 3), ...getDestinationsByCategory("Hikes").slice(0, 3)];
+          return `<div class="p-8 md:p-10">
+            <p class="eyebrow text-xs font-bold mb-2 text-[#968d80]">Talani Adventures · Trails &amp; Hikes</p>
+            <h1 class="display text-3xl text-[#304b54] mb-5">${title || "Forest canopies, waterfall chases, craters, and high ridges."}</h1>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              ${list.map((d) => `
+                <div class="bg-white border border-[#dcded9] overflow-hidden">
+                  <div class="photo-strip">${(d.photos || []).slice(0, 3).map((p) => `<img src="${p.url}" alt="${d.title}" />`).join("")}</div>
+                  <div class="p-4">
+                    <span class="text-[10px] font-bold uppercase text-[#968d80]">${d.category}</span>
+                    <p class="display text-base text-[#304b54] mt-1">${d.title}</p>
+                  </div>
+                </div>`).join("")}
+            </div>
+          </div>`;
+        }
+      }
+    ],
+    "adamanti": [
+      {
+        id: "adamanti-coming-soon",
+        label: "Adamanti Coming Soon",
+        render: (title) => `
+          <div class="py-20 px-6 text-center">
+            <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">Adamanti · Concierge &amp; Hospitality</p>
+            <h1 class="display text-4xl md:text-5xl text-[#304b54]">${title || "Coming Soon."}</h1>
+            <p class="text-sm text-[#52636a] max-w-md mx-auto mt-4">Dedicated hospitality and concierge coordination across BnBs, hotels, resorts, and hosting.</p>
+          </div>`
+      }
+    ],
+    "talani-premium": [
+      {
+        id: "premium-hero",
+        label: "Talani Premium Multi-Day Retreats",
+        render: (title) => {
+          const list = getDestinationsByCategory("Multi-Day").slice(0, 6);
+          return `<div class="p-8 md:p-10">
+            <p class="eyebrow text-xs font-bold mb-2 text-[#968d80]">Talani Premium · Multi-Day Expeditions</p>
+            <h1 class="display text-3xl text-[#304b54] mb-5">${title || "Extended expeditions across mountains, bush camps, deserts, and islands."}</h1>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              ${list.map((d) => `
+                <div class="bg-white border border-[#dcded9] overflow-hidden">
+                  <div class="photo-strip">${(d.photos || []).slice(0, 3).map((p) => `<img src="${p.url}" alt="${d.title}" />`).join("")}</div>
+                  <div class="p-4">
+                    <span class="text-[10px] font-bold uppercase text-[#968d80]">${d.duration || "Multi-Day"}</span>
+                    <p class="display text-base text-[#304b54] mt-1">${d.title}</p>
+                  </div>
+                </div>`).join("")}
+            </div>
+          </div>`;
+        }
+      }
+    ]
+  };
+
+  let activePage = "index";
+  let blocks = [];
+  let selectedId = null;
+
+  function buildInitialBlocks(pageKey) {
+    return (PAGE_TEMPLATES[pageKey] || []).map((tpl, idx) => ({
+      id: tpl.id,
+      label: tpl.label,
+      order: idx,
+      widthPct: 100,
+      scale: 1,
+      hidden: false,
+      customTitle: "",
+      buttons: []
+    }));
+  }
+
+  async function selectPage(pageKey) {
+    activePage = pageKey;
+    $("page-tabs").querySelectorAll("button").forEach((b) => b.classList.toggle("active", b.dataset.page === pageKey));
+    let loaded = buildInitialBlocks(pageKey);
+
+    const draftRaw = localStorage.getItem(`talani_mirror_draft_${pageKey}`);
+    if (draftRaw) {
+      try {
+        const parsed = JSON.parse(draftRaw);
+        const map = new Map(parsed.map((x) => [x.id, x]));
+        loaded = loaded.map((b, i) => ({ ...b, ...(map.get(b.id) || {}), order: map.get(b.id)?.order ?? i }));
+        loaded.sort((a, b) => a.order - b.order);
+      } catch {}
+    } else if (db) {
+      try {
+        const snap = await getDoc(doc(db, "site_layouts", pageKey));
+        if (snap.exists() && Array.isArray(snap.data().blocks)) {
+          const map = new Map(snap.data().blocks.map((x) => [x.id, x]));
+          loaded = loaded.map((b, i) => ({ ...b, ...(map.get(b.id) || {}), order: map.get(b.id)?.order ?? i }));
+          loaded.sort((a, b) => a.order - b.order);
+        }
+      } catch {}
+    }
+
+    blocks = loaded;
+    selectedId = blocks[0]?.id || null;
+    renderMirror();
+    syncControls();
+    $("studio-status").textContent = `Mirroring ${pageKey}.html`;
+  }
+
+  function renderMirror() {
+    const templates = new Map((PAGE_TEMPLATES[activePage] || []).map((t) => [t.id, t]));
+    blocks.forEach((b, i) => { b.order = i; });
+
+    $("mirror-stage").innerHTML = blocks.map((b, idx) => {
+      const tpl = templates.get(b.id);
+      const inner = tpl ? tpl.render(b.customTitle) : "";
+      const customBtns = (b.buttons || []).length
+        ? `<div class="px-8 pb-6 flex flex-wrap gap-2.5">${b.buttons.map((btn, bi) => `
+            <button type="button" data-preview-btn="${b.id}:${bi}" class="bg-[#304b54] text-white px-4 py-2 text-xs font-bold uppercase tracking-wider cursor-pointer">${btn.label}</button>`).join("")}
+          </div>`
+        : "";
+
+      return `
+        <section class="mirror-section ${b.id === selectedId ? "selected" : ""} ${b.hidden ? "is-hidden" : ""}"
+                 data-block="${b.id}"
+                 style="width:${b.widthPct || 100}%;margin:0 auto;transform:scale(${b.scale || 1});transform-origin:top center;">
+          <span class="section-badge">${idx + 1}. ${b.label} (${b.widthPct || 100}%)</span>
+          ${inner}
+          ${customBtns}
+        </section>`;
+    }).join("");
+
+    $("mirror-stage").querySelectorAll("[data-block]").forEach((sec) => {
+      sec.addEventListener("click", (e) => {
+        if (e.target.closest("[data-preview-btn]")) return;
+        selectedId = sec.dataset.block;
+        renderMirror();
+        syncControls();
+      });
+    });
+
+    $("mirror-stage").querySelectorAll("[data-preview-btn]").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const [bid, bidx] = btn.dataset.previewBtn.split(":");
+        const blk = blocks.find((x) => x.id === bid);
+        const cfg = blk?.buttons?.[Number(bidx)];
+        if (cfg) triggerButtonAction(cfg);
+      });
+    });
+  }
+
+  function syncControls() {
+    const b = blocks.find((x) => x.id === selectedId);
+    if (!b) return;
+    $("selected-label").textContent = b.label;
+    $("inp-heading").value = b.customTitle || "";
+    $("inp-width").value = String(b.widthPct || 100);
+    $("inp-scale").value = String(b.scale || 1);
+    $("inp-hidden").checked = Boolean(b.hidden);
+    renderAttachedButtons(b);
+  }
+
+  function renderAttachedButtons(b) {
+    $("attached-buttons").innerHTML = (b.buttons || []).map((btn, i) => `
+      <span class="inline-flex items-center gap-2 bg-[#f8f7f3] border border-[#dcded9] px-3 py-1 text-xs">
+        <strong>${btn.label}</strong> → ${btn.target}
+        <button type="button" data-rm-btn="${i}" class="text-red-700 font-bold cursor-pointer">✕</button>
+      </span>
+    `).join("");
+
+    $("attached-buttons").querySelectorAll("[data-rm-btn]").forEach((rm) => {
+      rm.addEventListener("click", () => {
+        b.buttons.splice(Number(rm.dataset.rmBtn), 1);
+        renderAttachedButtons(b);
+        renderMirror();
+      });
+    });
+  }
+
+  ["inp-heading", "inp-width", "inp-scale", "inp-hidden"].forEach((id) => {
+    $(id).addEventListener("input", () => {
+      const b = blocks.find((x) => x.id === selectedId);
+      if (!b) return;
+      b.customTitle = $("inp-heading").value.trim();
+      b.widthPct = Number($("inp-width").value) || 100;
+      b.scale = Number($("inp-scale").value) || 1;
+      b.hidden = $("inp-hidden").checked;
+      renderMirror();
+    });
+  });
+
+  $("move-up-btn").addEventListener("click", () => {
+    const i = blocks.findIndex((x) => x.id === selectedId);
+    if (i <= 0) return;
+    [blocks[i - 1], blocks[i]] = [blocks[i], blocks[i - 1]];
+    renderMirror();
+  });
+
+  $("move-down-btn").addEventListener("click", () => {
+    const i = blocks.findIndex((x) => x.id === selectedId);
+    if (i < 0 || i >= blocks.length - 1) return;
+    [blocks[i + 1], blocks[i]] = [blocks[i], blocks[i + 1]];
+    renderMirror();
+  });
+
+  $("add-btn").addEventListener("click", () => {
+    const b = blocks.find((x) => x.id === selectedId);
+    const label = $("btn-label").value.trim();
+    const target = $("btn-target").value.trim();
+    if (!b || !label || !target) return;
+    b.buttons = b.buttons || [];
+    b.buttons.push({ label, actionType: $("btn-action").value, target, style: "primary" });
+    $("btn-label").value = "";
+    $("btn-target").value = "";
+    renderAttachedButtons(b);
+    renderMirror();
+  });
+
+  $("save-draft-btn").addEventListener("click", () => {
+    localStorage.setItem(`talani_mirror_draft_${activePage}`, JSON.stringify(blocks));
+    $("studio-status").textContent = `Draft saved for ${activePage}.html`;
+  });
+
+  $("publish-btn").addEventListener("click", async () => {
+    if (!db) { $("studio-status").textContent = "Connect Firestore to publish live."; return; }
+    $("studio-status").textContent = "Publishing...";
+    try {
+      await setDoc(doc(db, "site_layouts", activePage), {
+        pageKey: activePage,
+        blocks,
+        updatedAt: serverTimestamp()
+      });
+      localStorage.removeItem(`talani_mirror_draft_${activePage}`);
+      $("studio-status").textContent = `✓ Published ${activePage}.html live!`;
+    } catch (err) {
+      $("studio-status").textContent = "Publish error: " + err.message;
+    }
+  });
+
+  $("page-tabs").addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-page]");
+    if (btn) selectPage(btn.dataset.page);
+  });
+
+  // Studio Ribbon Drawer Toggle
+  document.querySelectorAll(".mode-pill").forEach((pill) => {
+    pill.addEventListener("click", () => {
+      document.querySelectorAll(".mode-pill").forEach((p) => p.setAttribute("aria-pressed", String(p === pill)));
+      ["editor-drawer", "cloudinary-drawer", "trips-drawer", "leads-drawer"].forEach((d) => {
+        $(d).classList.toggle("hidden", d !== pill.dataset.drawer);
+      });
+    });
+  });
+
+  // Cloudinary Destination Folder Uploader
+  const folderFor = (d) => `talani/${d.category === "Trails" ? "trails" : d.category === "Hikes" ? "hikes" : "multi-day"}/${d.id}`;
+  $("cld-dest").innerHTML = [
+    ...ITINERARY_DATA.map((d) => `<option value="${d.id}" data-folder="${folderFor(d)}">${d.title} (${d.category})</option>`),
+    `<option value="outdoor-adventures" data-folder="talani/outdoor-adventures">Outdoor Adventures (Safaris)</option>`
+  ].join("");
+  const syncCldFolder = () => { $("cld-folder").value = $("cld-dest").selectedOptions[0]?.dataset.folder || "talani/general"; };
+  $("cld-dest").addEventListener("change", syncCldFolder);
+  syncCldFolder();
+
+  $("cld-upload-btn").addEventListener("click", async () => {
+    const files = Array.from($("cld-files").files || []).slice(0, 8);
+    if (!files.length) { $("studio-status").textContent = "Select photos first"; return; }
+    const folder = $("cld-folder").value.trim() || "talani/general";
+    $("studio-status").textContent = `Uploading ${files.length} photo(s)...`;
+    $("cld-thumbs").innerHTML = "";
+    const uploaded = [];
+    for (const file of files) {
+      const fd = new FormData();
+      fd.append("file", file);
+      fd.append("upload_preset", UPLOAD_PRESET);
+      fd.append("folder", folder);
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.secure_url) {
+        uploaded.push({ url: data.secure_url, caption: file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ") });
+        $("cld-thumbs").innerHTML += `<img src="${data.secure_url}" alt="${file.name}" />`;
+      }
+    }
+    $("cld-json").value = JSON.stringify(uploaded, null, 2);
+    $("studio-status").textContent = `✓ Uploaded ${uploaded.length} to ${folder}`;
+  });
+
+  $("cld-copy-btn").addEventListener("click", async () => {
+    if ($("cld-json").value) {
+      await navigator.clipboard?.writeText($("cld-json").value);
+      $("studio-status").textContent = "✓ Copied JSON";
+    }
+  });
+
+  // Trips Form & Group Leads
+  $("trip-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!db) return;
+    await addDoc(collection(db, "trips"), {
+      brand: $("t-brand").value,
+      title: $("t-title").value.trim(),
+      date: $("t-date").value,
+      price: Number($("t-price").value) || 0,
+      deposit: Number($("t-deposit").value) || 0,
+      slotsLeft: Number($("t-slots").value) || 0,
+      coverUrl: $("t-cover").value.trim(),
+      createdAt: serverTimestamp()
+    });
+    $("trip-form").reset();
+    $("studio-status").textContent = "✓ Trip published";
+  });
+
+  if (db) {
+    onSnapshot(query(collection(db, "leads"), orderBy("createdAt", "desc")), (snap) => {
+      $("leads-list").innerHTML = snap.empty
+        ? "<p>No inquiries yet.</p>"
+        : snap.docs.map((d) => {
+            const x = d.data();
+            return `<div class="border border-[#dcded9] bg-[#f8f7f3] p-3">
+              <strong>${x.name || "Guest"}</strong> • ${x.phone || ""}<br>
+              <span class="text-[#61767b]">${x.tripName || ""} (${x.pax || 1} pax)</span>
+            </div>`;
+          }).join("");
+    });
+  }
+
+  selectPage("index");
+  </script>
+</body>
+</html>
