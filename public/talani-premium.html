@@ -88,49 +88,22 @@
     </div>
   </footer>
 
-  <script>
-    const MOUNTAIN_PHOTOS = [
-      "https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg?auto=compress&cs=tinysrgb&w=800"
-    ];
-    const COAST_PHOTOS = [
-      "https://images.pexels.com/photos/457882/pexels-photo-457882.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/1450361/pexels-photo-1450361.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/1078981/pexels-photo-1078981.jpeg?auto=compress&cs=tinysrgb&w=800"
-    ];
-    const BUSH_PHOTOS = [
-      "https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/247376/pexels-photo-247376.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/1670187/pexels-photo-1670187.jpeg?auto=compress&cs=tinysrgb&w=800"
-    ];
+  <script type="module">
+    import { getDestinationsByCategory } from "./itinerary-data.js";
 
-    const MULTIDAY = [
-      { title: "Mt. Meru, Tanzania (4 Days; Cabins)", detail: "4 Days • Cabins", photos: MOUNTAIN_PHOTOS },
-      { title: "Mt. Kenya – Sirimon Route (4 Days; Dorms)", detail: "4 Days • Dorms", photos: MOUNTAIN_PHOTOS },
-      { title: "Mt. Kenya – Chogoria Route (4 Days; Camping)", detail: "4 Days • Camping", photos: MOUNTAIN_PHOTOS },
-      { title: "Ol Jojori Ranch Mt. Kenya", detail: "Mt. Kenya Ranch Expedition", photos: BUSH_PHOTOS },
-      { title: "Kilimanjaro – Marangu Route (6 Days; Cabins)", detail: "6 Days • Cabins", photos: MOUNTAIN_PHOTOS },
-      { title: "Zanzibar Flagship Retreat (4 Days / 3 Nights Bush-to-Beach)", detail: "4 Days / 3 Nights • Bush-to-Beach", photos: COAST_PHOTOS },
-      { title: "Lake Naivasha / Lake Oloiden Bush Camp (2 Days / 1 Night)", detail: "2 Days / 1 Night • Bush Camp", photos: BUSH_PHOTOS },
-      { title: "Amboseli Borderlands Cultural Camp (2 Days / 1 Night)", detail: "2 Days / 1 Night • Cultural Camp", photos: BUSH_PHOTOS },
-      { title: "Aberdares North-to-South Moorland Traverse (3 Days / 2 Nights)", detail: "3 Days / 2 Nights • Moorland Traverse", photos: MOUNTAIN_PHOTOS },
-      { title: "Mt. Elgon – Koitoboss Peak & Kitum Cave (4 Days)", detail: "4 Days • Peak & Cave", photos: MOUNTAIN_PHOTOS },
-      { title: "Lamu Archipelago Dhow Expedition (4 Days)", detail: "4 Days • Coast & Dhow", photos: COAST_PHOTOS },
-      { title: "Chalbi Desert & Lake Turkana Overland (5 Days)", detail: "5 Days • Overland Expedition", photos: BUSH_PHOTOS },
-      { title: "Matthews Range Trekking (Samburu)", detail: "Samburu Multi-Day Trek", photos: BUSH_PHOTOS },
-      { title: "Tsavo West & Shetani Lava Flows (3 Days / 2 Nights)", detail: "3 Days / 2 Nights • Bush & Lava", photos: BUSH_PHOTOS }
-    ];
+    const items = getDestinationsByCategory("Multi-Day");
 
-    document.getElementById("premium-grid").innerHTML = MULTIDAY.map((item) => `
+    document.getElementById("premium-grid").innerHTML = items.map((item) => `
       <article class="exp-card">
         <div>
           <div class="photo-strip">
-            ${item.photos.slice(0, 3).map((u) => `<img src="${u}" alt="${item.title}" loading="lazy" />`).join("")}
+            ${(item.photos || []).slice(0, 3).map((p) => `<img src="${p.url}" alt="${item.title} — ${p.caption}" loading="lazy" />`).join("")}
           </div>
           <div class="p-5 pb-0">
-            <p class="eyebrow text-[10px] font-bold mb-2 text-[#968d80]">${item.detail}</p>
+            <p class="eyebrow text-[10px] font-bold mb-2 text-[#968d80]">${item.duration || ""} • ${item.difficulty || ""}</p>
             <h3 class="display text-lg text-[#304b54] leading-snug">${item.title}</h3>
+            <p class="text-[11px] font-semibold text-[#61767b] mt-1">${item.region || ""}</p>
+            <p class="text-xs text-[#52636a] leading-6 mt-2">${item.summary || ""}</p>
           </div>
         </div>
         <div class="p-5 pt-3">
