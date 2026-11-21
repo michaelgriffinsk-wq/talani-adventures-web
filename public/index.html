@@ -98,7 +98,7 @@
     </header>
 
     <main id="home">
-      <section class="max-w-7xl mx-auto px-6 md:px-10 pt-12 md:pt-20 pb-16 md:pb-24 grid lg:grid-cols-[.95fr_1.05fr] items-center gap-10 lg:gap-16" aria-labelledby="hero-title">
+      <section data-block-id="hero" class="max-w-7xl mx-auto px-6 md:px-10 pt-12 md:pt-20 pb-16 md:pb-24 grid lg:grid-cols-[.95fr_1.05fr] items-center gap-10 lg:gap-16" aria-labelledby="hero-title">
         <div class="reveal">
           <p class="eyebrow text-xs font-bold mb-5 text-[#968d80]">Talani Adventures · Who We Are</p>
           <h1 id="hero-title" class="display leading-[1.08] tracking-[-.045em] max-w-xl text-[#304b54] text-3xl md:text-5xl">Thoughtful journeys across forest, wild, peak, and coast.</h1>
@@ -115,12 +115,12 @@
         </div>
       </section>
 
-      <section aria-label="Latest stories" class="max-w-7xl mx-auto px-6 md:px-10 pt-4 pb-12">
+      <section data-block-id="stories" aria-label="Latest stories" class="max-w-7xl mx-auto px-6 md:px-10 pt-4 pb-12">
         <p class="eyebrow text-xs font-bold mb-5 text-[#968d80]">Field dispatches / latest stories</p>
         <div id="stories-bar" class="story-strip" aria-label="Expedition stories"></div>
       </section>
 
-      <section id="active-spotlight" class="w-full bg-[#e9eeec] py-20 md:py-24" aria-labelledby="spotlight-title">
+      <section data-block-id="active-spotlight" id="active-spotlight" class="w-full bg-[#e9eeec] py-20 md:py-24" aria-labelledby="spotlight-title">
         <div class="max-w-7xl mx-auto px-6 md:px-10">
           <div class="flex flex-wrap items-end justify-between gap-4 mb-7">
             <div>
@@ -141,7 +141,7 @@
         </div>
       </section>
 
-      <section id="services" class="max-w-7xl mx-auto px-6 md:px-10 py-20 md:py-24" aria-labelledby="services-title">
+      <section data-block-id="services" id="services" class="max-w-7xl mx-auto px-6 md:px-10 py-20 md:py-24" aria-labelledby="services-title">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-12">
           <div>
             <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">What we offer</p>
@@ -198,7 +198,7 @@
         </div>
       </section>
 
-      <section id="memories" class="w-full bg-[#e9eeec] py-20 md:py-24" aria-labelledby="memories-title">
+      <section data-block-id="memories" id="memories" class="w-full bg-[#e9eeec] py-20 md:py-24" aria-labelledby="memories-title">
         <div class="max-w-7xl mx-auto px-6 md:px-10">
           <div class="flex flex-wrap items-end justify-between gap-4 mb-9">
             <div>
@@ -211,7 +211,7 @@
         </div>
       </section>
 
-      <section id="about" class="w-full bg-[#304b54] text-white py-20 md:py-24" aria-labelledby="about-title">
+      <section data-block-id="about" id="about" class="w-full bg-[#304b54] text-white py-20 md:py-24" aria-labelledby="about-title">
         <div class="max-w-7xl mx-auto px-6 md:px-10 grid md:grid-cols-2 gap-8 md:gap-20 items-end">
           <div>
             <p class="eyebrow text-xs font-bold mb-5 text-[#d2dcd9]">One company. Many horizons.</p>
@@ -253,8 +253,11 @@
   </div>
 
   <script type="module">
+  import { applyPublishedLayout } from "./layout-runtime.js";
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  applyPublishedLayout("index");
 
   const firebaseConfig = {
     apiKey: "AIzaSyDhdiJxS7bI4BX0E9ObXGjMA4Y95sXZftc",
