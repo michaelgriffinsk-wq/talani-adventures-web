@@ -223,7 +223,7 @@
       query, orderBy, onSnapshot, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // PASTE YOUR FIREBASE WEB CONFIG FROM STEP 1
+    // PASTE YOUR FIREBASE WEB CONFIG HERE
     const FIREBASE_CONFIG = {
       apiKey: "YOUR_API_KEY",
       authDomain: "talani-adventures.firebaseapp.com",
@@ -234,7 +234,7 @@
     };
 
     const CLOUDINARY_CLOUD_NAME = "Nx35scok";
-    const CLOUDINARY_UPLOAD_PRESET = "talani_unsigned"; // Create this Unsigned preset in Cloudinary
+    const CLOUDINARY_UPLOAD_PRESET = "talani_unsigned";
 
     const app = initializeApp(FIREBASE_CONFIG);
     const auth = getAuth(app);
@@ -264,7 +264,6 @@
       }
       const data = await res.json();
       const rawUrl = data.secure_url;
-      // For images, inject auto-format/auto-quality/width for fast web display while keeping rawUrl untouched
       const webUrl = resourceType === "image"
         ? rawUrl.replace("/upload/", "/upload/f_auto,q_auto:good,w_1440/")
         : rawUrl;
