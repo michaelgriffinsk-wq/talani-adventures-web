@@ -58,7 +58,7 @@
   </header>
 
   <main class="max-w-7xl mx-auto px-6 md:px-10 py-14 md:py-20">
-    <section class="grid lg:grid-cols-[1fr_1fr] gap-10 items-center mb-16">
+    <section data-block-id="safari-hero" class="grid lg:grid-cols-[1fr_1fr] gap-10 items-center mb-16">
       <div>
         <p class="eyebrow text-xs font-bold mb-4 text-[#968d80]">Outdoor Adventures · Safaris &amp; Wildlife</p>
         <h1 class="display text-3xl md:text-5xl leading-[1.1] tracking-[-.04em] text-[#304b54]">Closer to wildlife, savannah horizons, and bush country.</h1>
@@ -73,7 +73,7 @@
       </div>
     </section>
 
-    <section aria-labelledby="safari-offerings" class="grid md:grid-cols-3 gap-7">
+    <section data-block-id="safari-cards" aria-labelledby="safari-offerings" class="grid md:grid-cols-3 gap-7">
       <article class="bg-white border border-[#dcded9] overflow-hidden">
         <div class="photo-strip">
           <img src="https://images.pexels.com/photos/247376/pexels-photo-247376.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Savannah wildlife" loading="lazy" />
@@ -130,5 +130,10 @@
       </div>
     </div>
   </footer>
+
+  <script type="module">
+    import { applyPublishedLayout } from "./layout-runtime.js";
+    applyPublishedLayout("outdoor-adventures");
+  </script>
 </body>
 </html>
