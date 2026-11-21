@@ -71,7 +71,7 @@
     <section class="max-w-3xl mb-14">
       <p class="eyebrow text-xs font-bold mb-4 text-[#968d80]">Talani Adventures · Trails &amp; Hikes</p>
       <h1 class="display text-3xl md:text-5xl leading-[1.1] tracking-[-.04em] text-[#304b54]">Forest canopies, waterfall chases, craters, and high ridges.</h1>
-      <p class="leading-8 mt-5 text-[#52636a] text-base">Woodland walks, waterfalls, tea estates, crater loops, and mountain hikes across Kenya—starting with the December 5, 2026 Gatamaiyu Forest Reserve hike.</p>
+      <p class="leading-8 mt-5 text-[#52636a] text-base">Woodland walks, waterfalls, tea estates, crater loops, and mountain hikes across Kenya—starting with our active Gatamaiyu Forest Reserve departure.</p>
     </section>
 
     <section aria-labelledby="live-hikes-heading" class="mb-20">
@@ -118,6 +118,7 @@
   </footer>
 
   <script type="module">
+  import { getDestinationsByCategory } from "./itinerary-data.js";
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -130,73 +131,6 @@
     appId: "1:698912000783:web:ab04f85cb956c994558c7a",
     measurementId: "G-X2HVRDMRDM"
   };
-
-  const PHOTOS = {
-    waterfalls: [
-      "https://images.pexels.com/photos/210186/pexels-photo-210186.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/145685/pexels-photo-145685.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/358457/pexels-photo-358457.jpeg?auto=compress&cs=tinysrgb&w=800"
-    ],
-    ngareNdare: [
-      "https://images.pexels.com/photos/1450360/pexels-photo-1450360.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/1671325/pexels-photo-1671325.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/210186/pexels-photo-210186.jpeg?auto=compress&cs=tinysrgb&w=800"
-    ],
-    teaForest: [
-      "https://images.pexels.com/photos/158163/the-tea-plant-tea-plantation-farm-silver-158163.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/1671325/pexels-photo-1671325.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/145685/pexels-photo-145685.jpeg?auto=compress&cs=tinysrgb&w=800"
-    ],
-    peaksCraters: [
-      "https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg?auto=compress&cs=tinysrgb&w=800"
-    ]
-  };
-
-  const ITEMS = [
-    { mode: "Trails", title: "Castle Forest & Kamweti Falls", tag: "Forest & Waterfall Trail", photos: PHOTOS.waterfalls },
-    { mode: "Trails", title: "Kathandeni Forest & Waterfall Chase", tag: "Forest & Waterfall Chase", photos: PHOTOS.waterfalls },
-    { mode: "Trails", title: "Ragia Forest & Falls", tag: "Forest & Falls", photos: PHOTOS.waterfalls },
-    { mode: "Trails", title: "Kereita Forest & Waterfalls", tag: "Forest & Waterfalls", photos: PHOTOS.waterfalls },
-    { mode: "Trails", title: "Thiririka Falls", tag: "Waterfall Chase", photos: PHOTOS.waterfalls },
-    { mode: "Trails", title: "Kanunga Falls / Blue Pools", tag: "Waterfall & Blue Pools", photos: PHOTOS.ngareNdare },
-    { mode: "Trails", title: "Trasha Falls", tag: "Waterfall Trail", photos: PHOTOS.waterfalls },
-    { mode: "Trails", title: "Tigoni Tea Trails", tag: "Tea Estate Walk", photos: PHOTOS.teaForest },
-    { mode: "Trails", title: "Kiambethu Farm & Woodlands", tag: "Woodlands & Tea Farm", photos: PHOTOS.teaForest },
-    { mode: "Trails", title: "Gatamaiyu Forest Reserve", tag: "Active Dec 5, 2026 Hike", photos: PHOTOS.ngareNdare },
-    { mode: "Trails", title: "Ngare Ndare Forest & Blue Pools", tag: "Blue Pools, Canopy Walkway & Waterfalls", photos: PHOTOS.ngareNdare },
-    { mode: "Trails", title: "Zaina Falls (Nyeri)", tag: "Nyeri Forest Trail", photos: PHOTOS.waterfalls },
-    { mode: "Trails", title: "Nthenge Njeru Falls (Embu)", tag: "Embu Waterfall Trail", photos: PHOTOS.waterfalls },
-    { mode: "Trails", title: "Oloolua Nature Trail (Karen)", tag: "Forest Nature Trail", photos: PHOTOS.teaForest },
-    { mode: "Trails", title: "Ndakaini Dam / Kiplot Trails", tag: "Highland Dam Trail", photos: PHOTOS.teaForest },
-    { mode: "Trails", title: "Karuru Falls", tag: "Waterfall Trail", photos: PHOTOS.waterfalls },
-
-    { mode: "Hikes", title: "Lake Ellis & Nithi Fall", tag: "Lake & Waterfall Hike", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Mt. Suswa (Half-Crater Circuit)", tag: "Crater Circuit", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Oldonyo Sabuk / Kilimambogo", tag: "Summit Hike", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Mount Kipipiri", tag: "Peak & Forest Hike", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Kijabe Hills", tag: "Hills Hike", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Kijabe Dark Tunnel & Hot Springs Route", tag: "Tunnel & Hot Springs", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Table Mountain (Aberdares)", tag: "Aberdares Hike", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Sleeping Warrior & Ugali Hills", tag: "Rift Hills Circuit", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Mount Longonot Crater Circuit", tag: "Crater Rim Hike", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Seven Ponds Hike", tag: "Ridge & Ponds Hike", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Elephant Hill", tag: "Aberdares Peak Climb", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Rurimeria Moorland Trek", tag: "Moorland Trek", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Teleki Valley (Mackinders Quest)", tag: "High-Altitude Route", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Eburru Forest (Western Summit)", tag: "Western Summit", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Sirimon Likii North", tag: "High-Altitude Hike", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Oldonyo Lesatima / Dragon's Teeth", tag: "High Peak & Ridge", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "William Hill Soft", tag: "Scenic Hill Hike", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Menengai Crater", tag: "Caldera Hike", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Ngong Hills (7 Hills Circuit)", tag: "7-Hills Circuit", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Mount Namanga (Ol Doinyo Orok)", tag: "Peak Hike", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Mt. Kinangop (Aberdares)", tag: "Aberdares Peak", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Mt. Olorgesailie (Magadi)", tag: "Rift Hike", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Chyulu Hills (Kibwezi)", tag: "Volcanic Hills", photos: PHOTOS.peaksCraters },
-    { mode: "Hikes", title: "Mount Margaret", tag: "Hill Hike", photos: PHOTOS.peaksCraters }
-  ];
 
   const fallbackTrips = [{
     title: "Gatamaiyu Forest Reserve Hike",
@@ -214,17 +148,21 @@
   const fmt = (n) => Math.max(0, Number(n) || 0).toLocaleString("en-KE");
 
   function renderDirectory() {
-    const list = ITEMS.filter((i) => mode === "ALL" || i.mode === mode);
+    const list = mode === "ALL"
+      ? [...getDestinationsByCategory("Trails"), ...getDestinationsByCategory("Hikes")]
+      : getDestinationsByCategory(mode);
+
     $("directory-grid").innerHTML = list.map((item) => `
       <article class="dest-card">
         <div>
           <div class="photo-strip">
-            ${item.photos.slice(0, 3).map((u) => `<img src="${u}" alt="${item.title}" loading="lazy" />`).join("")}
+            ${(item.photos || []).slice(0, 3).map((p) => `<img src="${p.url}" alt="${item.title} — ${p.caption}" loading="lazy" />`).join("")}
           </div>
           <div class="p-5 pb-0">
-            <span class="text-[10px] font-extrabold uppercase tracking-[.14em] text-[#968d80]">${item.mode}</span>
+            <span class="text-[10px] font-extrabold uppercase tracking-[.14em] text-[#968d80]">${item.category} • ${item.difficulty || ""}</span>
             <h3 class="display text-lg text-[#304b54] mt-2">${item.title}</h3>
-            <p class="text-xs text-[#52636a] mt-1">${item.tag}</p>
+            <p class="text-[11px] font-semibold text-[#61767b] mt-1">${item.region || ""} • ${item.duration || ""}</p>
+            <p class="text-xs text-[#52636a] leading-6 mt-2">${item.summary || ""}</p>
           </div>
         </div>
         <div class="p-5 pt-3">
