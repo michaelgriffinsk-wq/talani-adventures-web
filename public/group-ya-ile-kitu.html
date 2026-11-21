@@ -69,9 +69,9 @@
     <section class="max-w-3xl mb-12">
       <p class="eyebrow text-xs font-bold mb-4 text-[#968d80]">Group ya Ile Kitu · Full Destination Hub</p>
       <h1 class="display text-3xl md:text-5xl leading-[1.1] tracking-[-.04em] text-[#304b54]">Every destination in one place for group &amp; custom inquiries.</h1>
-      <p class="leading-8 mt-5 text-[#52636a] text-base">Curated for small groups, corporate teams, and families. Tap any destination below to reach out about custom dates, group tiers, or bookings.</p>
+      <p class="leading-8 mt-5 text-[#52636a] text-base">Curated for small groups, corporate teams, and families. Browse all destinations from our shared itinerary catalog and reach out about any destination.</p>
       <div class="mt-6 border-l-2 border-[#968d80] bg-[#e9eeec] px-4 py-3 text-xs md:text-sm font-semibold text-[#304b54]">
-        Group Tiers: 5% off (3–5 pax) • 7% off (5–7 pax) • 10% off (7–10 pax) • Custom quotes for corporate &amp; family groups.
+        Group Tiers: 5% off (3–5 pax) • 7% off (5–7 pax) • 10% off (7–10 pax) • Custom quotes for larger corporate &amp; family groups.
       </div>
     </section>
 
@@ -158,6 +158,7 @@
   </footer>
 
   <script type="module">
+  import { ITINERARY_DATA, getDestinationsByCategory } from "./itinerary-data.js";
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -171,105 +172,12 @@
     measurementId: "G-X2HVRDMRDM"
   };
 
-  const PHOTO_SETS = {
-    waterfalls: [
-      { url: "https://images.pexels.com/photos/210186/pexels-photo-210186.jpeg?auto=compress&cs=tinysrgb&w=900", cap: "Forest waterfall cascade" },
-      { url: "https://images.pexels.com/photos/145685/pexels-photo-145685.jpeg?auto=compress&cs=tinysrgb&w=900", cap: "Woodland trail leading to falls" },
-      { url: "https://images.pexels.com/photos/358457/pexels-photo-358457.jpeg?auto=compress&cs=tinysrgb&w=900", cap: "Clear forest stream & mossy rocks" }
-    ],
-    ngareNdare: [
-      { url: "https://images.pexels.com/photos/1450360/pexels-photo-1450360.jpeg?auto=compress&cs=tinysrgb&w=900", cap: "Turquoise blue pools at Ngare Ndare" },
-      { url: "https://images.pexels.com/photos/1671325/pexels-photo-1671325.jpeg?auto=compress&cs=tinysrgb&w=900", cap: "Forest canopy walkway & treetops" },
-      { url: "https://images.pexels.com/photos/210186/pexels-photo-210186.jpeg?auto=compress&cs=tinysrgb&w=900", cap: "Ngare Ndare forest waterfall" }
-    ],
-    teaForest: [
-      { url: "https://images.pexels.com/photos/158163/the-tea-plant-tea-plantation-farm-silver-158163.jpeg?auto=compress&cs=tinysrgb&w=900", cap: "Highland tea & estate trails" },
-      { url: "https://images.pexels.com/photos/1671325/pexels-photo-1671325.jpeg?auto=compress&cs=tinysrgb&w=900", cap: "Lush indigenous forest canopy" },
-      { url: "https://images.pexels.com/photos/145685/pexels-photo-145685.jpeg?auto=compress&cs=tinysrgb&w=900", cap: "Shaded walking path" }
-    ],
-    peaksCraters: [
-      { url: "https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=900", cap: "High mountain ridge & mist" },
-      { url: "https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=900", cap: "Summit ridge & valley view" },
-      { url: "https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg?auto=compress&cs=tinysrgb&w=900", cap: "Crater & highland terrain" }
-    ],
-    safariBush: [
-      { url: "https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=900", cap: "Wildlife across open savannah" },
-      { url: "https://images.pexels.com/photos/247376/pexels-photo-247376.jpeg?auto=compress&cs=tinysrgb&w=900", cap: "Bush & wildlife corridor" },
-      { url: "https://images.pexels.com/photos/1670187/pexels-photo-1670187.jpeg?auto=compress&cs=tinysrgb&w=900", cap: "Golden bush landscape" }
-    ],
-    coastIsland: [
-      { url: "https://images.pexels.com/photos/457882/pexels-photo-457882.jpeg?auto=compress&cs=tinysrgb&w=900", cap: "Coastal waters & palms" },
-      { url: "https://images.pexels.com/photos/1450361/pexels-photo-1450361.jpeg?auto=compress&cs=tinysrgb&w=900", cap: "Island beach retreat" },
-      { url: "https://images.pexels.com/photos/1078981/pexels-photo-1078981.jpeg?auto=compress&cs=tinysrgb&w=900", cap: "Shoreline & horizon" }
-    ]
-  };
-
-  const CATALOG = [
-    // Trails
-    { title: "Castle Forest & Kamweti Falls", cat: "Trails", note: "Forest walk & waterfall trail", photos: PHOTO_SETS.waterfalls },
-    { title: "Kathandeni Forest & Waterfall Chase", cat: "Trails", note: "Forest & waterfall chase", photos: PHOTO_SETS.waterfalls },
-    { title: "Ragia Forest & Falls", cat: "Trails", note: "Forest & falls trail", photos: PHOTO_SETS.waterfalls },
-    { title: "Kereita Forest & Waterfalls", cat: "Trails", note: "Forest & waterfalls", photos: PHOTO_SETS.waterfalls },
-    { title: "Thiririka Falls", cat: "Trails", note: "Waterfall trail", photos: PHOTO_SETS.waterfalls },
-    { title: "Kanunga Falls / Blue Pools", cat: "Trails", note: "Waterfall & blue pools", photos: PHOTO_SETS.ngareNdare },
-    { title: "Trasha Falls", cat: "Trails", note: "Waterfall trail", photos: PHOTO_SETS.waterfalls },
-    { title: "Tigoni Tea Trails", cat: "Trails", note: "Tea estate & highland walk", photos: PHOTO_SETS.teaForest },
-    { title: "Kiambethu Farm & Woodlands", cat: "Trails", note: "Farm & indigenous woodlands", photos: PHOTO_SETS.teaForest },
-    { title: "Gatamaiyu Forest Reserve", cat: "Trails", note: "Active Dec 5, 2026 forest trail", photos: PHOTO_SETS.ngareNdare },
-    { title: "Ngare Ndare Forest & Blue Pools", cat: "Trails", note: "Blue pools, canopy walkway & waterfalls", photos: PHOTO_SETS.ngareNdare },
-    { title: "Zaina Falls (Nyeri)", cat: "Trails", note: "Nyeri forest & waterfall", photos: PHOTO_SETS.waterfalls },
-    { title: "Nthenge Njeru Falls (Embu)", cat: "Trails", note: "Embu waterfall trail", photos: PHOTO_SETS.waterfalls },
-    { title: "Oloolua Nature Trail (Karen)", cat: "Trails", note: "Nairobi forest nature trail", photos: PHOTO_SETS.teaForest },
-    { title: "Ndakaini Dam / Kiplot Trails", cat: "Trails", note: "Dam & highland trail", photos: PHOTO_SETS.teaForest },
-    { title: "Karuru Falls", cat: "Trails", note: "Waterfall trail", photos: PHOTO_SETS.waterfalls },
-
-    // Hikes
-    { title: "Lake Ellis & Nithi Fall", cat: "Hikes", note: "Highland lake & waterfall hike", photos: PHOTO_SETS.peaksCraters },
-    { title: "Mt. Suswa (Half-Crater Circuit)", cat: "Hikes", note: "Crater circuit hike", photos: PHOTO_SETS.peaksCraters },
-    { title: "Oldonyo Sabuk / Kilimambogo", cat: "Hikes", note: "Summit & ridge hike", photos: PHOTO_SETS.peaksCraters },
-    { title: "Mount Kipipiri", cat: "Hikes", note: "Forest & peak hike", photos: PHOTO_SETS.peaksCraters },
-    { title: "Kijabe Hills", cat: "Hikes", note: "Rift Valley hills hike", photos: PHOTO_SETS.peaksCraters },
-    { title: "Kijabe Dark Tunnel & Hot Springs Route", cat: "Hikes", note: "Tunnel & hot springs route", photos: PHOTO_SETS.peaksCraters },
-    { title: "Table Mountain (Aberdares)", cat: "Hikes", note: "Aberdares plateau hike", photos: PHOTO_SETS.peaksCraters },
-    { title: "Sleeping Warrior & Ugali Hills", cat: "Hikes", note: "Lake Elementaita hills circuit", photos: PHOTO_SETS.peaksCraters },
-    { title: "Mount Longonot Crater Circuit", cat: "Hikes", note: "Crater rim circuit", photos: PHOTO_SETS.peaksCraters },
-    { title: "Seven Ponds Hike", cat: "Hikes", note: "Scenic ponds & ridge hike", photos: PHOTO_SETS.peaksCraters },
-    { title: "Elephant Hill", cat: "Hikes", note: "Aberdares steep climb", photos: PHOTO_SETS.peaksCraters },
-    { title: "Rurimeria Moorland Trek", cat: "Hikes", note: "Moorland trek", photos: PHOTO_SETS.peaksCraters },
-    { title: "Teleki Valley (Mackinders Quest)", cat: "Hikes", note: "High-altitude alpine route", photos: PHOTO_SETS.peaksCraters },
-    { title: "Eburru Forest (Western Summit)", cat: "Hikes", note: "Western summit hike", photos: PHOTO_SETS.peaksCraters },
-    { title: "Sirimon Likii North", cat: "Hikes", note: "Likii North high-altitude hike", photos: PHOTO_SETS.peaksCraters },
-    { title: "Oldonyo Lesatima / Dragon's Teeth", cat: "Hikes", note: "Aberdares high peak & ridge", photos: PHOTO_SETS.peaksCraters },
-    { title: "William Hill Soft", cat: "Hikes", note: "Accessible hill hike", photos: PHOTO_SETS.peaksCraters },
-    { title: "Menengai Crater", cat: "Hikes", note: "Caldera & crater hike", photos: PHOTO_SETS.peaksCraters },
-    { title: "Ngong Hills (7 Hills Circuit)", cat: "Hikes", note: "7-peak ridge circuit", photos: PHOTO_SETS.peaksCraters },
-    { title: "Mount Namanga (Ol Doinyo Orok)", cat: "Hikes", note: "Border peak hike", photos: PHOTO_SETS.peaksCraters },
-    { title: "Mt. Kinangop (Aberdares)", cat: "Hikes", note: "Aberdares peak hike", photos: PHOTO_SETS.peaksCraters },
-    { title: "Mt. Olorgesailie (Magadi)", cat: "Hikes", note: "Rift valley hike", photos: PHOTO_SETS.peaksCraters },
-    { title: "Chyulu Hills (Kibwezi)", cat: "Hikes", note: "Rolling volcanic hills", photos: PHOTO_SETS.peaksCraters },
-    { title: "Mount Margaret", cat: "Hikes", note: "Rift hill hike", photos: PHOTO_SETS.peaksCraters },
-
-    // Multi-Day Expeditions & Retreats
-    { title: "Mt. Meru, Tanzania (4 Days; Cabins)", cat: "Multi-Day", note: "4 Days • Cabins", photos: PHOTO_SETS.peaksCraters },
-    { title: "Mt. Kenya – Sirimon Route (4 Days; Dorms)", cat: "Multi-Day", note: "4 Days • Dorms", photos: PHOTO_SETS.peaksCraters },
-    { title: "Mt. Kenya – Chogoria Route (4 Days; Camping)", cat: "Multi-Day", note: "4 Days • Camping", photos: PHOTO_SETS.peaksCraters },
-    { title: "Ol Jojori Ranch Mt. Kenya", cat: "Multi-Day", note: "Mt. Kenya ranch multi-day", photos: PHOTO_SETS.safariBush },
-    { title: "Kilimanjaro – Marangu Route (6 Days; Cabins)", cat: "Multi-Day", note: "6 Days • Cabins", photos: PHOTO_SETS.peaksCraters },
-    { title: "Zanzibar Flagship Retreat (4 Days / 3 Nights Bush-to-Beach)", cat: "Multi-Day", note: "4 Days / 3 Nights • Bush-to-Beach", photos: PHOTO_SETS.coastIsland },
-    { title: "Lake Naivasha / Lake Oloiden Bush Camp (2 Days / 1 Night)", cat: "Multi-Day", note: "2 Days / 1 Night • Bush Camp", photos: PHOTO_SETS.safariBush },
-    { title: "Amboseli Borderlands Cultural Camp (2 Days / 1 Night)", cat: "Multi-Day", note: "2 Days / 1 Night • Cultural Camp", photos: PHOTO_SETS.safariBush },
-    { title: "Aberdares North-to-South Moorland Traverse (3 Days / 2 Nights)", cat: "Multi-Day", note: "3 Days / 2 Nights • Moorland Traverse", photos: PHOTO_SETS.peaksCraters },
-    { title: "Mt. Elgon – Koitoboss Peak & Kitum Cave (4 Days)", cat: "Multi-Day", note: "4 Days • Peak & Cave", photos: PHOTO_SETS.peaksCraters },
-    { title: "Lamu Archipelago Dhow Expedition (4 Days)", cat: "Multi-Day", note: "4 Days • Coast & Dhow", photos: PHOTO_SETS.coastIsland },
-    { title: "Chalbi Desert & Lake Turkana Overland (5 Days)", cat: "Multi-Day", note: "5 Days • Desert & Lake Overland", photos: PHOTO_SETS.safariBush },
-    { title: "Matthews Range Trekking (Samburu)", cat: "Multi-Day", note: "Samburu multi-day trek", photos: PHOTO_SETS.safariBush },
-    { title: "Tsavo West & Shetani Lava Flows (3 Days / 2 Nights)", cat: "Multi-Day", note: "3 Days / 2 Nights • Bush & Lava", photos: PHOTO_SETS.safariBush }
-  ];
-
   let activeCat = "ALL";
   const $ = (id) => document.getElementById(id);
 
-  $("lead-dest").innerHTML = CATALOG.map((d) => `<option value="${d.title.replace(/"/g, "&quot;")}">${d.title} (${d.cat})</option>`).join("");
+  $("lead-dest").innerHTML = ITINERARY_DATA
+    .map((d) => `<option value="${d.title.replace(/"/g, "&quot;")}">${d.title} (${d.category})</option>`)
+    .join("");
 
   function openPhoto(url, cap) {
     $("photo-modal-img").src = url;
@@ -280,18 +188,20 @@
   $("photo-modal").addEventListener("click", (e) => { if (e.target === $("photo-modal")) $("photo-modal").hidden = true; });
 
   function renderCatalog() {
-    const filtered = CATALOG.filter((item) => activeCat === "ALL" || item.cat === activeCat);
+    const filtered = getDestinationsByCategory(activeCat);
     $("catalog-count").textContent = `${filtered.length} destinations`;
-    $("catalog-grid").innerHTML = filtered.map((item, idx) => `
+    $("catalog-grid").innerHTML = filtered.map((item) => `
       <article class="dest-card">
         <div>
           <div class="photo-strip">
-            ${item.photos.slice(0, 3).map((p) => `<img src="${p.url}" alt="${item.title} — ${p.cap}" loading="lazy" data-url="${p.url}" data-cap="${item.title} — ${p.cap}" class="preview-img" />`).join("")}
+            ${(item.photos || []).slice(0, 3).map((p) => `<img src="${p.url}" alt="${item.title} — ${p.caption}" loading="lazy" data-url="${p.url}" data-cap="${item.title} —${p.caption}" class="preview-img" />`).join("")}
           </div>
           <div class="p-5 pb-0">
-            <span class="cat-tag">${item.cat}</span>
+            <span class="cat-tag">${item.category}</span>
             <h3 class="display text-lg text-[#304b54] mt-3 leading-snug">${item.title}</h3>
-            <p class="text-xs text-[#52636a] mt-1.5">${item.note}</p>
+            <p class="text-[11px] font-semibold text-[#968d80] mt-1">${item.region || ""} • ${item.duration || ""}</p>
+            <p class="text-xs text-[#52636a] leading-6 mt-2">${item.summary || ""}</p>
+            <p class="text-[11px] text-[#304b54] font-semibold mt-2.5">Activities: ${(item.activities || []).slice(0, 3).join(" • ")}</p>
           </div>
         </div>
         <div class="p-5 pt-3">
