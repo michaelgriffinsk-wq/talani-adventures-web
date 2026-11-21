@@ -21,8 +21,11 @@
     .reveal{animation:rise .7s both}.reveal-late{animation:rise .7s .16s both}
     @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
     .sticky-header{position:sticky;top:0;z-index:30;background:rgba(248,247,243,.96);backdrop-filter:blur(14px)}
+    .subnav-strip{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:10px 0}
+    .subnav-strip::-webkit-scrollbar,.story-strip::-webkit-scrollbar,.filter-row::-webkit-scrollbar{display:none}
+    .subnav-link{flex:none;font-size:12px;font-weight:700;color:var(--ink);text-decoration:none;padding:8px 14px;border:1px solid var(--line);background:white;transition:border-color .2s,background .2s}
+    .subnav-link:hover{border-color:var(--ink);background:var(--mist)}
     .story-strip{display:flex;gap:22px;overflow-x:auto;scrollbar-width:none;padding:5px 2px 15px}
-    .story-strip::-webkit-scrollbar,.filter-row::-webkit-scrollbar{display:none}
     .story-button{width:82px;flex:none;text-align:center;cursor:pointer;background:none;border:0;padding:0;color:var(--ink)}
     .story-ring{display:block;width:72px;height:72px;padding:3px;margin:0 auto 9px;border-radius:50%;background:linear-gradient(45deg,#968d80,#304b54,#a8b9ae)}
     .story-picture{display:block;width:100%;height:100%;border:3px solid var(--paper);border-radius:50%;background-size:cover;background-position:center;background-color:var(--mist)}
@@ -61,117 +64,142 @@
     <header class="sticky-header w-full border-b border-[#dcded9]">
       <div class="max-w-7xl mx-auto px-6 md:px-10 py-3 flex items-center justify-between gap-4">
         <a href="#home" aria-label="Talani Adventures home" class="shrink-0">
-          <img class="w-16 h-16 md:w-20 md:h-20 object-contain" loading="lazy" src="../IMG-20261110-WA0045.jpg" alt="Talani Adventures blue-green mountain and palm tree logo">
+          <img class="w-16 h-16 md:w-20 md:h-20 object-contain" loading="lazy" src="../IMG-20261110-WA0045.jpg" alt="Talani Adventures logo">
         </a>
         <div class="min-w-0 flex-1">
           <p class="display font-medium leading-tight text-[#304b54] text-lg md:text-xl">Talani Adventures</p>
           <p class="text-[10px] md:text-xs tracking-wide mt-1 text-[#968d80] font-semibold">@talani.adventures • Group ya Ile Kitu</p>
         </div>
-        <nav aria-label="Main navigation" class="hidden lg:flex items-center gap-7">
-          <a class="text-sm font-semibold hover:underline text-[#304b54]" href="#experiences">Experiences</a>
-          <a class="text-sm font-semibold hover:underline text-[#304b54]" href="#travellers">Who we welcome</a>
-          <a class="text-sm font-semibold hover:underline text-[#304b54]" href="#about">Our story</a>
+        <nav aria-label="Main navigation" class="hidden lg:flex items-center gap-6">
+          <a class="text-sm font-semibold hover:underline text-[#304b54]" href="#services">Our Arms</a>
+          <a class="text-sm font-semibold hover:underline text-[#304b54]" href="#active-spotlight">Active Trips</a>
+          <a class="text-sm font-semibold hover:underline text-[#304b54]" href="#about">Who We Are</a>
         </nav>
         <div class="flex items-center gap-2 shrink-0">
           <a href="https://www.instagram.com/talani.adventures/" target="_blank" rel="noopener noreferrer" aria-label="Instagram @talani.adventures" class="border border-[#dcded9] px-2.5 py-2 text-[11px] md:text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">IG ↗</a>
           <a href="https://www.tiktok.com/@talani.adventures" target="_blank" rel="noopener noreferrer" aria-label="TikTok @talani.adventures" class="border border-[#dcded9] px-2.5 py-2 text-[11px] md:text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">TT ↗</a>
-          <a href="./studio.html" class="border border-[#dcded9] px-3 py-2 text-[11px] md:text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">Creator Studio ↗</a>
+          <a href="./studio.html" class="border border-[#dcded9] px-3 py-2 text-[11px] md:text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">Studio ↗</a>
+        </div>
+      </div>
+      <div class="border-t border-[#e6e8e3] bg-[#f8f7f3]">
+        <div class="max-w-7xl mx-auto px-6 md:px-10 subnav-strip" aria-label="Dedicated experience pages">
+          <a class="subnav-link" href="./index.html">Overview</a>
+          <a class="subnav-link" href="./group-ya-ile-kitu.html">Group ya Ile Kitu (All Destinations)</a>
+          <a class="subnav-link" href="./outdoor-adventures.html">Outdoor Adventures (Safaris &amp; Wildlife)</a>
+          <a class="subnav-link" href="./talani-adventures.html">Talani Adventures (Hikes &amp; Trails)</a>
+          <a class="subnav-link" href="./adamanti.html">Adamanti (Concierge &amp; Stays)</a>
+          <a class="subnav-link" href="./talani-premium.html">Talani Premium (Multi-Day Trips)</a>
         </div>
       </div>
     </header>
 
     <main id="home">
-      <section class="max-w-7xl mx-auto px-6 md:px-10 pt-14 md:pt-24 pb-16 md:pb-24 grid lg:grid-cols-[.92fr_1.08fr] items-center gap-12 lg:gap-16" aria-labelledby="hero-title">
+      <!-- HERO: WHO WE ARE -->
+      <section class="max-w-7xl mx-auto px-6 md:px-10 pt-14 md:pt-24 pb-16 md:pb-24 grid lg:grid-cols-[.95fr_1.05fr] items-center gap-12 lg:gap-16" aria-labelledby="hero-title">
         <div class="reveal">
-          <p class="eyebrow text-xs font-bold mb-7 text-[#968d80]">A world of possibility, rooted in Africa</p>
-          <h1 id="hero-title" class="display leading-[1.08] tracking-[-.045em] max-w-xl text-[#304b54] text-3xl md:text-4xl">Go further. Feel more.</h1>
-          <p class="leading-8 max-w-lg mt-7 text-[#52636a] text-base">From the hush of the savannah to mountain air and the rhythm of the coast, Talani Adventures brings remarkable journeys together under one roof.</p>
-          <a href="#upcoming" class="inline-flex items-center justify-center mt-9 px-7 py-4 rounded-sm font-semibold tracking-wide transition hover:opacity-85 bg-[#304b54] text-white text-sm">Explore our journeys ↗</a>
+          <p class="eyebrow text-xs font-bold mb-7 text-[#968d80]">Talani Adventures · Who We Are</p>
+          <h1 id="hero-title" class="display leading-[1.08] tracking-[-.045em] max-w-xl text-[#304b54] text-3xl md:text-5xl">Thoughtful journeys across forest, wild, peak, and coast.</h1>
+          <p class="leading-8 max-w-lg mt-7 text-[#52636a] text-base">Talani Adventures is a travel and outdoor experiences company connecting forest trails, mountain hikes, safaris, multi-day retreats, and hospitality hosting—whether you join an open departure or plan a private group escape.</p>
+          <div class="flex flex-wrap gap-3 mt-9">
+            <a href="#active-spotlight" class="inline-flex items-center justify-center px-7 py-4 rounded-sm font-semibold tracking-wide transition hover:opacity-85 bg-[#304b54] text-white text-sm">See active departures ↗</a>
+            <a href="./group-ya-ile-kitu.html" class="inline-flex items-center justify-center px-6 py-4 border border-[#304b54] font-semibold tracking-wide transition hover:bg-[#e9eeec] text-[#304b54] text-sm">Explore all destinations →</a>
+          </div>
         </div>
         <div class="photo-frame hero-photo relative reveal-late">
-          <img class="absolute inset-0 w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=1280" alt="Elephants crossing a sunlit African landscape">
+          <img class="absolute inset-0 w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=1280" alt="Wildlife moving across an open African landscape">
           <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/35 to-transparent pointer-events-none"></div>
-          <p class="eyebrow absolute bottom-6 left-7 text-xs font-semibold text-white">Beyond the expected</p>
+          <p class="eyebrow absolute bottom-6 left-7 text-xs font-semibold text-white">Curated field operations</p>
         </div>
       </section>
 
-      <section id="experiences" class="w-full bg-[#e9eeec] py-20 md:py-28" aria-labelledby="experiences-title">
-        <div class="max-w-7xl mx-auto px-6 md:px-10">
-          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-11">
-            <div>
-              <p class="eyebrow text-xs font-bold mb-4 text-[#61767b]">The Talani collection</p>
-              <h2 id="experiences-title" class="display tracking-[-.035em] text-[#304b54] text-2xl">Three ways to wander.</h2>
-            </div>
-            <p class="max-w-sm leading-7 text-[#52636a] text-base">Distinct destinations and experiences, thoughtfully brought together.</p>
-          </div>
-          <div class="grid md:grid-cols-4 gap-7">
-            <article>
-              <div class="photo-frame h-64 md:h-72">
-                <img class="w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/247376/pexels-photo-247376.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Wildlife on an African savannah">
-              </div>
-              <div class="pt-6 border-t-2 border-[#304b54] mt-5">
-                <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">01 / The wild</p>
-                <h3 class="display text-[#304b54] text-lg">Safaris &amp; wildlife</h3>
-                <p class="mt-3 leading-7 text-[#52636a] text-base">Come closer to extraordinary landscapes and the wildlife that calls them home.</p>
-              </div>
-            </article>
-            <article>
-              <div class="photo-frame h-64 md:h-72">
-                <img class="w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Mountain peaks rising above a misty landscape">
-              </div>
-              <div class="pt-6 border-t-2 border-[#304b54] mt-5">
-                <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">02 / The heights</p>
-                <h3 class="display text-[#304b54] text-lg">Mountain treks</h3>
-                <p class="mt-3 leading-7 text-[#52636a] text-base">Find new perspective on trails that reward every step with wonder.</p>
-              </div>
-            </article>
-            <article>
-              <div class="photo-frame h-64 md:h-72">
-                <img class="w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/457882/pexels-photo-457882.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Palm-lined tropical coastline and turquoise sea">
-              </div>
-              <div class="pt-6 border-t-2 border-[#304b54] mt-5">
-                <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">03 / The shore</p>
-                <h3 class="display text-[#304b54] text-lg">Coastal getaways</h3>
-                <p class="mt-3 leading-7 text-[#52636a] text-base">Slow down where warm horizons, ocean breezes, and easy days meet.</p>
-              </div>
-            </article>
-            <article>
-              <div class="photo-frame h-64 md:h-72">
-                <img class="w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/145685/pexels-photo-145685.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Lush forest trail leading toward a waterfall">
-              </div>
-              <div class="pt-6 border-t-2 border-[#304b54] mt-5">
-                <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">04 / Forest &amp; falls</p>
-                <h3 class="display text-[#304b54] text-lg">Forest trails &amp; waterfalls</h3>
-                <p class="mt-3 leading-7 text-[#52636a] text-base">Follow green trails to hidden cascades and refreshing wild swims.</p>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section aria-label="Latest stories" class="max-w-7xl mx-auto px-6 md:px-10 pt-16 md:pt-20">
-        <p class="eyebrow text-xs font-bold mb-5 text-[#968d80]">Along the way / latest stories</p>
+      <!-- LATEST STORIES -->
+      <section aria-label="Latest stories" class="max-w-7xl mx-auto px-6 md:px-10 pt-6 pb-12">
+        <p class="eyebrow text-xs font-bold mb-5 text-[#968d80]">Field dispatches / latest stories</p>
         <div id="stories-bar" class="story-strip" aria-label="Expedition stories"></div>
       </section>
 
-      <section id="upcoming" class="max-w-7xl mx-auto px-6 md:px-10 py-16 md:py-20" aria-labelledby="upcoming-title">
-        <div class="flex flex-wrap items-end justify-between gap-4 mb-7">
-          <div>
-            <p class="eyebrow text-xs font-bold mb-4 text-[#968d80]">Your next chapter</p>
-            <h2 id="upcoming-title" class="display tracking-[-.035em] text-[#304b54] text-2xl">Upcoming Expeditions</h2>
+      <!-- MOST RECENT & ACTIVE TRIPS / HIKES / SAFARIS -->
+      <section id="active-spotlight" class="w-full bg-[#e9eeec] py-20 md:py-24" aria-labelledby="spotlight-title">
+        <div class="max-w-7xl mx-auto px-6 md:px-10">
+          <div class="flex flex-wrap items-end justify-between gap-4 mb-7">
+            <div>
+              <p class="eyebrow text-xs font-bold mb-4 text-[#61767b]">Most recent &amp; active departures</p>
+              <h2 id="spotlight-title" class="display tracking-[-.035em] text-[#304b54] text-2xl md:text-3xl">Active Tours, Hikes &amp; Expeditions</h2>
+            </div>
+            <span id="live-status" class="text-xs font-bold text-[#61767b]" role="status" aria-live="polite">● Connecting to live updates</span>
           </div>
-          <span id="live-status" class="text-xs font-bold text-[#61767b]" role="status" aria-live="polite">● Connecting to live updates</span>
+          <div id="brand-pills" class="filter-row" role="group" aria-label="Filter active trips">
+            <button type="button" class="filter-pill" data-brand="ALL" aria-pressed="true">All Active</button>
+            <button type="button" class="filter-pill" data-brand="Group ya Ile Kitu" aria-pressed="false">Group ya Ile Kitu</button>
+            <button type="button" class="filter-pill" data-brand="Talani Adventures" aria-pressed="false">Hikes &amp; Trails</button>
+            <button type="button" class="filter-pill" data-brand="Outdoor Adventures" aria-pressed="false">Safaris &amp; Wildlife</button>
+            <button type="button" class="filter-pill" data-brand="Talani Premium Tours" aria-pressed="false">Talani Premium</button>
+            <button type="button" class="filter-pill" data-brand="Adamanti Hospitality" aria-pressed="false">Adamanti Stays</button>
+          </div>
+          <div id="trips-feed" class="trip-grid" aria-live="polite"></div>
+          <p id="trips-empty" class="hidden py-8 text-[#61767b]">No active departures under this filter right now—browse all destinations in Group ya Ile Kitu.</p>
         </div>
-        <div id="brand-pills" class="filter-row" role="group" aria-label="Filter expeditions by brand">
-          <button type="button" class="filter-pill" data-brand="ALL" aria-pressed="true">All Experiences</button>
-          <button type="button" class="filter-pill" data-brand="Group ya Ile Kitu" aria-pressed="false">Group ya Ile Kitu</button>
-          <button type="button" class="filter-pill" data-brand="Talani Premium Tours" aria-pressed="false">Talani Premium Tours</button>
-          <button type="button" class="filter-pill" data-brand="Adamanti Hospitality" aria-pressed="false">Adamanti Hospitality</button>
-        </div>
-        <div id="trips-feed" class="trip-grid" aria-live="polite"></div>
-        <p id="trips-empty" class="hidden py-8 text-[#61767b]">No upcoming trips listed under this brand yet.</p>
       </section>
 
+      <!-- SERVICES & ARMS DIRECTORY -->
+      <section id="services" class="max-w-7xl mx-auto px-6 md:px-10 py-20 md:py-28" aria-labelledby="services-title">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-12">
+          <div>
+            <p class="eyebrow text-xs font-bold mb-4 text-[#968d80]">What we offer</p>
+            <h2 id="services-title" class="display tracking-[-.035em] text-[#304b54] text-2xl md:text-3xl">Our divisions &amp; services.</h2>
+          </div>
+          <p class="max-w-md leading-7 text-[#52636a] text-base">Every division has its own dedicated page—while Group ya Ile Kitu lets you inquire about any destination in our catalog.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
+          <article class="border border-[#dcded9] bg-white p-7 flex flex-col justify-between">
+            <div>
+              <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">01 / Groups, Corporate &amp; Families</p>
+              <h3 class="display text-xl text-[#304b54]">Group ya Ile Kitu</h3>
+              <p class="mt-3 leading-7 text-sm text-[#52636a]">Curated tours for small groups, corporate teams, and families. Includes full access to every trail, hike, and multi-day destination so you can reach out for custom dates and group tiers.</p>
+            </div>
+            <a href="./group-ya-ile-kitu.html" class="inline-block mt-6 text-xs font-bold uppercase tracking-wider text-[#304b54] hover:underline">Open Group ya Ile Kitu →</a>
+          </article>
+
+          <article class="border border-[#dcded9] bg-white p-7 flex flex-col justify-between">
+            <div>
+              <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">02 / Safaris &amp; Wildlife</p>
+              <h3 class="display text-xl text-[#304b54]">Outdoor Adventures</h3>
+              <p class="mt-3 leading-7 text-sm text-[#52636a]">Game drives, savannah and bush outings, conservancy visits, and wildlife-focused itineraries planned with clear logistics.</p>
+            </div>
+            <a href="./outdoor-adventures.html" class="inline-block mt-6 text-xs font-bold uppercase tracking-wider text-[#304b54] hover:underline">Explore Safaris &amp; Wildlife →</a>
+          </article>
+
+          <article class="border border-[#dcded9] bg-white p-7 flex flex-col justify-between">
+            <div>
+              <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">03 / Hikes &amp; Forest Trails</p>
+              <h3 class="display text-xl text-[#304b54]">Talani Adventures</h3>
+              <p class="mt-3 leading-7 text-sm text-[#52636a]">Forest walks, waterfall chases, tea estates, crater circuits, and high-altitude peaks across Kenya—kicking off with Gatamaiyu Forest Reserve on Dec 5, 2026.</p>
+            </div>
+            <a href="./talani-adventures.html" class="inline-block mt-6 text-xs font-bold uppercase tracking-wider text-[#304b54] hover:underline">Browse Hikes &amp; Trails →</a>
+          </article>
+
+          <article class="border border-[#dcded9] bg-white p-7 flex flex-col justify-between">
+            <div>
+              <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">04 / Concierge &amp; Hosting</p>
+              <h3 class="display text-xl text-[#304b54]">Adamanti</h3>
+              <p class="mt-3 leading-7 text-sm text-[#52636a]">Concierge and hospitality coordination spanning BnBs, hotels, resorts, and tailored stay arrangements before, during, or after your trip.</p>
+            </div>
+            <a href="./adamanti.html" class="inline-block mt-6 text-xs font-bold uppercase tracking-wider text-[#304b54] hover:underline">Explore Adamanti Stays →</a>
+          </article>
+
+          <article class="border border-[#dcded9] bg-white p-7 flex flex-col justify-between md:col-span-2 lg:col-span-2">
+            <div>
+              <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">05 / Multi-Day Trips &amp; Retreats</p>
+              <h3 class="display text-xl text-[#304b54]">Talani Premium</h3>
+              <p class="mt-3 leading-7 text-sm text-[#52636a]">Extended multi-day expeditions and retreats—from Zanzibar bush-to-beach getaways, Lamu dhows, and coastal escapes to Mt. Kenya, Mt. Meru, Kilimanjaro, Aberdares, Samburu, and Chalbi/Lake Turkana.</p>
+            </div>
+            <a href="./talani-premium.html" class="inline-block mt-6 text-xs font-bold uppercase tracking-wider text-[#304b54] hover:underline">View Multi-Day Expeditions →</a>
+          </article>
+        </div>
+      </section>
+
+      <!-- D-DAY MEMORIES & REELS -->
       <section id="memories" class="w-full bg-[#e9eeec] py-20 md:py-28" aria-labelledby="memories-title">
         <div class="max-w-7xl mx-auto px-6 md:px-10">
           <div class="flex flex-wrap items-end justify-between gap-4 mb-9">
@@ -185,36 +213,14 @@
         </div>
       </section>
 
-      <section id="travellers" class="max-w-7xl mx-auto px-6 md:px-10 py-20 md:py-28" aria-labelledby="travellers-title">
-        <div class="grid lg:grid-cols-[.7fr_1.3fr] gap-10 lg:gap-20">
-          <div>
-            <p class="eyebrow text-xs font-bold mb-4 text-[#968d80]">Made for your kind of journey</p>
-            <h2 id="travellers-title" class="display tracking-[-.035em] text-[#304b54] text-2xl">There’s a place for you here.</h2>
-          </div>
-          <div class="divide-y divide-[#dcded9] border-y border-[#dcded9]">
-            <div class="py-7 grid sm:grid-cols-[190px_1fr] gap-3">
-              <h3 class="font-bold text-[#304b54] text-lg">International travellers</h3>
-              <p class="leading-7 text-[#52636a]">Discover the region’s beauty through experiences that help you feel truly connected to it.</p>
-            </div>
-            <div class="py-7 grid sm:grid-cols-[190px_1fr] gap-3">
-              <h3 class="font-bold text-[#304b54] text-lg">Local travellers</h3>
-              <p class="leading-7 text-[#52636a]">See familiar places with fresh eyes, from close-to-home escapes to something new.</p>
-            </div>
-            <div class="py-7 grid sm:grid-cols-[190px_1fr] gap-3">
-              <h3 class="font-bold text-[#304b54] text-lg">Corporate &amp; groups</h3>
-              <p class="leading-7 text-[#52636a]">Bring people together through shared adventures, retreats, and memorable group travel.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      <!-- ABOUT / COMPANY ETHOS -->
       <section id="about" class="w-full bg-[#304b54] text-white py-20 md:py-24" aria-labelledby="about-title">
         <div class="max-w-7xl mx-auto px-6 md:px-10 grid md:grid-cols-2 gap-8 md:gap-20 items-end">
           <div>
-            <p class="eyebrow text-xs font-bold mb-5 text-[#d2dcd9]">One name. Many horizons.</p>
-            <h2 id="about-title" class="display tracking-[-.035em] text-white text-2xl">Adventure, in all its forms.</h2>
+            <p class="eyebrow text-xs font-bold mb-5 text-[#d2dcd9]">One company. Many horizons.</p>
+            <h2 id="about-title" class="display tracking-[-.035em] text-white text-2xl">Built around real trails, clear planning, and shared moments.</h2>
           </div>
-          <p class="leading-8 text-white">Talani Adventures is a home for travel experiences across the wild, the mountains, and the coast. However you choose to explore, the journey begins with curiosity.</p>
+          <p class="leading-8 text-white">Whether you are joining a day trail, booking a multi-day escape, arranging accommodation through Adamanti, or bringing a group together through Group ya Ile Kitu, we keep every step structured and welcoming.</p>
         </div>
       </section>
     </main>
@@ -222,14 +228,16 @@
     <footer class="w-full border-t border-[#dcded9]">
       <div class="max-w-7xl mx-auto px-6 md:px-10 py-9 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
         <a href="#home" aria-label="Back to Talani Adventures home">
-          <img class="w-20 h-20 object-contain" loading="lazy" src="../IMG-20261110-WA0046.jpg" alt="Talani Adventures stone-coloured mountain and palm tree logo">
+          <img class="w-20 h-20 object-contain" loading="lazy" src="../IMG-20261110-WA0046.jpg" alt="Talani Adventures footer logo">
         </a>
         <div class="flex flex-wrap gap-6 items-center">
-          <a class="text-sm font-semibold hover:underline text-[#304b54]" href="#experiences">Experiences</a>
-          <a class="text-sm font-semibold hover:underline text-[#304b54]" href="#travellers">Travellers</a>
+          <a class="text-sm font-semibold hover:underline text-[#304b54]" href="./group-ya-ile-kitu.html">Group ya Ile Kitu</a>
+          <a class="text-sm font-semibold hover:underline text-[#304b54]" href="./talani-adventures.html">Hikes &amp; Trails</a>
+          <a class="text-sm font-semibold hover:underline text-[#304b54]" href="./outdoor-adventures.html">Safaris</a>
+          <a class="text-sm font-semibold hover:underline text-[#304b54]" href="./adamanti.html">Adamanti</a>
+          <a class="text-sm font-semibold hover:underline text-[#304b54]" href="./talani-premium.html">Talani Premium</a>
           <a class="text-sm font-semibold hover:underline text-[#304b54]" href="https://www.instagram.com/talani.adventures/" target="_blank" rel="noopener noreferrer">Instagram @talani.adventures ↗</a>
           <a class="text-sm font-semibold hover:underline text-[#304b54]" href="https://www.tiktok.com/@talani.adventures" target="_blank" rel="noopener noreferrer">TikTok @talani.adventures ↗</a>
-          <a class="text-sm font-semibold hover:underline text-[#304b54]" href="#home">Back to top ↑</a>
         </div>
         <p class="text-xs tracking-wide text-[#6f7877]">Talani Adventures · @talani.adventures</p>
       </div>
@@ -260,165 +268,256 @@
     appId: "1:698912000783:web:ab04f85cb956c994558c7a",
     measurementId: "G-X2HVRDMRDM"
   };
-  const demoTrips = [{
-    id:"demo_gatamaiyu",brand:"Group ya Ile Kitu",title:"Gatamaiyu Forest Waterfall Hike",
-    date:"2026-12-05",price:3000,deposit:1800,slotsTotal:22,slotsLeft:9,
-    coverUrl:"https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=900&q=80",
-    bio:"Lush bamboo trails, river crossings & waterfall picnic in Kiambu.\nIncludes: Overland transport from Nairobi CBD, KFS entry, armed rangers, guides, trail snacks & pro photography.",
-    groupDiscountNote:"Group Discounts: 5% off (3–5 pax) • 7% off (5–7 pax) • 10% off (7–10 pax)",
-    formUrl:"https://docs.google.com/forms/"
-  }];
-  const demoStories = [{
-    id:"st_1",label:"Gatamaiyu",
-    caption:"Only 9 slots left for Dec 5th! Tap Reserve Slot to lock yours with KSh 1,800 deposit.",
-    mediaUrl:"https://images.unsplash.com/photo-1501555088652-021faa106b9b?auto=format&fit=crop&w=700&q=80"
-  }];
-  const demoPosts = [{
-    id:"pt_1",type:"image",
-    webUrl:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80",
-    rawUrl:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=95",
-    caption:"Summit squad energy from our last ridge expedition!"
-  }];
-  let tripsData=demoTrips,storiesData=demoStories,postsData=demoPosts,activeBrand="ALL",previousFocus=null;
-  const $=id=>document.getElementById(id);
-  const safeUrl=value=>{try{const url=new URL(String(value));return url.protocol==="https:"?url.href:null}catch{return null}};
-  const number=value=>Math.max(0,Number(value)||0);
-  const fmt=value=>number(value).toLocaleString("en-KE");
 
-  function picture(url, className, description){
-    const node=document.createElement("span");
-    node.className=className;
-    node.setAttribute("role","img");
-    node.setAttribute("aria-label",String(description||"Expedition photograph"));
-    const valid=safeUrl(url);
-    if(valid)node.style.backgroundImage=`url("${valid.replace(/["\\]/g,"")}")`;
+  const demoTrips = [
+    {
+      id: "demo_gatamaiyu",
+      brand: "Group ya Ile Kitu",
+      title: "Gatamaiyu Forest Reserve Hike",
+      date: "2026-12-05",
+      price: 3000,
+      deposit: 1800,
+      slotsTotal: 22,
+      slotsLeft: 18,
+      coverUrl: "https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=900&q=80",
+      bio: "Forest trails, river crossings & waterfall picnic in Kiambu. Active upcoming departure.",
+      groupDiscountNote: "Group Discounts: 5% off (3–5 pax) • 7% off (5–7 pax) • 10% off (7–10 pax)",
+      formUrl: "./group-ya-ile-kitu.html"
+    },
+    {
+      id: "demo_zanzibar",
+      brand: "Talani Premium Tours",
+      title: "Zanzibar Flagship Retreat (4 Days / 3 Nights)",
+      date: "2027-02-20",
+      price: 48000,
+      deposit: 15000,
+      slotsTotal: 16,
+      slotsLeft: 12,
+      coverUrl: "https://images.unsplash.com/photo-1457882/pexels-photo-457882.jpeg?auto=compress&cs=tinysrgb&w=900",
+      bio: "Bush-to-beach coastal retreat featuring curated stays, island excursions, and group coordination.",
+      groupDiscountNote: "Small group & custom family dates available via Group ya Ile Kitu.",
+      formUrl: "./talani-premium.html"
+    }
+  ];
+
+  const demoStories = [
+    {
+      id: "st_1",
+      label: "Gatamaiyu",
+      caption: "Dec 5 Gatamaiyu Forest Reserve hike is live—18 slots left.",
+      mediaUrl: "https://images.unsplash.com/photo-1501555088652-021faa106b9b?auto=format&fit=crop&w=700&q=80"
+    }
+  ];
+
+  const demoPosts = [
+    {
+      id: "pt_1",
+      type: "image",
+      webUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80",
+      rawUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=95",
+      caption: "Ridge & trail moments with Talani Adventures."
+    }
+  ];
+
+  let tripsData = demoTrips, storiesData = demoStories, postsData = demoPosts, activeBrand = "ALL", previousFocus = null;
+  const $ = (id) => document.getElementById(id);
+  const safeUrl = (value) => {
+    try {
+      const s = String(value || "").trim();
+      if (s.startsWith("./") || s.startsWith("../") || s.startsWith("#")) return s;
+      const url = new URL(s);
+      return url.protocol === "https:" ? url.href : null;
+    } catch { return null; }
+  };
+  const number = (value) => Math.max(0, Number(value) || 0);
+  const fmt = (value) => number(value).toLocaleString("en-KE");
+
+  function picture(url, className, description) {
+    const node = document.createElement("span");
+    node.className = className;
+    node.setAttribute("role", "img");
+    node.setAttribute("aria-label", String(description || "Expedition photograph"));
+    const valid = safeUrl(url);
+    if (valid) node.style.backgroundImage = `url("${valid.replace(/["\\]/g, "")}")`;
     return node;
   }
-  function renderStories(){
-    const root=$("stories-bar");
+
+  function renderStories() {
+    const root = $("stories-bar");
     root.replaceChildren();
-    storiesData.forEach(story=>{
-      const button=document.createElement("button");
-      button.type="button";button.className="story-button";
-      button.setAttribute("aria-label",`View ${story.label||"Update"} story`);
-      const ring=document.createElement("span");ring.className="story-ring";
-      ring.append(picture(story.mediaUrl,"story-picture",story.label));
-      const name=document.createElement("span");name.className="story-name";name.textContent=story.label||"Update";
-      button.append(ring,name);
-      button.addEventListener("click",()=>openModal("image",story.mediaUrl,null,story.caption));
+    storiesData.forEach((story) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "story-button";
+      button.setAttribute("aria-label", `View ${story.label || "Update"} story`);
+      const ring = document.createElement("span");
+      ring.className = "story-ring";
+      ring.append(picture(story.mediaUrl, "story-picture", story.label));
+      const name = document.createElement("span");
+      name.className = "story-name";
+      name.textContent = story.label || "Update";
+      button.append(ring, name);
+      button.addEventListener("click", () => openModal("image", story.mediaUrl, null, story.caption));
       root.append(button);
     });
   }
-  function renderTrips(){
-    const root=$("trips-feed");
+
+  function renderTrips() {
+    const root = $("trips-feed");
     root.replaceChildren();
-    const list=tripsData.filter(trip=>activeBrand==="ALL"||trip.brand===activeBrand);
-    $("trips-empty").classList.toggle("hidden",list.length!==0);
-    list.forEach(trip=>{
-      const card=document.createElement("article");card.className="trip-card";
-      if(safeUrl(trip.coverUrl))card.append(picture(trip.coverUrl,"trip-cover",trip.title));
-      const body=document.createElement("div");body.className="trip-info";
-      const head=document.createElement("div");head.className="flex flex-wrap items-start justify-between gap-2";
-      const title=document.createElement("h3");title.className="display text-2xl leading-tight";title.textContent=trip.title||"Upcoming expedition";
-      const badge=document.createElement("span");badge.className="slot-badge"+(number(trip.slotsLeft)<=4?" low":"");
-      badge.textContent=`${fmt(trip.slotsLeft)} slots left`;
-      head.append(title,badge);
-      const meta=document.createElement("p");meta.className="text-xs font-semibold tracking-wide text-[#61767b] mt-3";
-      meta.textContent=`${trip.brand||"Talani Adventures"} • ${trip.date?.toDate?.().toLocaleDateString("en-KE",{day:"numeric",month:"long",year:"numeric"})||String(trip.date||"Date to be announced")}`;
-      const bio=document.createElement("p");bio.className="trip-bio leading-7 text-sm mt-5 text-[#52636a]";bio.textContent=trip.bio||"";
-      body.append(head,meta,bio);
-      if(trip.groupDiscountNote){const note=document.createElement("p");note.className="discount-note text-xs leading-6 mt-5";note.textContent=trip.groupDiscountNote;body.append(note)}
-      const foot=document.createElement("div");foot.className="flex flex-wrap items-end justify-between gap-4 mt-6 pt-5 border-t border-[#dcded9]";
-      const prices=document.createElement("div");
-      const price=document.createElement("p");price.className="font-bold text-xl";price.textContent=`KSh ${fmt(trip.price)}`;
-      const deposit=document.createElement("p");deposit.className="text-xs mt-1 text-[#61767b]";deposit.textContent=`Deposit: KSh ${fmt(trip.deposit)}`;
-      prices.append(price,deposit);
-      const booking=safeUrl(trip.formUrl);
-      if(booking){const link=document.createElement("a");link.className="bg-[#304b54] text-white px-5 py-3 text-xs font-bold hover:opacity-85";link.href=booking;link.target="_blank";link.rel="noopener noreferrer";link.textContent="Reserve Slot ↗";foot.append(prices,link)}
-      else foot.append(prices);
-      body.append(foot);card.append(body);root.append(card);
+    const list = tripsData.filter((trip) => activeBrand === "ALL" || trip.brand === activeBrand);
+    $("trips-empty").classList.toggle("hidden", list.length !== 0);
+    list.forEach((trip) => {
+      const card = document.createElement("article");
+      card.className = "trip-card";
+      if (safeUrl(trip.coverUrl)) card.append(picture(trip.coverUrl, "trip-cover", trip.title));
+      const body = document.createElement("div");
+      body.className = "trip-info";
+      const head = document.createElement("div");
+      head.className = "flex flex-wrap items-start justify-between gap-2";
+      const title = document.createElement("h3");
+      title.className = "display text-2xl leading-tight";
+      title.textContent = trip.title || "Upcoming expedition";
+      const badge = document.createElement("span");
+      badge.className = "slot-badge" + (number(trip.slotsLeft) <= 4 ? " low" : "");
+      badge.textContent = `${fmt(trip.slotsLeft)} slots left`;
+      head.append(title, badge);
+      const meta = document.createElement("p");
+      meta.className = "text-xs font-semibold tracking-wide text-[#61767b] mt-3";
+      meta.textContent = `${trip.brand || "Talani Adventures"} • ${trip.date?.toDate?.().toLocaleDateString("en-KE", { day: "numeric", month: "long", year: "numeric" }) || String(trip.date || "Active departure")}`;
+      const bio = document.createElement("p");
+      bio.className = "trip-bio leading-7 text-sm mt-5 text-[#52636a]";
+      bio.textContent = trip.bio || "";
+      body.append(head, meta, bio);
+      if (trip.groupDiscountNote) {
+        const note = document.createElement("p");
+        note.className = "discount-note text-xs leading-6 mt-5";
+        note.textContent = trip.groupDiscountNote;
+        body.append(note);
+      }
+      const foot = document.createElement("div");
+      foot.className = "flex flex-wrap items-end justify-between gap-4 mt-6 pt-5 border-t border-[#dcded9]";
+      const prices = document.createElement("div");
+      const price = document.createElement("p");
+      price.className = "font-bold text-xl";
+      price.textContent = `KSh ${fmt(trip.price)}`;
+      const deposit = document.createElement("p");
+      deposit.className = "text-xs mt-1 text-[#61767b]";
+      deposit.textContent = `Deposit: KSh ${fmt(trip.deposit)}`;
+      prices.append(price, deposit);
+      const booking = safeUrl(trip.formUrl) || "./group-ya-ile-kitu.html";
+      const link = document.createElement("a");
+      link.className = "bg-[#304b54] text-white px-5 py-3 text-xs font-bold hover:opacity-85";
+      link.href = booking;
+      if (booking.startsWith("https://")) { link.target = "_blank"; link.rel = "noopener noreferrer"; }
+      link.textContent = "Reserve / Inquire ↗";
+      foot.append(prices, link);
+      body.append(foot);
+      card.append(body);
+      root.append(card);
     });
   }
-  function renderPosts(){
-    const root=$("posts-grid");root.replaceChildren();
-    postsData.forEach(post=>{
-      const tile=document.createElement("button");tile.type="button";tile.className="memory-tile";
-      tile.setAttribute("aria-label",`View ${post.type==="video"?"reel":"photo"}: ${post.caption||"Expedition memory"}`);
-      if(post.type==="video"){
-        const video=document.createElement("video");
-        const url=safeUrl(post.webUrl);if(url)video.src=url;
-        video.muted=true;video.playsInline=true;video.preload="metadata";
+
+  function renderPosts() {
+    const root = $("posts-grid");
+    root.replaceChildren();
+    postsData.forEach((post) => {
+      const tile = document.createElement("button");
+      tile.type = "button";
+      tile.className = "memory-tile";
+      tile.setAttribute("aria-label", `View ${post.type === "video" ? "reel" : "photo"}: ${post.caption || "Expedition memory"}`);
+      if (post.type === "video") {
+        const video = document.createElement("video");
+        const url = safeUrl(post.webUrl);
+        if (url) video.src = url;
+        video.muted = true; video.playsInline = true; video.preload = "metadata";
         tile.append(video);
-        const mark=document.createElement("span");mark.className="reel-mark";mark.textContent="▶ REEL";tile.append(mark);
-      }else{
-        const url=safeUrl(post.webUrl);
-        if(url)tile.style.backgroundImage=`url("${url.replace(/["\\]/g,"")}")`;
+        const mark = document.createElement("span");
+        mark.className = "reel-mark";
+        mark.textContent = "▶ REEL";
+        tile.append(mark);
+      } else {
+        const url = safeUrl(post.webUrl);
+        if (url) tile.style.backgroundImage = `url("${url.replace(/["\\]/g, "")}")`;
       }
-      tile.addEventListener("click",()=>openModal(post.type,post.webUrl,post.rawUrl,post.caption));
+      tile.addEventListener("click", () => openModal(post.type, post.webUrl, post.rawUrl, post.caption));
       root.append(tile);
     });
   }
-  function openModal(type,webUrl,rawUrl,caption){
-    const url=safeUrl(webUrl);
-    if(!url)return;
-    previousFocus=document.activeElement;
-    const wrap=$("modal-media-wrap");wrap.replaceChildren();
-    if(type==="video"){
-      const video=document.createElement("video");video.className="viewer-media";video.src=url;
-      video.controls=true;video.autoplay=true;video.playsInline=true;
-      video.setAttribute("aria-label",caption||"Expedition reel");wrap.append(video);
-    }else wrap.append(picture(url,"viewer-media block",caption||"Expedition photograph"));
-    $("modal-caption").textContent=caption||"";
-    const hd=$("modal-hd-link"),original=safeUrl(rawUrl);
-    hd.hidden=!original;
-    if(original)hd.href=original;else hd.removeAttribute("href");
-    $("viewer-modal").hidden=false;
-    document.body.style.overflow="hidden";
+
+  function openModal(type, webUrl, rawUrl, caption) {
+    const url = safeUrl(webUrl);
+    if (!url) return;
+    previousFocus = document.activeElement;
+    const wrap = $("modal-media-wrap");
+    wrap.replaceChildren();
+    if (type === "video") {
+      const video = document.createElement("video");
+      video.className = "viewer-media"; video.src = url;
+      video.controls = true; video.autoplay = true; video.playsInline = true;
+      video.setAttribute("aria-label", caption || "Expedition reel");
+      wrap.append(video);
+    } else {
+      wrap.append(picture(url, "viewer-media block", caption || "Expedition photograph"));
+    }
+    $("modal-caption").textContent = caption || "";
+    const hd = $("modal-hd-link"), original = safeUrl(rawUrl);
+    hd.hidden = !original;
+    if (original) hd.href = original; else hd.removeAttribute("href");
+    $("viewer-modal").hidden = false;
+    document.body.style.overflow = "hidden";
     $("modal-close-btn").focus();
   }
-  function closeModal(){
+
+  function closeModal() {
     $("modal-media-wrap").replaceChildren();
-    $("viewer-modal").hidden=true;
-    document.body.style.overflow="";
+    $("viewer-modal").hidden = true;
+    document.body.style.overflow = "";
     previousFocus?.focus();
   }
-  $("modal-close-btn").addEventListener("click",closeModal);
-  $("viewer-modal").addEventListener("click",event=>{if(event.target===$("viewer-modal"))closeModal()});
-  document.addEventListener("keydown",event=>{
-    if($("viewer-modal").hidden)return;
-    if(event.key==="Escape")closeModal();
-    if(event.key==="Tab"){
-      const controls=[$("modal-hd-link"),$("modal-close-btn")].filter(el=>!el.hidden);
-      if(event.shiftKey&&document.activeElement===controls[0]){event.preventDefault();controls.at(-1).focus()}
-      else if(!event.shiftKey&&document.activeElement===controls.at(-1)){event.preventDefault();controls[0].focus()}
+
+  $("modal-close-btn").addEventListener("click", closeModal);
+  $("viewer-modal").addEventListener("click", (event) => { if (event.target === $("viewer-modal")) closeModal(); });
+  document.addEventListener("keydown", (event) => {
+    if ($("viewer-modal").hidden) return;
+    if (event.key === "Escape") closeModal();
+    if (event.key === "Tab") {
+      const controls = [$("modal-hd-link"), $("modal-close-btn")].filter((el) => !el.hidden);
+      if (event.shiftKey && document.activeElement === controls[0]) { event.preventDefault(); controls.at(-1).focus(); }
+      else if (!event.shiftKey && document.activeElement === controls.at(-1)) { event.preventDefault(); controls[0].focus(); }
     }
   });
-  $("brand-pills").addEventListener("click",event=>{
-    const button=event.target.closest("button[data-brand]");
-    if(!button)return;
-    activeBrand=button.dataset.brand;
-    $("brand-pills").querySelectorAll("button").forEach(item=>item.setAttribute("aria-pressed",String(item===button)));
+
+  $("brand-pills").addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-brand]");
+    if (!button) return;
+    activeBrand = button.dataset.brand;
+    $("brand-pills").querySelectorAll("button").forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
     renderTrips();
   });
-  renderStories();renderTrips();renderPosts();
-  try{
-    const db=getFirestore(initializeApp(firebaseConfig));
-    const live={trips:false,stories:false,posts:false};
-    const updateStatus=()=>{$("live-status").textContent=live.trips&&live.stories&&live.posts?"● Live updates":"● Showing available updates"};
-    const listen=(name,field,direction,apply)=>{
-      onSnapshot(query(collection(db,name),orderBy(field,direction)),snapshot=>{
-        live[name]=true;
-        apply(snapshot.empty?null:snapshot.docs.map(doc=>({id:doc.id,...doc.data()})));
+
+  renderStories(); renderTrips(); renderPosts();
+
+  try {
+    const db = getFirestore(initializeApp(firebaseConfig));
+    const live = { trips: false, stories: false, posts: false };
+    const updateStatus = () => {
+      $("live-status").textContent = live.trips && live.stories && live.posts ? "● Live updates" : "● Showing active schedule";
+    };
+    const listen = (name, field, direction, apply) => {
+      onSnapshot(query(collection(db, name), orderBy(field, direction)), (snapshot) => {
+        live[name] = true;
+        apply(snapshot.empty ? null : snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
         updateStatus();
-      },()=>{
-        live[name]=false;
+      }, () => {
+        live[name] = false;
         updateStatus();
       });
     };
-    listen("trips","date","asc",rows=>{tripsData=rows||demoTrips;renderTrips()});
-    listen("stories","createdAt","desc",rows=>{storiesData=rows||demoStories;renderStories()});
-    listen("posts","createdAt","desc",rows=>{postsData=rows||demoPosts;renderPosts()});
-  }catch{$("live-status").textContent="● Featured expeditions"}
-</script>
+    listen("trips", "date", "asc", (rows) => { tripsData = rows || demoTrips; renderTrips(); });
+    listen("stories", "createdAt", "desc", (rows) => { storiesData = rows || demoStories; renderStories(); });
+    listen("posts", "createdAt", "desc", (rows) => { postsData = rows || demoPosts; renderPosts(); });
+  } catch { $("live-status").textContent = "● Active schedule"; }
+  </script>
 </body>
 </html>
