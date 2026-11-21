@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "698912000783",
+    "project_id": "talani-adventures",
+    "storage_bucket": "talani-adventures.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:698912000783:android:33e1b531ce19694e558c7a",
+        "android_client_info": {
+          "package_name": "com.talani.studio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChwTInYbbNCyO__NB76oR54dgNLP_YrEA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
