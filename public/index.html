@@ -1,154 +1,264 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Talani Adventures & Group ya Ile Kitu</title>
+  <title>Talani Adventures — The journey is yours</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <style>
-    :root {
-      --bg: #090d16;
-      --surface: #111827;
-      --surface-2: #1f2937;
-      --border: #283548;
-      --text: #f9fafb;
-      --muted: #9ca3af;
-      --accent: #10b981;
-      --gold: #f59e0b;
-      --ring: linear-gradient(45deg, #f59e0b, #10b981, #38bdf8);
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: var(--bg); color: var(--text); max-width: 680px; margin: 0 auto; padding-bottom: 60px; }
-    .hidden { display: none !important; }
+    :root { --ink:#304b54; --stone:#968d80; --paper:#f8f7f3; --sage:#e9eeec; --line:#dcded9; }
+    html { scroll-behavior:smooth; }
+    body { font-family:Raleway,sans-serif; color:var(--ink); background:var(--paper); }
+    .display { font-family:Fraunces,serif; }
+    .site-shell { width:100%; overflow:hidden; }
+    .eyebrow { letter-spacing:.23em; text-transform:uppercase; }
+    .hero-photo { min-height:430px; }
+    .photo-frame { overflow:hidden; }
+    .photo-frame img, .photo-frame video { transition:transform .65s ease; }
+    .photo-frame:hover img { transform:scale(1.045); }
+    a:focus-visible, button:focus-visible { outline:3px solid #ad8970; outline-offset:4px; }
+    .reveal { animation:rise .7s both; }
+    .reveal-late { animation:rise .7s .16s both; }
+    @keyframes rise { from {opacity:0;transform:translateY(18px)} to {opacity:1;transform:translateY(0)} }
 
-    /* Top Nav */
-    header {
-      position: sticky; top: 0; z-index: 20; background: rgba(9, 13, 22, 0.9);
-      backdrop-filter: blur(10px); border-bottom: 1px solid var(--border);
-      padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;
-    }
-    .brand-title { font-weight: 800; font-size: 1.1rem; letter-spacing: -0.3px; }
-    .brand-sub { font-size: 0.72rem; color: var(--accent); font-weight: 600; }
-    .studio-link {
-      font-size: 0.74rem; color: var(--muted); text-decoration: none;
-      border: 1px solid var(--border); padding: 5px 10px; border-radius: 99px;
-    }
-
-    /* Instagram-Style Stories Bar */
-    .stories-bar {
-      display: flex; gap: 14px; overflow-x: auto; padding: 14px 16px;
-      border-bottom: 1px solid var(--border); scrollbar-width: none;
-    }
-    .stories-bar::-webkit-scrollbar { display: none; }
-    .story-item { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; flex-shrink: 0; width: 68px; }
+    /* Stories bar */
+    .stories-bar { display:flex; gap:16px; overflow-x:auto; padding:18px 0; scrollbar-width:none; }
+    .stories-bar::-webkit-scrollbar { display:none; }
+    .story-item { display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; flex-shrink:0; width:74px; }
     .story-ring {
-      width: 62px; height: 62px; border-radius: 50%; padding: 2.5px;
-      background: var(--ring); display: flex; align-items: center; justify-content: center;
+      width:66px; height:66px; border-radius:50%; padding:2.5px;
+      background:linear-gradient(135deg,#304b54,#968d80,#5a7d87);
+      display:flex; align-items:center; justify-content:center;
     }
-    .story-ring img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 2px solid var(--bg); }
-    .story-label { font-size: 0.7rem; color: var(--text); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+    .story-ring img { width:100%; height:100%; object-fit:cover; border-radius:50%; border:2.5px solid var(--paper); }
+    .story-label { font-size:0.72rem; font-weight:600; color:var(--ink); text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%; }
 
-    /* Section Headers & Brand Filter Pills */
-    .sec-head { padding: 16px 16px 8px; display: flex; justify-content: space-between; align-items: center; }
-    .sec-head h2 { font-size: 1rem; font-weight: 700; }
-    .pills { display: flex; gap: 6px; padding: 0 16px 12px; overflow-x: auto; }
+    /* Filter pills */
+    .pills { display:flex; flex-wrap:wrap; gap:8px; }
     .pill {
-      background: var(--surface); color: var(--muted); border: 1px solid var(--border);
-      padding: 6px 12px; border-radius: 99px; font-size: 0.75rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+      background:#ffffff; color:#52636a; border:1px solid var(--line);
+      padding:7px 15px; border-radius:999px; font-size:0.78rem; font-weight:600; cursor:pointer; transition:all .2s ease;
     }
-    .pill.active { background: var(--accent); color: #052e16; border-color: var(--accent); }
+    .pill.active { background:var(--ink); color:#ffffff; border-color:var(--ink); }
 
-    /* Trip Profile Cards ("Accounts") */
-    .trip-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-      margin: 0 16px 16px; overflow: hidden;
-    }
-    .trip-cover { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; background: var(--surface-2); display: block; }
-    .trip-body { padding: 14px; }
-    .trip-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
-    .trip-title { font-size: 1.05rem; font-weight: 800; }
-    .badge { font-size: 0.68rem; font-weight: 700; padding: 3px 8px; border-radius: 8px; white-space: nowrap; }
-    .badge.ok { background: rgba(16, 185, 129, 0.16); color: var(--accent); }
-    .badge.warn { background: rgba(245, 158, 11, 0.16); color: var(--gold); }
-    .trip-meta { font-size: 0.78rem; color: var(--muted); margin-bottom: 8px; }
-    .trip-bio { font-size: 0.84rem; line-height: 1.45; color: #e5e7eb; margin-bottom: 10px; white-space: pre-line; }
-    .tier-box {
-      background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px;
-      padding: 8px 10px; font-size: 0.76rem; color: var(--gold); margin-bottom: 12px;
-    }
-    .trip-footer { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-    .price-tag { font-size: 1.1rem; font-weight: 800; color: var(--accent); }
-    .price-sub { font-size: 0.72rem; color: var(--muted); display: block; }
-    .btn-book {
-      background: var(--accent); color: #052e16; font-weight: 800; font-size: 0.84rem;
-      padding: 10px 16px; border-radius: 10px; text-decoration: none; border: none; cursor: pointer;
-    }
-
-    /* D-Day Posts & Reels Grid (Instagram Profile Grid) */
-    .ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; padding: 0 16px; }
-    .ig-tile { position: relative; aspect-ratio: 1 / 1; background: var(--surface-2); overflow: hidden; cursor: pointer; }
-    .ig-tile img, .ig-tile video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    /* D-Day gallery grid */
+    .ig-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+    @media (min-width:768px) { .ig-grid { grid-template-columns:repeat(4,1fr); gap:12px; } }
+    .ig-tile { position:relative; aspect-ratio:1/1; background:#dfe6e3; overflow:hidden; cursor:pointer; }
+    .ig-tile img, .ig-tile video { width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s ease; }
+    .ig-tile:hover img, .ig-tile:hover video { transform:scale(1.04); }
     .reel-icon {
-      position: absolute; top: 6px; right: 6px; background: rgba(0, 0, 0, 0.65);
-      color: #fff; font-size: 0.68rem; padding: 2px 6px; border-radius: 6px; font-weight: 700;
+      position:absolute; top:8px; right:8px; background:rgba(48,75,84,0.86);
+      color:#ffffff; font-size:0.65rem; letter-spacing:.08em; padding:3px 7px; font-weight:700;
     }
 
-    /* Fullscreen Modal (Story & Post Viewer) */
+    /* Lightbox modal */
     .modal {
-      position: fixed; inset: 0; z-index: 50; background: rgba(0, 0, 0, 0.94);
-      display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 16px;
+      position:fixed; inset:0; z-index:50; background:rgba(24,38,43,0.92); backdrop-filter:blur(6px);
+      display:flex; flex-direction:column; justify-content:center; align-items:center; padding:18px;
     }
-    .modal-inner { max-width: 460px; width: 100%; text-align: center; }
-    .modal-media { width: 100%; max-height: 70vh; object-fit: contain; border-radius: 12px; margin-bottom: 10px; }
-    .modal-caption { font-size: 0.88rem; margin-bottom: 12px; color: #f3f4f6; }
-    .modal-actions { display: flex; gap: 10px; justify-content: center; }
-    .btn-outline {
-      background: transparent; color: var(--text); border: 1px solid var(--border);
-      padding: 8px 14px; border-radius: 10px; font-size: 0.8rem; text-decoration: none; cursor: pointer;
+    .modal-inner { max-width:520px; width:100%; text-align:center; }
+    .modal-media { width:100%; max-height:68vh; object-fit:contain; background:#111a1d; margin-bottom:12px; }
+    .modal-caption { font-size:0.9rem; line-height:1.5; margin-bottom:14px; color:#f8f7f3; }
+    .modal-actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+    .btn-light {
+      background:#f8f7f3; color:#304b54; border:1px solid #dcded9;
+      padding:9px 16px; font-size:0.8rem; font-weight:700; text-decoration:none; cursor:pointer;
     }
+
+    .hidden { display:none !important; }
+    @media (max-width:767px) { .hero-photo { min-height:310px; } }
+    @media (prefers-reduced-motion:reduce) { html {scroll-behavior:auto} .reveal,.reveal-late {animation:none} .photo-frame img,.ig-tile img,.ig-tile video {transition:none} }
   </style>
 </head>
-<body>
-  <header>
-    <div>
-      <div class="brand-title">Talani Adventures</div>
-      <div class="brand-sub">Group ya Ile Kitu • Curated Expeditions</div>
-    </div>
-    <a href="./studio.html" class="studio-link">Creator Studio</a>
-  </header>
+<body class="w-full">
+  <div class="site-shell w-full">
+    <header class="w-full border-b border-[#dcded9] bg-[#f8f7f3]/90 backdrop-blur-sm sticky top-0 z-20">
+      <div class="max-w-7xl mx-auto px-6 md:px-10 py-3.5 flex items-center justify-between gap-5">
+        <a href="#home" aria-label="Talani Adventures home" class="shrink-0 flex items-center gap-3">
+          <svg class="w-11 h-11 text-[#304b54]" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <path d="M6 48L24 22L36 39L44 28L58 48H6Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+            <path d="M46 22C46 15 51 11 56 11C53 15 52 19 52 22" stroke="#968d80" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <div>
+            <div class="display text-lg text-[#304b54] leading-none">Talani Adventures</div>
+            <div class="text-[11px] tracking-[.16em] uppercase text-[#968d80] mt-1">The journey is yours</div>
+          </div>
+        </a>
+        <nav aria-label="Main navigation" class="flex flex-wrap items-center justify-end gap-x-5 gap-y-2 md:gap-x-8">
+          <a class="text-xs md:text-sm font-semibold tracking-wide hover:underline underline-offset-8 text-[#304b54]" href="#experiences">Experiences</a>
+          <a class="text-xs md:text-sm font-semibold tracking-wide hover:underline underline-offset-8 text-[#304b54]" href="#upcoming">Upcoming trips</a>
+          <a class="text-xs md:text-sm font-semibold tracking-wide hover:underline underline-offset-8 text-[#304b54]" href="#travellers">Who we welcome</a>
+          <a class="text-xs md:text-sm font-semibold tracking-wide hover:underline underline-offset-8 text-[#304b54]" href="#about">Our story</a>
+          <a class="text-xs font-semibold tracking-wide px-3.5 py-1.5 border border-[#dcded9] bg-white text-[#304b54] hover:border-[#304b54]" href="./studio.html">Creator Studio</a>
+        </nav>
+      </div>
+    </header>
 
-  <!-- STORIES BAR -->
-  <div class="stories-bar" id="stories-bar"></div>
+    <main id="home">
+      <!-- HERO -->
+      <section class="max-w-7xl mx-auto px-6 md:px-10 pt-14 md:pt-20 pb-14 md:pb-20 grid lg:grid-cols-[.92fr_1.08fr] items-center gap-12 lg:gap-16" aria-labelledby="hero-title">
+        <div class="reveal">
+          <p class="eyebrow text-xs font-bold mb-6 text-[#968d80]">A world of possibility, rooted in Africa</p>
+          <h1 id="hero-title" class="display text-4xl md:text-5xl leading-[1.08] tracking-[-.045em] max-w-xl text-[#304b54]">Go further. Feel more.</h1>
+          <p class="leading-8 max-w-lg mt-6 text-[#52636a] text-base">From the hush of the savannah to mountain air and the rhythm of the coast, Talani Adventures brings remarkable journeys together under one roof.</p>
+          <div class="mt-8 flex flex-wrap items-center gap-4">
+            <a href="#upcoming" class="inline-flex items-center justify-center px-7 py-4 text-sm font-semibold tracking-wide transition hover:opacity-85 bg-[#304b54] text-white">Explore upcoming trips ↗</a>
+            <a href="#experiences" class="inline-flex items-center justify-center px-6 py-4 text-sm font-semibold tracking-wide border border-[#dcded9] text-[#304b54] hover:bg-[#e9eeec]">Three ways to wander</a>
+          </div>
+        </div>
+        <div class="photo-frame hero-photo relative reveal-late">
+          <img class="absolute inset-0 w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=1280" alt="Elephants crossing a sunlit African landscape">
+          <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
+          <p class="eyebrow absolute bottom-6 left-7 text-xs font-semibold text-white">Beyond the expected</p>
+        </div>
+      </section>
 
-  <!-- BRAND FILTER -->
-  <div class="sec-head">
-    <h2>Upcoming Expeditions</h2>
-    <span id="live-status" class="brand-sub">● Live</span>
+      <!-- LIVE STORIES STRIP -->
+      <section class="w-full border-y border-[#dcded9] bg-[#f8f7f3]" aria-label="Field dispatches and updates">
+        <div class="max-w-7xl mx-auto px-6 md:px-10 py-3 flex items-center gap-5">
+          <span class="eyebrow text-[11px] font-bold text-[#968d80] shrink-0">Dispatches</span>
+          <div class="stories-bar flex-1" id="stories-bar"></div>
+        </div>
+      </section>
+
+      <!-- THREE WAYS TO WANDER -->
+      <section id="experiences" class="w-full bg-[#e9eeec] py-20 md:py-24" aria-labelledby="experiences-title">
+        <div class="max-w-7xl mx-auto px-6 md:px-10">
+          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-11">
+            <div>
+              <p class="eyebrow text-xs font-bold mb-3 text-[#61767b]">The Talani collection</p>
+              <h2 id="experiences-title" class="display text-2xl md:text-3xl tracking-[-.035em] text-[#304b54]">Three ways to wander.</h2>
+            </div>
+            <p class="max-w-sm leading-7 text-[#52636a] text-sm md:text-base">Distinct destinations and experiences, thoughtfully brought together.</p>
+          </div>
+          <div class="grid md:grid-cols-3 gap-7">
+            <article class="group">
+              <div class="photo-frame h-64 md:h-72">
+                <img class="w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/247376/pexels-photo-247376.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Wildlife on an African savannah">
+              </div>
+              <div class="pt-6 border-t-2 border-[#304b54] mt-5">
+                <p class="eyebrow text-xs font-bold mb-2 text-[#968d80]">01 / The wild</p>
+                <h3 class="display text-xl text-[#304b54]">Safaris &amp; wildlife</h3>
+                <p class="mt-2.5 leading-7 text-[#52636a] text-sm md:text-base">Come closer to extraordinary landscapes and the wildlife that calls them home.</p>
+              </div>
+            </article>
+            <article class="group">
+              <div class="photo-frame h-64 md:h-72">
+                <img class="w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Mountain peaks rising above a misty landscape">
+              </div>
+              <div class="pt-6 border-t-2 border-[#304b54] mt-5">
+                <p class="eyebrow text-xs font-bold mb-2 text-[#968d80]">02 / The heights</p>
+                <h3 class="display text-xl text-[#304b54]">Mountain treks</h3>
+                <p class="mt-2.5 leading-7 text-[#52636a] text-sm md:text-base">Find new perspective on trails that reward every step with wonder.</p>
+              </div>
+            </article>
+            <article class="group">
+              <div class="photo-frame h-64 md:h-72">
+                <img class="w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/457882/pexels-photo-457882.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Palm-lined tropical coastline and turquoise sea">
+              </div>
+              <div class="pt-6 border-t-2 border-[#304b54] mt-5">
+                <p class="eyebrow text-xs font-bold mb-2 text-[#968d80]">03 / The shore</p>
+                <h3 class="display text-xl text-[#304b54]">Coastal getaways</h3>
+                <p class="mt-2.5 leading-7 text-[#52636a] text-sm md:text-base">Slow down where warm horizons, ocean breezes, and easy days meet.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- LIVE FIRESTORE TRIPS & BOOKING -->
+      <section id="upcoming" class="max-w-7xl mx-auto px-6 md:px-10 py-20 md:py-24" aria-labelledby="upcoming-title">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-8">
+          <div>
+            <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">Open departures</p>
+            <h2 id="upcoming-title" class="display text-2xl md:text-3xl tracking-[-.035em] text-[#304b54]">Upcoming expeditions.</h2>
+          </div>
+          <div class="pills" id="brand-pills">
+            <button class="pill active" data-brand="ALL">All Experiences</button>
+            <button class="pill" data-brand="Group ya Ile Kitu">Group ya Ile Kitu</button>
+            <button class="pill" data-brand="Talani Premium Tours">Talani Premium</button>
+            <button class="pill" data-brand="Adamanti Hospitality">Adamanti Stays</button>
+          </div>
+        </div>
+        <div id="trips-feed" class="grid md:grid-cols-2 gap-8"></div>
+      </section>
+
+      <!-- WHO WE WELCOME -->
+      <section id="travellers" class="w-full bg-[#e9eeec] py-20 md:py-24" aria-labelledby="travellers-title">
+        <div class="max-w-7xl mx-auto px-6 md:px-10 grid lg:grid-cols-[.7fr_1.3fr] gap-10 lg:gap-20">
+          <div>
+            <p class="eyebrow text-xs font-bold mb-4 text-[#968d80]">Made for your kind of journey</p>
+            <h2 id="travellers-title" class="display text-2xl md:text-3xl tracking-[-.035em] text-[#304b54]">There’s a place for you here.</h2>
+          </div>
+          <div class="divide-y divide-[#ccd4d0] border-y border-[#ccd4d0]">
+            <div class="py-7 grid sm:grid-cols-[190px_1fr] gap-3">
+              <h3 class="font-bold text-lg text-[#304b54]">International travellers</h3>
+              <p class="leading-7 text-[#52636a]">Discover the region’s beauty through experiences that help you feel truly connected to it.</p>
+            </div>
+            <div class="py-7 grid sm:grid-cols-[190px_1fr] gap-3">
+              <h3 class="font-bold text-lg text-[#304b54]">Local travellers</h3>
+              <p class="leading-7 text-[#52636a]">See familiar places with fresh eyes, from close-to-home escapes to something new.</p>
+            </div>
+            <div class="py-7 grid sm:grid-cols-[190px_1fr] gap-3">
+              <h3 class="font-bold text-lg text-[#304b54]">Corporate &amp; groups</h3>
+              <p class="leading-7 text-[#52636a]">Bring people together through shared adventures, retreats, and memorable group travel.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- D-DAY MEMORIES & REELS GRID -->
+      <section id="memories" class="max-w-7xl mx-auto px-6 md:px-10 py-20 md:py-24" aria-labelledby="memories-title">
+        <div class="flex items-end justify-between gap-4 mb-8">
+          <div>
+            <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">From the trail</p>
+            <h2 id="memories-title" class="display text-2xl md:text-3xl tracking-[-.035em] text-[#304b54]">D-Day memories &amp; reels.</h2>
+          </div>
+          <span class="text-xs font-semibold text-[#968d80]">Tap any frame for HD</span>
+        </div>
+        <div class="ig-grid" id="posts-grid"></div>
+      </section>
+
+      <!-- OUR STORY -->
+      <section id="about" class="w-full bg-[#304b54] text-white py-20 md:py-24" aria-labelledby="about-title">
+        <div class="max-w-7xl mx-auto px-6 md:px-10 grid md:grid-cols-[1fr_1fr] gap-8 md:gap-20 items-end">
+          <div>
+            <p class="eyebrow text-xs font-bold mb-5 text-[#d2dcd9]">One name. Many horizons.</p>
+            <h2 id="about-title" class="display text-2xl md:text-3xl tracking-[-.035em] text-white">Adventure, in all its forms.</h2>
+          </div>
+          <p class="leading-8 text-white/95">Talani Adventures is a home for travel experiences across the wild, the mountains, and the coast. However you choose to explore, the journey begins with curiosity.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="w-full border-t border-[#dcded9] bg-[#f8f7f3]">
+      <div class="max-w-7xl mx-auto px-6 md:px-10 py-9 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <a href="#home" aria-label="Back to Talani Adventures home" class="flex items-center gap-3">
+          <svg class="w-10 h-10 text-[#968d80]" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <path d="M6 48L24 22L36 39L44 28L58 48H6Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+            <path d="M46 22C46 15 51 11 56 11C53 15 52 19 52 22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="text-xs tracking-wide text-[#6f7877]">Talani Adventures · A world worth exploring</span>
+        </a>
+        <div class="flex flex-wrap gap-6 items-center">
+          <a class="text-sm font-semibold hover:underline underline-offset-4 text-[#304b54]" href="#experiences">Experiences</a>
+          <a class="text-sm font-semibold hover:underline underline-offset-4 text-[#304b54]" href="#travellers">Travellers</a>
+          <a class="text-sm font-semibold hover:underline underline-offset-4 text-[#304b54]" href="#home">Back to top ↑</a>
+        </div>
+      </div>
+    </footer>
   </div>
-  <div class="pills" id="brand-pills">
-    <button class="pill active" data-brand="ALL">All Experiences</button>
-    <button class="pill" data-brand="Group ya Ile Kitu">Group ya Ile Kitu</button>
-    <button class="pill" data-brand="Talani Premium Tours">Talani Premium</button>
-    <button class="pill" data-brand="Adamanti Hospitality">Adamanti Stays</button>
-  </div>
 
-  <!-- UPCOMING TRIPS FEED -->
-  <div id="trips-feed"></div>
-
-  <!-- D-DAY REELS & PHOTO GRID -->
-  <div class="sec-head">
-    <h2>D-Day Memories & Reels</h2>
-    <span style="font-size:0.74rem; color:var(--muted);">Tap for HD</span>
-  </div>
-  <div class="ig-grid" id="posts-grid"></div>
-
-  <!-- LIGHTBOX MODAL (STORIES & POSTS) -->
+  <!-- LIGHTBOX MODAL -->
   <div id="viewer-modal" class="modal hidden">
     <div class="modal-inner">
       <div id="modal-media-wrap"></div>
       <div id="modal-caption" class="modal-caption"></div>
       <div class="modal-actions">
-        <a id="modal-hd-link" href="#" target="_blank" download class="btn-outline hidden">⬇ Download Original HD</a>
-        <button id="modal-close-btn" class="btn-outline">✕ Close</button>
+        <a id="modal-hd-link" href="#" target="_blank" download class="btn-light hidden">⬇ Download Original HD</a>
+        <button id="modal-close-btn" class="btn-light">✕ Close</button>
       </div>
     </div>
   </div>
@@ -177,7 +287,7 @@
         deposit: 1800,
         slotsTotal: 22,
         slotsLeft: 9,
-        coverUrl: "https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=900&q=80",
+        coverUrl: "https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=900",
         bio: "Lush bamboo trails, river crossings & waterfall picnic in Kiambu.\nIncludes: Overland transport from Nairobi CBD, KFS entry, armed rangers, guides, trail snacks & pro photography.",
         groupDiscountNote: "Group Discounts: 5% off (3–5 pax) • 7% off (5–7 pax) • 10% off (7–10 pax)",
         formUrl: "https://docs.google.com/forms/"
@@ -188,16 +298,16 @@
         id: "st_1",
         label: "Gatamaiyu",
         caption: "Only 9 slots left for Dec 5th! Tap Reserve Slot to lock yours with KSh 1,800 deposit.",
-        mediaUrl: "https://images.unsplash.com/photo-1501555088652-021faa106b9b?auto=format&fit=crop&w=700&q=80"
+        mediaUrl: "https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=700"
       }
     ];
     let postsData = [
       {
         id: "pt_1",
         type: "image",
-        webUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80",
-        rawUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=95",
-        caption: "Summit squad energy from our last ridge expedition!"
+        webUrl: "https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=600",
+        rawUrl: "https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=1600",
+        caption: "Golden hour moments from our latest field expedition."
       }
     ];
 
@@ -221,33 +331,38 @@
 
     function renderTrips() {
       const list = tripsData.filter((t) => activeBrand === "ALL" || t.brand === activeBrand);
-      document.getElementById("trips-feed").innerHTML = list.map((t) => `
-        <article class="trip-card">
-          ${t.coverUrl ? `<img class="trip-cover" src="${esc(t.coverUrl)}" alt="${esc(t.title)}" loading="lazy" />` : ""}
-          <div class="trip-body">
-            <div class="trip-top">
-              <h3 class="trip-title">${esc(t.title)}</h3>
-              <span class="badge ${t.slotsLeft > 4 ? "ok" : "warn"}">${t.slotsLeft} / ${t.slotsTotal} slots left</span>
-            </div>
-            <div class="trip-meta">${esc(t.brand)} • 📅 ${esc(t.date)}</div>
-            <p class="trip-bio">${esc(t.bio)}</p>
-            ${t.groupDiscountNote ? `<div class="tier-box">🎟 ${esc(t.groupDiscountNote)}</div>` : ""}
-            <div class="trip-footer">
-              <div>
-                <span class="price-tag">KSh ${Number(t.price || 0).toLocaleString()}</span>
-                <span class="price-sub">Deposit: KSh ${Number(t.deposit || 0).toLocaleString()}</span>
+      document.getElementById("trips-feed").innerHTML = list.map((t) => {
+        const urgent = Number(t.slotsLeft || 0) <= 5;
+        return `
+          <article class="bg-white border border-[#dcded9] overflow-hidden flex flex-col justify-between">
+            <div>
+              ${t.coverUrl ? `<div class="photo-frame h-56"><img class="w-full h-full object-cover" src="${esc(t.coverUrl)}" alt="${esc(t.title)}" loading="lazy" /></div>` : ""}
+              <div class="p-6">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                  <h3 class="display text-xl text-[#304b54]">${esc(t.title)}</h3>
+                  <span class="text-xs font-semibold px-3 py-1 shrink-0 ${urgent ? "bg-[#f5f0e6] text-[#8a6528] border border-[#e3d3b3]" : "bg-[#e9eeec] text-[#304b54]"}">${t.slotsLeft} / ${t.slotsTotal} slots left</span>
+                </div>
+                <p class="eyebrow text-[11px] font-bold text-[#968d80] mb-3">${esc(t.brand)} • ${esc(t.date)}</p>
+                <p class="text-sm leading-7 text-[#52636a] whitespace-pre-line mb-4">${esc(t.bio)}</p>
+                ${t.groupDiscountNote ? `<div class="bg-[#f8f7f3] border-l-2 border-[#968d80] px-3.5 py-2.5 text-xs font-semibold text-[#304b54] mb-4">${esc(t.groupDiscountNote)}</div>` : ""}
               </div>
-              <a class="btn-book" href="${esc(t.formUrl || "#")}" target="_blank" rel="noopener">Reserve Slot →</a>
             </div>
-          </div>
-        </article>`).join("") || `<p style="padding:16px; color:var(--muted);">No upcoming trips listed under this brand yet.</p>`;
+            <div class="px-6 py-4 border-t border-[#dcded9] bg-[#f8f7f3]/60 flex items-center justify-between gap-4">
+              <div>
+                <span class="display text-xl text-[#304b54]">KSh ${Number(t.price || 0).toLocaleString()}</span>
+                <span class="block text-xs text-[#6f7877]">Deposit: KSh ${Number(t.deposit || 0).toLocaleString()}</span>
+              </div>
+              <a class="px-5 py-3 text-xs font-bold tracking-wider uppercase bg-[#304b54] text-white hover:opacity-85 transition" href="${esc(t.formUrl || "#")}" target="_blank" rel="noopener">Reserve slot ↗</a>
+            </div>
+          </article>`;
+      }).join("") || `<p class="text-[#52636a] py-6">No upcoming trips listed under this category yet.</p>`;
     }
 
     function renderPosts() {
       document.getElementById("posts-grid").innerHTML = postsData.map((p, i) => `
         <div class="ig-tile" data-idx="${i}">
           ${p.type === "video"
-            ? `<video src="${esc(p.webUrl)}" muted playsinline preload="metadata"></video><span class="reel-icon">▶ REEL</span>`
+            ? `<video src="${esc(p.webUrl)}" muted playsinline preload="metadata"></video><span class="reel-icon">REEL</span>`
             : `<img src="${esc(p.webUrl)}" alt="${esc(p.caption)}" loading="lazy" />`}
         </div>`).join("");
 
