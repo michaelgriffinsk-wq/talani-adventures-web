@@ -13,38 +13,46 @@
     .display{font-family:Fraunces,serif}
     .eyebrow{letter-spacing:.23em;text-transform:uppercase}
     :is(a,button):focus-visible{outline:3px solid #ad8970;outline-offset:3px}
-    .sticky-header{position:sticky;top:0;z-index:30;background:rgba(248,247,243,.96);backdrop-filter:blur(14px)}
+    .sticky-header{position:sticky;top:0;z-index:30;background:rgba(248,247,243,.97);backdrop-filter:blur(14px)}
+    .header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .header-brand{display:flex;align-items:center;gap:12px;min-width:0}
+    .header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
     .subnav-strip{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:10px 0}
     .subnav-strip::-webkit-scrollbar{display:none}
-    .subnav-link{flex:none;font-size:12px;font-weight:700;color:var(--ink);text-decoration:none;padding:8px 14px;border:1px solid var(--line);background:white}
+    .subnav-link{flex:none;font-size:12px;font-weight:700;color:var(--ink);text-decoration:none;padding:8px 14px;border:1px solid var(--line);background:white;white-space:nowrap}
     .subnav-link.active,.subnav-link:hover{border-color:var(--ink);background:var(--mist)}
+    .photo-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line)}
+    .photo-strip img{width:100%;height:112px;object-fit:cover;display:block}
+    @media(max-width:767px){.header-actions{width:100%;justify-content:flex-start}}
   </style>
   <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
 </head>
 <body class="w-full" style="background: rgb(248, 247, 243);">
   <header class="sticky-header w-full border-b border-[#dcded9]">
-    <div class="max-w-7xl mx-auto px-6 md:px-10 py-3 flex items-center justify-between gap-4">
-      <a href="./index.html" aria-label="Talani Adventures home" class="shrink-0">
-        <img class="w-16 h-16 md:w-20 md:h-20 object-contain" loading="lazy" src="../IMG-20261110-WA0045.jpg" alt="Talani Adventures logo">
-      </a>
-      <div class="min-w-0 flex-1">
-        <p class="display font-medium leading-tight text-[#304b54] text-lg md:text-xl">Outdoor Adventures · Safaris &amp; Wildlife</p>
-        <p class="text-[10px] md:text-xs tracking-wide mt-1 text-[#968d80] font-semibold">Game Drives • Conservancies • Bush Outings • @talani.adventures</p>
+    <div class="max-w-7xl mx-auto px-6 md:px-10 py-3 header-top">
+      <div class="header-brand">
+        <a href="./index.html" aria-label="Talani Adventures home" class="shrink-0">
+          <img class="w-12 h-12 md:w-14 md:h-14 object-contain" loading="lazy" src="../IMG-20261110-WA0045.jpg" alt="Talani Adventures logo">
+        </a>
+        <div class="min-w-0">
+          <p class="display font-medium leading-tight text-[#304b54] text-lg md:text-xl">Outdoor Adventures</p>
+          <p class="text-[11px] tracking-wide text-[#968d80] font-semibold">Safaris &amp; Wildlife • @talani.adventures</p>
+        </div>
       </div>
-      <div class="flex items-center gap-2 shrink-0">
-        <a href="https://www.instagram.com/talani.adventures/" target="_blank" rel="noopener noreferrer" class="border border-[#dcded9] px-2.5 py-2 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">IG ↗</a>
-        <a href="https://www.tiktok.com/@talani.adventures" target="_blank" rel="noopener noreferrer" class="border border-[#dcded9] px-2.5 py-2 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">TT ↗</a>
-        <a href="./studio.html" class="border border-[#dcded9] px-3 py-2 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">Studio ↗</a>
+      <div class="header-actions">
+        <a href="https://www.instagram.com/talani.adventures/" target="_blank" rel="noopener noreferrer" class="border border-[#dcded9] bg-white px-3 py-1.5 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">Instagram ↗</a>
+        <a href="https://www.tiktok.com/@talani.adventures" target="_blank" rel="noopener noreferrer" class="border border-[#dcded9] bg-white px-3 py-1.5 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">TikTok ↗</a>
+        <a href="./studio.html" class="border border-[#304b54] bg-[#304b54] px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90">Studio ↗</a>
       </div>
     </div>
     <div class="border-t border-[#e6e8e3] bg-[#f8f7f3]">
       <div class="max-w-7xl mx-auto px-6 md:px-10 subnav-strip">
         <a class="subnav-link" href="./index.html">Overview</a>
-        <a class="subnav-link" href="./group-ya-ile-kitu.html">Group ya Ile Kitu (All Destinations)</a>
-        <a class="subnav-link active" href="./outdoor-adventures.html">Outdoor Adventures (Safaris &amp; Wildlife)</a>
-        <a class="subnav-link" href="./talani-adventures.html">Talani Adventures (Hikes &amp; Trails)</a>
-        <a class="subnav-link" href="./adamanti.html">Adamanti (Concierge &amp; Stays)</a>
-        <a class="subnav-link" href="./talani-premium.html">Talani Premium (Multi-Day Trips)</a>
+        <a class="subnav-link" href="./group-ya-ile-kitu.html">Group ya Ile Kitu</a>
+        <a class="subnav-link active" href="./outdoor-adventures.html">Outdoor Adventures</a>
+        <a class="subnav-link" href="./talani-adventures.html">Hikes &amp; Trails</a>
+        <a class="subnav-link" href="./adamanti.html">Adamanti (Coming Soon)</a>
+        <a class="subnav-link" href="./talani-premium.html">Talani Premium</a>
       </div>
     </div>
   </header>
@@ -54,32 +62,55 @@
       <div>
         <p class="eyebrow text-xs font-bold mb-4 text-[#968d80]">Outdoor Adventures · Safaris &amp; Wildlife</p>
         <h1 class="display text-3xl md:text-5xl leading-[1.1] tracking-[-.04em] text-[#304b54]">Closer to wildlife, savannah horizons, and bush country.</h1>
-        <p class="leading-8 mt-5 text-[#52636a] text-base">Guided game viewing, conservancy excursions, and wildlife itineraries crafted for unhurried observation and clear ground logistics.</p>
+        <p class="leading-8 mt-5 text-[#52636a] text-base">Guided game drives, conservancy and lake excursions, and wildlife itineraries across Kenya.</p>
         <div class="flex flex-wrap gap-3 mt-7">
           <a href="./group-ya-ile-kitu.html#inquiry-section" class="bg-[#304b54] text-white px-6 py-3.5 text-xs font-bold uppercase tracking-wider">Request Safari Itinerary ↗</a>
           <a href="./talani-premium.html" class="border border-[#304b54] text-[#304b54] px-6 py-3.5 text-xs font-bold uppercase tracking-wider hover:bg-[#e9eeec]">Multi-Day Bush &amp; Camp Trips →</a>
         </div>
       </div>
       <div class="overflow-hidden border border-[#dcded9] h-72 md:h-96">
-        <img class="w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/247376/pexels-photo-247376.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Wildlife across open savannah">
+        <img class="w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Wildlife across open savannah">
       </div>
     </section>
 
     <section aria-labelledby="safari-offerings" class="grid md:grid-cols-3 gap-7">
-      <article class="bg-white border border-[#dcded9] p-6">
-        <p class="eyebrow text-xs font-bold mb-2 text-[#968d80]">01 / Game &amp; Bush</p>
-        <h2 class="display text-xl text-[#304b54]">Savannah &amp; Park Drives</h2>
-        <p class="text-sm text-[#52636a] leading-7 mt-3">Day and weekend wildlife viewing across parks and borderlands, including Amboseli and Rift Valley bush corridors.</p>
+      <article class="bg-white border border-[#dcded9] overflow-hidden">
+        <div class="photo-strip">
+          <img src="https://images.pexels.com/photos/247376/pexels-photo-247376.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Savannah wildlife" loading="lazy" />
+          <img src="https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Open plains wildlife" loading="lazy" />
+          <img src="https://images.pexels.com/photos/1670187/pexels-photo-1670187.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Warm bush horizon" loading="lazy" />
+        </div>
+        <div class="p-6">
+          <p class="eyebrow text-xs font-bold mb-2 text-[#968d80]">01 / Savannah &amp; Borderlands</p>
+          <h2 class="display text-xl text-[#304b54]">Amboseli &amp; Bush Drives</h2>
+          <p class="text-sm text-[#52636a] leading-7 mt-3">Game viewing and borderlands excursions with clear transport and camp coordination.</p>
+        </div>
       </article>
-      <article class="bg-white border border-[#dcded9] p-6">
-        <p class="eyebrow text-xs font-bold mb-2 text-[#968d80]">02 / Lakes &amp; Lava</p>
-        <h2 class="display text-xl text-[#304b54]">Lake &amp; Tsavo Corridors</h2>
-        <p class="text-sm text-[#52636a] leading-7 mt-3">Pair wildlife and birding around Lake Naivasha / Lake Oloiden with dramatic volcanic terrain in Tsavo West.</p>
+
+      <article class="bg-white border border-[#dcded9] overflow-hidden">
+        <div class="photo-strip">
+          <img src="https://images.pexels.com/photos/1450360/pexels-photo-1450360.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Lake & water scenery" loading="lazy" />
+          <img src="https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Rift valley landscape" loading="lazy" />
+          <img src="https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Highland & valley views" loading="lazy" />
+        </div>
+        <div class="p-6">
+          <p class="eyebrow text-xs font-bold mb-2 text-[#968d80]">02 / Lakes &amp; Lava</p>
+          <h2 class="display text-xl text-[#304b54]">Naivasha / Oloiden &amp; Tsavo West</h2>
+          <p class="text-sm text-[#52636a] leading-7 mt-3">Bush camps, lakeside outings, and volcanic lava landscapes across southern and Rift corridors.</p>
+        </div>
       </article>
-      <article class="bg-white border border-[#dcded9] p-6">
-        <p class="eyebrow text-xs font-bold mb-2 text-[#968d80]">03 / Groups &amp; Stays</p>
-        <h2 class="display text-xl text-[#304b54]">Custom Group Safaris</h2>
-        <p class="text-sm text-[#52636a] leading-7 mt-3">Coordinate vehicles, camp/lodge bookings via Adamanti, and group tiers through Group ya Ile Kitu.</p>
+
+      <article class="bg-white border border-[#dcded9] overflow-hidden">
+        <div class="photo-strip">
+          <img src="https://images.pexels.com/photos/158163/the-tea-plant-tea-plantation-farm-silver-158163.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Scenic rural terrain" loading="lazy" />
+          <img src="https://images.pexels.com/photos/1671325/pexels-photo-1671325.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Forest & reserve canopy" loading="lazy" />
+          <img src="https://images.pexels.com/photos/210186/pexels-photo-210186.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Water & forest scenery" loading="lazy" />
+        </div>
+        <div class="p-6">
+          <p class="eyebrow text-xs font-bold mb-2 text-[#968d80]">03 / Groups &amp; Custom Dates</p>
+          <h2 class="display text-xl text-[#304b54]">Private &amp; Group Safaris</h2>
+          <p class="text-sm text-[#52636a] leading-7 mt-3">Plan small group, family, or corporate wildlife trips with custom schedules via Group ya Ile Kitu.</p>
+        </div>
       </article>
     </section>
   </main>
@@ -94,8 +125,8 @@
         <a href="./index.html" class="hover:underline">Main Landing</a>
         <a href="./group-ya-ile-kitu.html" class="hover:underline">Group ya Ile Kitu</a>
         <a href="./talani-adventures.html" class="hover:underline">Hikes &amp; Trails</a>
-        <a href="./adamanti.html" class="hover:underline">Adamanti</a>
         <a href="./talani-premium.html" class="hover:underline">Talani Premium</a>
+        <a href="./adamanti.html" class="hover:underline">Adamanti</a>
       </div>
     </div>
   </footer>
