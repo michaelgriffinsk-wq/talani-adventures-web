@@ -18,10 +18,20 @@
     .header-brand{display:flex;align-items:center;gap:12px;min-width:0}
     .header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
     .subnav-strip{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:10px 0}
-    .subnav-strip::-webkit-scrollbar{display:none}
+    .subnav-strip::-webkit-scrollbar,.story-strip::-webkit-scrollbar{display:none}
     .subnav-link{flex:none;font-size:12px;font-weight:700;color:var(--ink);text-decoration:none;padding:8px 14px;border:1px solid var(--line);background:white;white-space:nowrap}
     .subnav-link.active,.subnav-link:hover{border-color:var(--ink);background:var(--mist)}
     .slot-badge{background:#e5eee8;color:#315d4d;padding:7px 11px;font-size:11px;font-weight:800;white-space:nowrap}
+    .story-strip{display:flex;gap:18px;overflow-x:auto;scrollbar-width:none;padding:4px 2px 12px}
+    .story-btn{width:76px;flex:none;text-align:center;cursor:pointer;background:none;border:0;padding:0;color:var(--ink)}
+    .story-ring{display:block;width:66px;height:66px;padding:3px;margin:0 auto 6px;border-radius:50%;background:linear-gradient(45deg,#968d80,#304b54,#a8b9ae)}
+    .story-pic{display:block;width:100%;height:100%;border:3px solid var(--paper);border-radius:50%;background-size:cover;background-position:center;background-color:var(--mist)}
+    .memory-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+    .memory-tile{position:relative;aspect-ratio:1;background:#dce3de;background-size:cover;background-position:center;border:0;cursor:pointer;overflow:hidden}
+    .memory-tile video{width:100%;height:100%;object-fit:cover;pointer-events:none}
+    .reel-mark{position:absolute;top:8px;right:8px;background:rgba(48,75,84,.85);color:#fff;padding:4px 7px;font-size:10px;font-weight:700}
+    .viewer{position:fixed;inset:0;z-index:60;background:rgba(25,39,42,.96);display:flex;align-items:center;justify-content:center;padding:22px;color:#fff}
+    .viewer[hidden]{display:none}
     @media(max-width:767px){.header-actions{width:100%;justify-content:flex-start}}
   </style>
   <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
@@ -35,12 +45,12 @@
         </a>
         <div class="min-w-0">
           <p class="display font-medium leading-tight text-[#304b54] text-lg md:text-xl">Talani Adventures</p>
-          <p class="text-[11px] tracking-wide text-[#968d80] font-semibold">Active Departure &amp; Booking Portal</p>
+          <p class="text-[11px] tracking-wide text-[#968d80] font-semibold">Active Departure &amp; Live Updates</p>
         </div>
       </div>
       <div class="header-actions">
         <a id="top-wa-channel" href="https://whatsapp.com/channel/0029Vb6x" target="_blank" rel="noopener noreferrer" class="border border-[#dcded9] bg-white px-3 py-1.5 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">WhatsApp Channel ↗</a>
-        <a href="./index.html" class="border border-[#304b54] bg-[#304b54] px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90">← Back to Overview</a>
+        <a href="./index.html" class="border border-[#304b54] bg-[#304b54] px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90">← Overview</a>
       </div>
     </div>
     <div class="border-t border-[#e6e8e3] bg-[#f8f7f3]">
@@ -62,6 +72,7 @@
         <div class="flex flex-wrap items-center gap-3">
           <span id="trip-eyebrow" data-node-key="at_eyebrow" class="eyebrow text-xs font-bold text-[#968d80]">Active Departure • 5 December 2026</span>
           <span id="trip-slots" class="slot-badge">18 slots left</span>
+          <span id="live-indicator" class="text-[11px] font-bold text-[#315d4d]">● Live updates</span>
         </div>
         <h1 id="trip-title" data-node-key="at_title" class="display text-3xl md:text-5xl leading-[1.1] text-[#304b54]">Gatamaiyu Forest Reserve Hike</h1>
         <p id="trip-meta" data-node-key="at_meta" class="text-xs md:text-sm font-bold bg-[#e9eeec] border-l-2 border-[#304b54] px-4 py-3 text-[#304b54]">
@@ -70,15 +81,14 @@
         <p id="trip-package" data-node-key="at_package" class="text-sm leading-7 text-[#52636a]">
           Package Includes: Round-trip transport from Nairobi CBD, KFS forest entry &amp; guide fees, trail snacks &amp; drinking water, standby emergency support, and photography.
         </p>
-        <p id="trip-payment-mode" class="text-xs font-bold text-[#304b54]">Payment Mode: M-Pesa Till / Paybill (details shared on confirmation or via WhatsApp)</p>
+        <p id="trip-payment-mode" class="text-xs font-bold text-[#304b54]">Payment Mode: M-Pesa Till / Paybill</p>
 
-        <!-- ONE-TAP WHATSAPP BOOKING, CHANNEL & CALL/TEXT -->
         <div class="flex flex-wrap gap-3 pt-2">
           <a id="wa-book-btn" href="#" target="_blank" rel="noopener noreferrer" class="bg-[#304b54] text-white px-6 py-3.5 text-xs font-bold uppercase tracking-wider hover:opacity-85">
             One-Tap WhatsApp Booking ↗
           </a>
           <a id="wa-channel-btn" href="https://whatsapp.com/channel/0029Vb6x" target="_blank" rel="noopener noreferrer" class="border border-[#304b54] bg-white text-[#304b54] px-5 py-3.5 text-xs font-bold uppercase tracking-wider hover:bg-[#e9eeec]">
-            Join WhatsApp Channel ↗
+            WhatsApp Channel ↗
           </a>
           <a id="call-inquiry-btn" href="tel:+254700000000" class="border border-[#dcded9] bg-white text-[#304b54] px-5 py-3.5 text-xs font-bold uppercase tracking-wider hover:bg-[#e9eeec]">
             Call / Text Inquiries
@@ -96,7 +106,14 @@
       </div>
     </section>
 
-    <!-- SECTION 2: WHAT TO PACK CHECKLIST & CANCELLATION POLICY FAQ -->
+    <!-- SECTION 2: LIVE FIELD STORIES & ROUTE UPDATES -->
+    <section data-block-id="trip-stories-feed" class="bg-white border border-[#dcded9] p-6 md:p-8">
+      <p data-node-key="ts_eyebrow" class="eyebrow text-[10px] font-bold text-[#968d80] mb-1">Field Dispatches &amp; Live Updates</p>
+      <h2 data-node-key="ts_title" class="display text-2xl text-[#304b54] mb-4">Route Updates, Weather &amp; Trail Stories</h2>
+      <div id="live-stories-bar" class="story-strip"></div>
+    </section>
+
+    <!-- SECTION 3: WHAT TO PACK CHECKLIST & CANCELLATION POLICY FAQ -->
     <section data-block-id="trip-checklist-faq" class="grid md:grid-cols-2 gap-6">
       <div class="bg-white border border-[#dcded9] p-6 md:p-8">
         <p class="eyebrow text-[10px] font-bold text-[#968d80] mb-2">Excursion Readiness</p>
@@ -113,39 +130,20 @@
       </div>
     </section>
 
-    <!-- SECTION 3: CLOSED-LOOP BOOKING FORM & PAYMENT CONFIRMATION PORTAL -->
+    <!-- SECTION 4: DYNAMIC BOOKING FORM & PAYMENT CONFIRMATION PORTAL -->
     <section data-block-id="trip-booking-loop" class="grid lg:grid-cols-2 gap-8">
-      <!-- STEP A: MASKED GOOGLE FORM / COMPANION APP REGISTRATION -->
       <div class="bg-white border border-[#dcded9] p-6 md:p-8">
         <p class="eyebrow text-[10px] font-bold text-[#968d80] mb-2">Step 1 · Reserve Slot</p>
         <h2 data-node-key="form_title" class="display text-2xl text-[#304b54] mb-2">Guest Registration Form</h2>
-        <p data-node-key="form_sub" class="text-xs text-[#52636a] leading-6 mb-5">Fill in your details below to register your slot. Your submission notifies our companion app and syncs with our booking sheet.</p>
+        <p data-node-key="form_sub" class="text-xs text-[#52636a] leading-6 mb-5">Fill in your details below to register your slot. Syncs directly with Studio leads &amp; our Google Form.</p>
 
-        <form id="booking-form" class="space-y-4">
-          <div>
-            <label for="b-name" class="block text-xs font-bold uppercase tracking-wider mb-1">Full Name</label>
-            <input id="b-name" type="text" required placeholder="e.g., Amina Njoroge" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-2.5 text-sm" />
-          </div>
-          <div class="grid sm:grid-cols-2 gap-3">
-            <div>
-              <label for="b-phone" class="block text-xs font-bold uppercase tracking-wider mb-1">WhatsApp Phone</label>
-              <input id="b-phone" type="tel" required placeholder="e.g., 0712 345 678" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-2.5 text-sm" />
-            </div>
-            <div>
-              <label for="b-pax" class="block text-xs font-bold uppercase tracking-wider mb-1">Slots (Pax)</label>
-              <input id="b-pax" type="number" min="1" value="1" required class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-2.5 text-sm" />
-            </div>
-          </div>
-          <div>
-            <label for="b-pickup" class="block text-xs font-bold uppercase tracking-wider mb-1">Pickup Point &amp; Emergency Contact</label>
-            <input id="b-pickup" type="text" required placeholder="e.g., Kencom CBD • Emergency: 07XX XXX XXX" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-2.5 text-sm" />
-          </div>
+        <form id="booking-form" class="space-y-3.5">
+          <div id="dynamic-form-fields" class="space-y-3.5"></div>
           <button type="submit" class="w-full bg-[#304b54] text-white py-3.5 text-xs font-bold uppercase tracking-wider cursor-pointer hover:opacity-85">Submit Registration ↗</button>
           <p id="booking-status" class="text-xs font-bold text-[#315d4d] min-h-[1.25rem]"></p>
         </form>
       </div>
 
-      <!-- STEP B: PAYMENT CONFIRMATION PORTAL (ROUTES TO ACCOUNTS APP) -->
       <div class="bg-white border border-[#dcded9] p-6 md:p-8">
         <p class="eyebrow text-[10px] font-bold text-[#968d80] mb-2">Step 2 · Confirm Payment</p>
         <h2 class="display text-2xl text-[#304b54] mb-2">Submit M-Pesa Payment Confirmation</h2>
@@ -175,7 +173,22 @@
         </form>
       </div>
     </section>
+
+    <!-- SECTION 5: LIVE POSTS, TRAIL MEMORIES & REELS -->
+    <section data-block-id="trip-posts-feed" class="bg-[#e9eeec] p-6 md:p-8">
+      <p class="eyebrow text-[10px] font-bold text-[#61767b] mb-1">Live Feed</p>
+      <h2 data-node-key="tp_posts_title" class="display text-2xl text-[#304b54] mb-5">Trail Memories &amp; Reels</h2>
+      <div id="live-posts-grid" class="memory-grid"></div>
+    </section>
   </main>
+
+  <div id="media-modal" class="viewer" hidden>
+    <div class="max-w-xl w-full text-center space-y-3">
+      <div id="media-modal-box"></div>
+      <p id="media-modal-cap" class="text-sm"></p>
+      <button id="media-modal-close" type="button" class="border border-[#b3c3c2] px-5 py-2 text-xs font-bold cursor-pointer">✕ Close</button>
+    </div>
+  </div>
 
   <footer class="w-full border-t border-[#dcded9] mt-12">
     <div class="max-w-7xl mx-auto px-6 md:px-10 py-9 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
@@ -194,7 +207,7 @@
 
   <script type="module">
   import { applyPublishedLayout, getDb, safeActionUrl } from "./layout-runtime.js";
-  import { doc, getDoc, collection, addDoc, updateDoc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { doc, collection, addDoc, updateDoc, query, where, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   await applyPublishedLayout("active-trip");
 
@@ -219,21 +232,20 @@
     packageIncludes: "Round-trip transport from Nairobi CBD, KFS forest entry & guide fees, trail snacks & drinking water, standby emergency support, and photography.",
     packChecklist: "Sturdy grip hiking boots, 2L drinking water, Rain jacket / poncho, Warm fleece layer, Extra socks, ID / Passport",
     cancellationPolicy: "Deposits secure transport, guides, and park logistics and are non-refundable within 72 hours of departure. If your plans change, you may transfer your slot to a replacement guest before the manifest closes.",
+    customFormFields: ["Full Name", "WhatsApp Phone", "Number of Slots (Pax)", "Pickup Point", "Emergency Contact"],
     googleFormActionUrl: ""
   };
 
-  let db = null;
-  try {
-    db = getDb();
-    if (tripId) {
-      const snap = await getDoc(doc(db, "trips", tripId));
-      if (snap.exists()) activeTrip = { ...activeTrip, id: snap.id, ...snap.data() };
-    } else if (tripQueryTitle) {
-      const q = query(collection(db, "trips"), where("title", "==", tripQueryTitle));
-      const snaps = await getDocs(q);
-      if (!snaps.empty) activeTrip = { ...activeTrip, id: snaps.docs[0].id, ...snaps.docs[0].data() };
-    }
-  } catch {}
+  function openMedia(isVideo, url, caption) {
+    const valid = safeActionUrl(url);
+    if (!valid) return;
+    $("media-modal-box").innerHTML = isVideo
+      ? `<video src="${valid}" controls autoplay playsinline class="w-full max-h-[70vh] mx-auto"></video>`
+      : `<img src="${valid}" alt="${caption || ""}" class="w-full max-h-[70vh] object-contain mx-auto" />`;
+    $("media-modal-cap").textContent = caption || "";
+    $("media-modal").hidden = false;
+  }
+  $("media-modal-close").addEventListener("click", () => { $("media-modal-box").innerHTML = ""; $("media-modal").hidden = true; });
 
   function renderTripDetails() {
     const fmt = (n) => Math.max(0, Number(n) || 0).toLocaleString("en-KE");
@@ -264,21 +276,95 @@
 
     const items = String(activeTrip.packChecklist || "").split(/[\n,]+/).map((s) => s.trim()).filter(Boolean);
     $("pack-list").innerHTML = items.map((it) => `<li class="flex items-start gap-2"><span class="text-[#304b54] font-bold">✓</span><span>${it}</span></li>`).join("");
-
     if (activeTrip.cancellationPolicy) $("policy-text").textContent = activeTrip.cancellationPolicy;
+
+    const fields = Array.isArray(activeTrip.customFormFields) && activeTrip.customFormFields.length
+      ? activeTrip.customFormFields
+      : ["Full Name", "WhatsApp Phone", "Number of Slots (Pax)", "Pickup Point", "Emergency Contact"];
+
+    $("dynamic-form-fields").innerHTML = fields.map((label, idx) => {
+      const isNum = /pax|slot|people|number of/i.test(label);
+      const isTel = /phone|whatsapp|contact/i.test(label) && !/emergency/i.test(label);
+      return `<div>
+        <label for="df_${idx}" class="block text-xs font-bold uppercase tracking-wider mb-1">${label}</label>
+        <input id="df_${idx}" data-field-label="${label.replace(/"/g, "&quot;")}" type="${isNum ? "number" : isTel ? "tel" : "text"}" ${isNum ? 'min="1" value="1"' : ""} required class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-2.5 text-sm" />
+      </div>`;
+    }).join("");
   }
 
   renderTripDetails();
+
+  let db = null;
+  try {
+    db = getDb();
+
+    // Real-time listener on the active trip (live slot count & updates)
+    if (tripId) {
+      onSnapshot(doc(db, "trips", tripId), (snap) => {
+        if (snap.exists()) {
+          activeTrip = { ...activeTrip, id: snap.id, ...snap.data() };
+          renderTripDetails();
+        }
+      });
+    } else if (tripQueryTitle) {
+      onSnapshot(query(collection(db, "trips"), where("title", "==", tripQueryTitle)), (snaps) => {
+        if (!snaps.empty) {
+          activeTrip = { ...activeTrip, id: snaps.docs[0].id, ...snaps.docs[0].data() };
+          renderTripDetails();
+        }
+      });
+    }
+
+    // Real-time Stories feed
+    onSnapshot(query(collection(db, "stories"), orderBy("createdAt", "desc")), (snap) => {
+      const rows = snap.empty
+        ? [{ label: "Gatamaiyu", mediaUrl: activeTrip.coverUrl, mediaType: "image", caption: "Upcoming departure updates." }]
+        : snap.docs.map((d) => d.data());
+      $("live-stories-bar").innerHTML = rows.map((st, idx) => `
+        <button type="button" class="story-btn" data-st-idx="${idx}">
+          <span class="story-ring"><span class="story-pic" style="background-image:url('${String(st.mediaUrl || "").replace(/'/g, "")}')"></span></span>
+          <span class="block text-[11px] font-bold truncate">${st.label || "Update"}</span>
+        </button>`).join("");
+      $("live-stories-bar").querySelectorAll("[data-st-idx]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const st = rows[Number(btn.dataset.stIdx)];
+          if (st) openMedia(st.mediaType === "video", st.mediaUrl, st.caption);
+        });
+      });
+    });
+
+    // Real-time Posts & Reels feed
+    onSnapshot(query(collection(db, "posts"), orderBy("createdAt", "desc")), (snap) => {
+      const rows = snap.empty
+        ? [{ type: "image", webUrl: activeTrip.coverUrl, caption: "Trail scenery & route preview." }]
+        : snap.docs.map((d) => d.data());
+      $("live-posts-grid").innerHTML = rows.map((pt, idx) => `
+        <button type="button" class="memory-tile" data-pt-idx="${idx}" style="${pt.type !== "video" ? `background-image:url('${String(pt.webUrl || "").replace(/'/g, "")}')` : ""}">
+          ${pt.type === "video" ? `<video src="${pt.webUrl}" muted playsinline preload="metadata"></video><span class="reel-mark">▶ REEL</span>` : ""}
+        </button>`).join("");
+      $("live-posts-grid").querySelectorAll("[data-pt-idx]").forEach((tile) => {
+        tile.addEventListener("click", () => {
+          const pt = rows[Number(tile.dataset.ptIdx)];
+          if (pt) openMedia(pt.type === "video", pt.webUrl, pt.caption);
+        });
+      });
+    });
+  } catch {}
 
   let lastLeadDocId = null;
 
   $("booking-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     const status = $("booking-status");
-    const name = $("b-name").value.trim();
-    const phone = $("b-phone").value.trim();
-    const pax = Math.max(1, Number($("b-pax").value) || 1);
-    const pickup = $("b-pickup").value.trim();
+    const answers = {};
+    $("dynamic-form-fields").querySelectorAll("input").forEach((inp) => {
+      answers[inp.dataset.fieldLabel] = inp.value.trim();
+    });
+
+    const name = answers["Full Name"] || Object.values(answers)[0] || "Guest";
+    const phone = answers["WhatsApp Phone"] || Object.values(answers)[1] || "";
+    const pax = Math.max(1, Number(answers["Number of Slots (Pax)"]) || 1);
+    const summary = Object.entries(answers).map(([k, v]) => `${k}: ${v}`).join(" • ");
 
     status.textContent = "Submitting registration...";
     try {
@@ -289,8 +375,8 @@
           name,
           phone,
           pax,
-          notes: `Pickup/Emergency: ${pickup}`,
-          aiSummary: `Active Trip Registration • ${pax} pax • ${pickup}`,
+          formAnswers: answers,
+          aiSummary: summary,
           status: "REGISTERED_AWAITING_PAYMENT",
           source: "active-trip-portal",
           createdAt: serverTimestamp()
@@ -298,14 +384,10 @@
         lastLeadDocId = ref.id;
       }
 
-      // Optional dual-sync to Google Form formResponse endpoint if configured in Studio
       const gfUrl = safeActionUrl(activeTrip.googleFormActionUrl);
       if (gfUrl) {
         const fd = new FormData();
-        fd.append("entry.name", name);
-        fd.append("entry.phone", phone);
-        fd.append("entry.pax", String(pax));
-        fd.append("entry.notes", `${activeTrip.title} | ${pickup}`);
+        Object.entries(answers).forEach(([k, v]) => fd.append(k, v));
         fetch(gfUrl, { method: "POST", mode: "no-cors", body: fd }).catch(() => {});
       }
 
@@ -324,11 +406,7 @@
     const amountPaid = Number($("p-amount").value) || 0;
     const rawSms = $("p-raw-msg").value.trim();
 
-    if (!db) {
-      status.textContent = "Connect Firebase to route payment confirmations.";
-      return;
-    }
-
+    if (!db) { status.textContent = "Connect Firebase to route payment confirmations."; return; }
     status.textContent = "Sending confirmation to Accounts...";
     try {
       if (lastLeadDocId) {
