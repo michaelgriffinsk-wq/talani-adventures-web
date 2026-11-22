@@ -1,6 +1,6 @@
-// Shared runtime for applying published Studio layouts & custom buttons/actions on customer pages
+// Shared runtime for applying published Studio layouts, text overrides, added components & Cloudinary media
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 export const TALANI_FIREBASE_CONFIG = {
   apiKey: "AIzaSyDhdiJxS7bI4BX0E9ObXGjMA4Y95sXZftc",
@@ -11,6 +11,18 @@ export const TALANI_FIREBASE_CONFIG = {
   appId: "1:698912000783:web:ab04f85cb956c994558c7a",
   measurementId: "G-X2HVRDMRDM"
 };
+
+const BG_MAP = {
+  default: { bg: "#f8f7f3", fg: "#304b54" },
+  white: { bg: "#ffffff", fg: "#304b54" },
+  mist: { bg: "#e9eeec", fg: "#304b54" },
+  ink: { bg: "#304b54", fg: "#ffffff" }
+};
+
+export function getDb() {
+  const app = getApps().length ? getApps()[0] : initializeApp(TALANI_FIREBASE_CONFIG);
+  return getFirestore(app);
+}
 
 export function safeActionUrl(value) {
   try {
@@ -57,37 +69,96 @@ export function triggerButtonAction(btnConfig = {}) {
   }
 }
 
-function renderCustomButtonsContainer(sectionEl, buttons = []) {
-  const existing = sectionEl.querySelector("[data-studio-custom-buttons]");
+function renderCustomComponents(sectionEl, components = [], legacyButtons = []) {
+  const existing = sectionEl.querySelector("[data-studio-custom-layer]");
   if (existing) existing.remove();
-  if (!Array.isArray(buttons) || buttons.length === 0) return;
+
+  const items = Array.isArray(components) && components.length
+    ? components
+    : (Array.isArray(legacyButtons) ? legacyButtons.map((b) => ({ type: "button", title: b.label, content: b.target, actionType: b.actionType })) : []);
+
+  if (!items.length) return;
 
   const wrap = document.createElement("div");
-  wrap.setAttribute("data-studio-custom-buttons", "true");
-  wrap.className = "flex flex-wrap gap-3 mt-6";
+  wrap.setAttribute("data-studio-custom-layer", "true");
+  wrap.className = "space-y-4 mt-6";
 
-  buttons.forEach((cfg) => {
-    const label = String(cfg.label || "").trim();
-    if (!label) return;
-    const btn = document.createElement("button");
-    btn.type = "button";
-    const styleVariant = cfg.style || "primary";
-    btn.className = styleVariant === "outline"
-      ? "border border-[#304b54] text-[#304b54] bg-white px-5 py-3 text-xs font-bold uppercase tracking-wider hover:bg-[#e9eeec] cursor-pointer"
-      : "bg-[#304b54] text-white px-5 py-3 text-xs font-bold uppercase tracking-wider hover:opacity-85 cursor-pointer";
-    btn.textContent = label;
-    btn.addEventListener("click", () => triggerButtonAction(cfg));
-    wrap.appendChild(btn);
+  let btnRow = null;
+
+  items.forEach((comp) => {
+    if (comp.type === "photo") {
+      const src = safeActionUrl(comp.content);
+      if (!src) return;
+      btnRow = null;
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = String(comp.title || "Destination photo");
+      img.loading = "lazy";
+      img.className = "w-full max-h-80 object-cover border border-[#dcded9]";
+      wrap.appendChild(img);
+      return;
+    }
+
+    if (comp.type === "button") {
+      const label = String(comp.title || "").trim();
+      if (!label) return;
+      if (!btnRow) {
+        btnRow = document.createElement("div");
+        btnRow.className = "flex flex-wrap gap-3";
+        wrap.appendChild(btnRow);
+      }
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "bg-[#304b54] text-white px-5 py-3 text-xs font-bold uppercase tracking-wider hover:opacity-85 cursor-pointer";
+      btn.textContent = label;
+      btn.addEventListener("click", () => triggerButtonAction({
+        actionType: comp.actionType || (String(comp.content || "").startsWith("#") ? "scroll" : "link"),
+        target: comp.content
+      }));
+      btnRow.appendChild(btn);
+      return;
+    }
+
+    // Text component
+    btnRow = null;
+    const textVal = String(comp.title || comp.content || "").trim();
+    if (!textVal) return;
+    const p = document.createElement("p");
+    p.className = "text-sm leading-7";
+    p.textContent = textVal;
+    wrap.appendChild(p);
   });
 
   const targetContainer = sectionEl.querySelector(".max-w-7xl") || sectionEl;
   targetContainer.appendChild(wrap);
 }
 
+// Merge live Firestore destination_media/{id} Cloudinary photos onto ITINERARY_DATA
+export async function hydrateDestinationMedia(itineraryArray) {
+  if (!Array.isArray(itineraryArray)) return itineraryArray;
+  try {
+    const db = getDb();
+    const snap = await getDocs(collection(db, "destination_media"));
+    if (snap.empty) return itineraryArray;
+    const mediaMap = new Map();
+    snap.forEach((d) => {
+      const data = d.data();
+      if (Array.isArray(data.photos) && data.photos.length) {
+        mediaMap.set(d.id, data.photos);
+      }
+    });
+    itineraryArray.forEach((item) => {
+      if (mediaMap.has(item.id)) {
+        item.photos = mediaMap.get(item.id);
+      }
+    });
+  } catch {}
+  return itineraryArray;
+}
+
 export async function applyPublishedLayout(pageKey) {
   try {
-    const app = getApps().length ? getApps()[0] : initializeApp(TALANI_FIREBASE_CONFIG);
-    const db = getFirestore(app);
+    const db = getDb();
     const snap = await getDoc(doc(db, "site_layouts", pageKey));
     if (!snap.exists()) return null;
 
@@ -112,16 +183,33 @@ export async function applyPublishedLayout(pageKey) {
       el.style.marginLeft = widthPct < 100 ? "auto" : "";
       el.style.marginRight = widthPct < 100 ? "auto" : "";
 
-      const scale = Math.min(1.35, Math.max(0.75, Number(cfg.scale) || 1));
-      el.style.transform = scale !== 1 ? `scale(${scale})` : "";
-      el.style.transformOrigin = "top center";
+      if (cfg.bgPreset && BG_MAP[cfg.bgPreset]) {
+        el.style.backgroundColor = BG_MAP[cfg.bgPreset].bg;
+        el.style.color = BG_MAP[cfg.bgPreset].fg;
+      }
+
+      if (cfg.imageUrl) {
+        const safeImg = safeActionUrl(cfg.imageUrl);
+        const imgEl = el.querySelector("img");
+        if (safeImg && imgEl) imgEl.src = safeImg;
+      }
+
+      if (cfg.textOverrides && typeof cfg.textOverrides === "object") {
+        Object.entries(cfg.textOverrides).forEach(([nodeKey, newVal]) => {
+          const targetNode = el.querySelector(`[data-node-key="${nodeKey}"]`);
+          if (targetNode) {
+            targetNode.textContent = newVal;
+            targetNode.style.display = newVal === "" ? "none" : "";
+          }
+        });
+      }
 
       if (cfg.customTitle) {
         const heading = el.querySelector("h1, h2, h3");
         if (heading) heading.textContent = cfg.customTitle;
       }
 
-      renderCustomButtonsContainer(el, cfg.buttons || []);
+      renderCustomComponents(el, cfg.components || [], cfg.buttons || []);
       main.appendChild(el);
     });
 
