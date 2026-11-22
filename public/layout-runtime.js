@@ -205,7 +205,6 @@ export async function applyPublishedLayout(pageKey) {
       sectionMap.set(el.dataset.blockId, el);
     });
 
-    // Only reorder sections that were actually included in the Studio layout so un-mirrored sections don't jump awkwardly
     const ordered = [...blocks].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
     ordered.forEach((cfg) => {
       const el = sectionMap.get(cfg.id);
