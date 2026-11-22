@@ -644,7 +644,7 @@
   let selectedBlockId = null;
   let selectedNodeKey = null;
   let selectedCompIndex = null;
-  let dragState = null; // { kind: 'section' | 'comp', blockId, compIdx }
+  let dragState = null;
 
   function buildInitialBlocks(pageKey) {
     return (PAGE_TEMPLATES[pageKey] || []).map((tpl, idx) => ({
@@ -747,7 +747,6 @@
         </section>`;
     }).join("");
 
-    // Selection + Drag-and-Snap Handlers
     $("mirror-stage").querySelectorAll("[data-block]").forEach((sec) => {
       sec.addEventListener("click", (e) => {
         const nodeEl = e.target.closest("[data-node-key]");
@@ -777,7 +776,6 @@
         syncControls();
       });
 
-      // Drag start on section
       sec.addEventListener("dragstart", (e) => {
         if (e.target.closest("[data-comp-idx]")) return;
         dragState = { kind: "section", blockId: sec.dataset.block };
@@ -807,7 +805,6 @@
             $("studio-status").textContent = "Snapped section into new position";
           }
         } else if (dragState.kind === "comp") {
-          // Allow snapping a component into another section
           const srcBlock = blocks.find((x) => x.id === dragState.blockId);
           const dstBlock = blocks.find((x) => x.id === sec.dataset.block);
           if (srcBlock && dstBlock && srcBlock !== dstBlock && srcBlock.components?.[dragState.compIdx]) {
@@ -824,7 +821,6 @@
       });
     });
 
-    // Drag-and-snap for inner components
     $("mirror-stage").querySelectorAll("[data-comp-idx]").forEach((compEl) => {
       compEl.addEventListener("dragstart", (e) => {
         e.stopPropagation();
@@ -940,7 +936,6 @@
     });
   });
 
-  // Shared Top Toolbar Actions
   $("tb-move-up").addEventListener("click", () => {
     const b = currentBlock();
     if (!b) return;
@@ -967,7 +962,6 @@
     renderMirror();
   });
 
-  // Copy / Duplicate selected component or section
   $("tb-duplicate").addEventListener("click", () => {
     const b = currentBlock();
     if (!b) return;
