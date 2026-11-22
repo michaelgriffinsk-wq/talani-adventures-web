@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Talani Studio — Live Mirror Editor, Cloudinary Sync, Trips, Stories &amp; Leads</title>
+  <title>Talani Studio — Live Mirror Editor, Drag &amp; Snap, Media Uploader, Forms &amp; Leads</title>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root{--ink:#304b54;--stone:#968d80;--paper:#f8f7f3;--line:#dcded9;--mist:#e9eeec}
@@ -38,22 +38,28 @@
     .tb-btn.danger{color:#8f2424;border-color:#d8b4b4}
     .tb-sep{width:1px;height:20px;background:#cfd6d2;flex:none;margin:0 2px}
 
-    /* Live Mirror Stage */
+    /* Live Mirror Stage + Drag & Snap + Resize */
     .mirror-stage{position:relative;border:2px dashed #bfc9c5;background:var(--paper)}
-    .mirror-section{position:relative;transition:outline .15s,opacity .15s,background-color .2s;cursor:pointer}
+    .mirror-section{position:relative;transition:outline .15s,opacity .15s,background-color .2s;cursor:pointer;resize:vertical;overflow:auto;min-height:90px}
     .mirror-section:hover{outline:2px dashed #968d80;outline-offset:-2px}
     .mirror-section.selected{outline:3px solid #304b54;outline-offset:-3px}
     .mirror-section.is-hidden{opacity:.42;filter:grayscale(.6)}
-    .section-badge{display:inline-flex;align-items:center;gap:6px;background:#304b54;color:white;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;margin:8px}
+    .mirror-section.drag-over-top{border-top:4px solid #ad8970}
+    .mirror-section.drag-over-bottom{border-bottom:4px solid #ad8970}
+    .section-toolbar-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px;padding:6px 8px 0}
+    .section-badge{display:inline-flex;align-items:center;gap:6px;background:#304b54;color:white;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px}
+    .drag-handle{cursor:grab;background:#e9eeec;border:1px solid #bfc9c5;color:#304b54;font-size:10px;font-weight:800;padding:4px 8px;user-select:none}
+    .drag-handle:active{cursor:grabbing}
 
     /* Click-to-edit inline text & component targets */
     .editable-node{border:1px dashed transparent;border-radius:2px;transition:background-color .15s,border-color .15s}
     .editable-node:hover{border-color:#968d80;background:rgba(255,255,255,.45)}
     .editable-node.node-selected{outline:2px solid #ad8970;background:rgba(255,255,255,.78)}
 
-    .comp-item{position:relative;border:1px dashed transparent;padding:4px;transition:border-color .15s}
+    .comp-item{position:relative;border:1px dashed transparent;padding:6px;transition:border-color .15s;resize:both;overflow:auto;max-width:100%}
     .comp-item:hover{border-color:#968d80}
     .comp-item.comp-selected{border:2px solid #ad8970;background:rgba(255,255,255,.65)}
+    .comp-item.drag-over-top{border-top:3px solid #304b54}
 
     /* Shared Live Site Card Styles */
     .photo-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line)}
@@ -75,7 +81,7 @@
         </a>
         <div class="min-w-0">
           <p class="display font-medium leading-tight text-[#304b54] text-lg md:text-xl">Talani Adventures <span class="text-xs font-sans font-bold uppercase tracking-wider bg-[#e9eeec] px-2 py-0.5 ml-1">Studio</span></p>
-          <p class="text-[11px] tracking-wide text-[#968d80] font-semibold">@talani.adventures • Visual Builder, Cloudinary &amp; Operations</p>
+          <p class="text-[11px] tracking-wide text-[#968d80] font-semibold">@talani.adventures • Drag &amp; Snap Editor, Cloudinary &amp; Operations</p>
         </div>
       </div>
       <div class="header-actions">
@@ -99,10 +105,10 @@
     <!-- STUDIO DRAWER SWITCHER -->
     <div class="studio-ribbon">
       <div class="max-w-7xl mx-auto px-6 md:px-10 studio-bar">
-        <button type="button" class="mode-pill" data-drawer="editor-drawer" aria-pressed="true">1. Page &amp; Text Editor</button>
+        <button type="button" class="mode-pill" data-drawer="editor-drawer" aria-pressed="true">1. Page &amp; Component Editor</button>
         <button type="button" class="mode-pill" data-drawer="cloudinary-drawer" aria-pressed="false">2. Cloudinary Folders</button>
-        <button type="button" class="mode-pill" data-drawer="trips-drawer" aria-pressed="false">3. Active Trips &amp; Booking Setup</button>
-        <button type="button" class="mode-pill" data-drawer="stories-drawer" aria-pressed="false">4. Stories &amp; Reels</button>
+        <button type="button" class="mode-pill" data-drawer="trips-drawer" aria-pressed="false">3. Active Trips &amp; Form Builder</button>
+        <button type="button" class="mode-pill" data-drawer="stories-drawer" aria-pressed="false">4. Stories &amp; Reels (Upload/URL)</button>
         <button type="button" class="mode-pill" data-drawer="leads-drawer" aria-pressed="false">5. Leads &amp; Payment Confirmations</button>
         <span id="studio-status" class="text-[11px] text-[#d2dcd9] ml-auto whitespace-nowrap">Ready</span>
       </div>
@@ -113,6 +119,7 @@
       <div class="max-w-7xl mx-auto px-6 md:px-10 toolbar-strip" role="toolbar" aria-label="Page and component editing bar">
         <button type="button" id="tb-move-up" class="tb-btn">↑ Move Up</button>
         <button type="button" id="tb-move-down" class="tb-btn">↓ Move Down</button>
+        <button type="button" id="tb-duplicate" class="tb-btn">⧉ Copy / Duplicate</button>
         <span class="tb-sep"></span>
         <button type="button" id="tb-add-text" class="tb-btn">+ Text Block</button>
         <button type="button" id="tb-edit-text" class="tb-btn">✎ Edit Selected Text</button>
@@ -128,11 +135,11 @@
   </header>
 
   <section class="max-w-7xl mx-auto px-6 md:px-10 pt-5">
-    <!-- DRAWER 1: DIRECT CLICK-TO-EDIT INSPECTOR -->
+    <!-- DRAWER 1: DIRECT CLICK-TO-EDIT + RESIZE INSPECTOR -->
     <div id="editor-drawer" class="bg-white border border-[#dcded9] p-5 mb-5">
       <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
         <div>
-          <p class="eyebrow text-[10px] font-bold text-[#968d80]">Selected Element on Page</p>
+          <p class="eyebrow text-[10px] font-bold text-[#968d80]">Selected Target (Drag sections/blocks by handle or resize edges)</p>
           <h2 id="selected-label" class="display text-lg text-[#304b54]">Tap any sentence, card, heading, or section below to edit</h2>
         </div>
         <span id="selected-type-badge" class="text-[11px] font-bold uppercase px-2.5 py-1 bg-[#e9eeec] text-[#304b54]">Section</span>
@@ -140,26 +147,29 @@
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         <div class="sm:col-span-2">
-          <label for="inp-text" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Edit Selected Words / Heading / URL</label>
+          <label for="inp-text" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Edit Words / Heading / Image URL</label>
           <textarea id="inp-text" rows="2" placeholder="Tap any text on the mirrored page below to edit its exact words..." class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-sm"></textarea>
         </div>
         <div>
-          <label for="inp-link" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Button Link / Target (If Button)</label>
+          <label for="inp-link" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Button Link / Target</label>
           <input id="inp-link" type="text" placeholder="e.g., ./active-trip.html or https://wa.me/..." class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-sm" />
         </div>
         <div>
-          <label for="inp-bg" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Section Background &amp; Width</label>
-          <div class="flex gap-2">
-            <select id="inp-bg" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-2.5 py-2 text-xs font-semibold">
-              <option value="default">Warm Paper</option>
-              <option value="white">Crisp White</option>
-              <option value="mist">Sage Mist</option>
-              <option value="ink">Deep Slate</option>
-            </select>
-            <select id="inp-width" class="w-24 border border-[#dcded9] bg-[#f8f7f3] px-2 py-2 text-xs font-semibold">
+          <label class="block text-[11px] font-bold uppercase tracking-wider mb-1">Width • Height (px) • Background</label>
+          <div class="grid grid-cols-3 gap-1.5">
+            <select id="inp-width" class="border border-[#dcded9] bg-[#f8f7f3] px-2 py-2 text-xs font-semibold">
               <option value="100">100%</option>
               <option value="90">90%</option>
               <option value="75">75%</option>
+              <option value="60">60%</option>
+              <option value="50">50%</option>
+            </select>
+            <input id="inp-height" type="number" min="0" step="20" placeholder="Auto px" title="Min height in px (0 = auto)" class="border border-[#dcded9] bg-[#f8f7f3] px-2 py-2 text-xs font-semibold" />
+            <select id="inp-bg" class="border border-[#dcded9] bg-[#f8f7f3] px-2 py-2 text-xs font-semibold">
+              <option value="default">Paper</option>
+              <option value="white">White</option>
+              <option value="mist">Mist</option>
+              <option value="ink">Slate</option>
             </select>
           </div>
         </div>
@@ -204,11 +214,11 @@
       <textarea id="cld-json" rows="3" readonly placeholder="Uploaded photo JSON snippet..." class="w-full border border-[#dcded9] bg-[#f8f7f3] p-2.5 text-xs font-mono"></textarea>
     </div>
 
-    <!-- DRAWER 3: ACTIVE TRIPS, CHECKLIST, POLICY, WHATSAPP & PAYMENT CONFIG -->
-    <div id="trips-drawer" class="hidden bg-white border border-[#dcded9] p-5 md:p-6 mb-5 space-y-4">
+    <!-- DRAWER 3: ACTIVE TRIPS & CUSTOM GOOGLE FORM BUILDER -->
+    <div id="trips-drawer" class="hidden bg-white border border-[#dcded9] p-5 md:p-6 mb-5 space-y-5">
       <div>
-        <p class="eyebrow text-[10px] font-bold text-[#968d80]">Active Departures &amp; Trip Page Generator</p>
-        <h2 class="display text-xl text-[#304b54]">Publish Active Departure (Links to Active Trip Page &amp; Masked Form)</h2>
+        <p class="eyebrow text-[10px] font-bold text-[#968d80]">Active Departures &amp; Custom Registration Form</p>
+        <h2 class="display text-xl text-[#304b54]">Publish Active Departure + Configure Booking Form &amp; Google Script</h2>
       </div>
       <form id="trip-form" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <select id="t-brand" class="border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs font-semibold">
@@ -231,37 +241,62 @@
         <textarea id="t-package" rows="2" placeholder="What's in the package (Transport, guide, entry fees, snacks...)" class="sm:col-span-3 border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs"></textarea>
         <textarea id="t-packlist" rows="2" placeholder="What to Pack Checklist (comma-separated: Hiking boots, 2L water, rain jacket...)" class="sm:col-span-3 border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs"></textarea>
         <textarea id="t-policy" rows="2" placeholder="Cancellation & replacement policy FAQ..." class="sm:col-span-3 border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs"></textarea>
-        <input id="t-form-action" type="url" placeholder="Optional Google Form formResponse URL (for dual-sync)" class="sm:col-span-2 border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
-        <button type="submit" class="bg-[#304b54] text-white px-4 py-2.5 text-xs font-bold uppercase cursor-pointer">Publish Active Trip ↗</button>
+
+        <!-- CUSTOM FORM FIELDS + GOOGLE APPS SCRIPT GENERATOR -->
+        <div class="sm:col-span-3 bg-[#f8f7f3] border border-[#dcded9] p-4 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <p class="eyebrow text-[10px] font-bold text-[#968d80]">Custom Form Fields &amp; Google Form Script</p>
+              <p class="text-xs font-bold text-[#304b54]">Define the fields customers fill on <code>active-trip.html</code> &amp; generate the matching Google Form / Apps Script</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button type="button" id="gen-gs-btn" class="border border-[#304b54] bg-white px-3 py-1.5 text-xs font-bold cursor-pointer hover:bg-[#e9eeec]">Generate Google Script</button>
+              <button type="button" id="dl-form-btn" class="border border-[#304b54] bg-white px-3 py-1.5 text-xs font-bold cursor-pointer hover:bg-[#e9eeec]">Download Standalone Form (.html)</button>
+            </div>
+          </div>
+          <input id="t-form-fields" type="text" value="Full Name, WhatsApp Phone, Number of Slots (Pax), Pickup Point, Emergency Contact, Dietary / Medical Notes" placeholder="Comma-separated form fields..." class="w-full border border-[#dcded9] bg-white px-3 py-2 text-xs" />
+          <input id="t-form-action" type="url" placeholder="Optional Google Form formResponse URL (https://docs.google.com/forms/d/e/.../formResponse)" class="w-full border border-[#dcded9] bg-white px-3 py-2 text-xs" />
+          <textarea id="gs-output" rows="4" readonly placeholder="Click 'Generate Google Script' to get the Apps Script that auto-builds the Google Form and syncs direct Google Form signups straight into your Studio leads..." class="hidden w-full border border-[#dcded9] bg-white p-2.5 text-[11px] font-mono"></textarea>
+        </div>
+
+        <button type="submit" class="sm:col-span-3 bg-[#304b54] text-white px-4 py-3 text-xs font-bold uppercase tracking-wider cursor-pointer hover:opacity-85">Publish Active Trip &amp; Form ↗</button>
       </form>
     </div>
 
-    <!-- DRAWER 4: STORIES & REELS (RESTORED) -->
+    <!-- DRAWER 4: STORIES & REELS (DIRECT DEVICE UPLOAD OR URL) -->
     <div id="stories-drawer" class="hidden bg-white border border-[#dcded9] p-5 md:p-6 mb-5 space-y-6">
       <div class="grid md:grid-cols-2 gap-6">
         <form id="story-form" class="space-y-3">
-          <h3 class="display text-lg text-[#304b54]">Post Field Dispatch / Story</h3>
+          <h3 class="display text-lg text-[#304b54]">Post Field Dispatch / Story (Photo or Video)</h3>
           <input id="s-label" type="text" required placeholder="Story ring label (e.g., Gatamaiyu)" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
-          <input id="s-media" type="url" required placeholder="Story image URL (https://...)" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
+          <div>
+            <label for="s-file" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Upload Photo/Video from Device (Auto-uploads to Cloudinary)</label>
+            <input id="s-file" type="file" accept="image/*,video/*" class="w-full border border-[#dcded9] bg-[#f8f7f3] p-2 text-xs" />
+          </div>
+          <input id="s-media" type="url" placeholder="Or paste direct Photo / Video URL (https://...)" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
           <textarea id="s-caption" rows="2" placeholder="Story caption..." class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs"></textarea>
-          <button type="submit" class="bg-[#304b54] text-white px-4 py-2 text-xs font-bold uppercase cursor-pointer">Publish Story ↗</button>
+          <button type="submit" class="bg-[#304b54] text-white px-4 py-2.5 text-xs font-bold uppercase cursor-pointer">Publish Story ↗</button>
         </form>
 
         <form id="post-form" class="space-y-3">
-          <h3 class="display text-lg text-[#304b54]">Post D-Day Memory / Reel</h3>
+          <h3 class="display text-lg text-[#304b54]">Post D-Day Memory / Reel (Photo or Video)</h3>
           <select id="p-type" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs font-semibold">
             <option value="image">Photo Memory</option>
-            <option value="video">Video Reel (.mp4)</option>
+            <option value="video">Video Reel (.mp4 / mobile video)</option>
           </select>
-          <input id="p-web" type="url" required placeholder="Web photo or .mp4 URL (https://...)" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
+          <div>
+            <label for="p-file" class="block text-[11px] font-bold uppercase tracking-wider mb-1">Upload Photo/Video from Device</label>
+            <input id="p-file" type="file" accept="image/*,video/*" class="w-full border border-[#dcded9] bg-[#f8f7f3] p-2 text-xs" />
+          </div>
+          <input id="p-web" type="url" placeholder="Or paste Photo / Video URL (https://...)" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
           <input id="p-raw" type="url" placeholder="Optional Original HD URL" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
           <input id="p-caption" type="text" placeholder="Memory caption..." class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
-          <button type="submit" class="bg-[#304b54] text-white px-4 py-2 text-xs font-bold uppercase cursor-pointer">Publish Memory ↗</button>
+          <button type="submit" class="bg-[#304b54] text-white px-4 py-2.5 text-xs font-bold uppercase cursor-pointer">Publish Memory ↗</button>
         </form>
       </div>
     </div>
 
-    <!-- DRAWER 5: LEADS & PAYMENT CONFIRMATIONS (RESTORED + CLOSED LOOP) -->
+    <!-- DRAWER 5: LEADS & PAYMENT CONFIRMATIONS -->
     <div id="leads-drawer" class="hidden bg-white border border-[#dcded9] p-5 md:p-6 mb-5 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <div>
@@ -276,7 +311,7 @@
 
   <!-- LIVE WEBSITE MIRROR STAGE -->
   <main class="max-w-7xl mx-auto px-6 md:px-10 pb-16">
-    <p class="eyebrow text-[10px] font-bold text-[#968d80] mb-2">Live Customer Page Mirror (Tap any text, card, or section to edit its words or layout)</p>
+    <p class="eyebrow text-[10px] font-bold text-[#968d80] mb-2">Live Customer Page Mirror (Drag sections/components by ⠿ handle to snap into place, resize edges, or click text to edit)</p>
     <div id="mirror-stage" class="mirror-stage"></div>
   </main>
 
@@ -300,7 +335,19 @@
     ink: "background:#304b54;color:#ffffff;"
   };
 
-  // Helper to render any text node with a direct click-to-edit key
+  async function uploadToCloudinary(file, folder) {
+    const isVideo = String(file.type || "").startsWith("video/");
+    const resourceType = isVideo ? "video" : "image";
+    const fd = new FormData();
+    fd.append("file", file);
+    fd.append("upload_preset", UPLOAD_PRESET);
+    fd.append("folder", folder);
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${resourceType}/upload`, { method: "POST", body: fd });
+    if (!res.ok) throw new Error(`Cloudinary upload failed (${res.status})`);
+    const data = await res.json();
+    return { url: data.secure_url, isVideo };
+  }
+
   const ed = (block, key, fallback, tag = "span", cls = "") => {
     const val = (block.textOverrides && block.textOverrides[key] !== undefined) ? block.textOverrides[key] : fallback;
     const isSel = block.id === selectedBlockId && selectedNodeKey === key;
@@ -405,10 +452,19 @@
         label: "Active Trip Details, Package & WhatsApp",
         render: (b) => `
           <div class="p-8 md:p-10 space-y-4">
-            ${ed(b, "at_eyebrow", "Active Departure • Dec 5, 2026", "p", "eyebrow text-xs font-bold opacity-75 block")}
+            ${ed(b, "at_eyebrow", "Active Departure • 5 December 2026", "p", "eyebrow text-xs font-bold opacity-75 block")}
             ${ed(b, "at_title", "Gatamaiyu Forest Reserve Hike (10 km)", "h1", "display text-3xl block")}
             ${ed(b, "at_meta", "Price: KSh 3,000 • Non-refundable Deposit: KSh 1,800 • Deadline: Dec 2, 2026 • Payment: M-Pesa Till / Paybill", "p", "text-xs font-bold bg-[#e9eeec] text-[#304b54] p-3 block")}
             ${ed(b, "at_package", "Package Includes: Round-trip transport from Nairobi CBD, KFS forest entry & guide fees, trail snacks & water, standby first-aid support, and photography.", "p", "text-sm leading-7 block")}
+          </div>`
+      },
+      {
+        id: "trip-stories-feed",
+        label: "Live Trip Stories & Updates",
+        render: (b) => `
+          <div class="p-8 md:p-10">
+            ${ed(b, "ts_eyebrow", "Field Dispatches & Live Updates", "p", "eyebrow text-xs font-bold mb-2 opacity-75 block")}
+            ${ed(b, "ts_title", "Route Updates, Weather & Trail Stories", "h2", "display text-2xl block")}
           </div>`
       },
       {
@@ -428,11 +484,19 @@
       },
       {
         id: "trip-booking-loop",
-        label: "Masked Booking Form & Payment Confirmation Portal",
+        label: "Custom Registration Form & Payment Portal",
         render: (b) => `
           <div class="p-8 md:p-10">
             ${ed(b, "form_title", "Reserve Your Slot & Submit Payment Confirmation", "h2", "display text-2xl mb-2 block")}
-            ${ed(b, "form_sub", "Submits to Google Form + notifies Tiffany's companion app & routes payment confirmation to Shakeela's Accounts portal.", "p", "text-xs opacity-85 block")}
+            ${ed(b, "form_sub", "Renders your custom form fields, syncs with Google Forms, notifies Tiffany's companion app & routes M-Pesa confirmations to Shakeela's Accounts app.", "p", "text-xs opacity-85 block")}
+          </div>`
+      },
+      {
+        id: "trip-posts-feed",
+        label: "D-Day Memories & Reels Gallery",
+        render: (b) => `
+          <div class="p-8 md:p-10">
+            ${ed(b, "tp_posts_title", "Trail Memories & Reels", "h2", "display text-2xl block")}
           </div>`
       }
     ],
@@ -546,15 +610,18 @@
   let activePage = "index";
   let blocks = [];
   let selectedBlockId = null;
-  let selectedNodeKey = null;   // key inside block.textOverrides when user clicks an existing sentence/heading
-  let selectedCompIndex = null;  // index inside block.components when user clicks an added text/photo/button block
+  let selectedNodeKey = null;
+  let selectedCompIndex = null;
+  let dragState = null; // { kind: 'section' | 'comp', blockId, compIdx }
 
   function buildInitialBlocks(pageKey) {
     return (PAGE_TEMPLATES[pageKey] || []).map((tpl, idx) => ({
       id: tpl.id,
+      templateId: tpl.id,
       label: tpl.label,
       order: idx,
       widthPct: 100,
+      minHeightPx: 0,
       bgPreset: pageKey === "index" && tpl.id === "active-spotlight" ? "mist" : "default",
       hidden: false,
       imageUrl: "",
@@ -573,22 +640,18 @@
     if (draftRaw) {
       try {
         const parsed = JSON.parse(draftRaw);
-        const map = new Map(parsed.map((x) => [x.id, x]));
-        loaded = loaded.map((b, i) => ({ ...b, ...(map.get(b.id) || {}), order: map.get(b.id)?.order ?? i }));
-        loaded.sort((a, b) => a.order - b.order);
+        if (Array.isArray(parsed) && parsed.length) loaded = parsed;
       } catch {}
     } else if (db) {
       try {
         const snap = await getDoc(doc(db, "site_layouts", pageKey));
-        if (snap.exists() && Array.isArray(snap.data().blocks)) {
-          const map = new Map(snap.data().blocks.map((x) => [x.id, x]));
-          loaded = loaded.map((b, i) => ({ ...b, ...(map.get(b.id) || {}), order: map.get(b.id)?.order ?? i }));
-          loaded.sort((a, b) => a.order - b.order);
+        if (snap.exists() && Array.isArray(snap.data().blocks) && snap.data().blocks.length) {
+          loaded = snap.data().blocks;
         }
       } catch {}
     }
 
-    blocks = loaded;
+    blocks = loaded.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
     selectedBlockId = blocks[0]?.id || null;
     selectedNodeKey = null;
     selectedCompIndex = null;
@@ -606,26 +669,30 @@
     blocks.forEach((b, i) => { b.order = i; });
 
     $("mirror-stage").innerHTML = blocks.map((b, idx) => {
-      const tpl = templates.get(b.id);
+      const tpl = templates.get(b.templateId || b.id);
       const inner = tpl ? tpl.render(b) : "";
       const comps = Array.isArray(b.components) ? b.components : [];
       const compsHtml = comps.length
         ? `<div class="px-8 pb-6 space-y-3">
             ${comps.map((c, ci) => {
               const isSel = b.id === selectedBlockId && selectedCompIndex === ci;
+              const styleStr = `width:${c.widthPct || 100}%;${c.minHeightPx ? `min-height:${c.minHeightPx}px;` : ""}`;
               if (c.type === "photo") {
-                return `<div class="comp-item ${isSel ? "comp-selected" : ""}" data-comp-idx="${ci}" data-parent-block="${b.id}">
+                return `<div draggable="true" style="${styleStr}" class="comp-item ${isSel ? "comp-selected" : ""}" data-comp-idx="${ci}" data-parent-block="${b.id}">
+                  <span class="drag-handle mb-1 inline-block">⠿ Drag / Resize Photo</span>
                   ${c.content
-                    ? `<img src="${c.content}" alt="${c.title || "Photo"}" class="w-full max-h-64 object-cover border border-[#dcded9]" />`
+                    ? `<img src="${c.content}" alt="${c.title || "Photo"}" class="w-full max-h-72 object-cover border border-[#dcded9]" />`
                     : `<div class="border-2 border-dashed border-[#968d80] bg-[#f8f7f3] text-[#304b54] p-6 text-center text-xs font-bold">📷 Photo Slot — Paste image URL in the box above</div>`}
                 </div>`;
               }
               if (c.type === "button") {
-                return `<div class="comp-item inline-block mr-2 ${isSel ? "comp-selected" : ""}" data-comp-idx="${ci}" data-parent-block="${b.id}">
+                return `<div draggable="true" style="${styleStr}" class="comp-item inline-block mr-2 ${isSel ? "comp-selected" : ""}" data-comp-idx="${ci}" data-parent-block="${b.id}">
+                  <span class="drag-handle mr-1">⠿</span>
                   <button type="button" data-preview-btn="${b.id}:${ci}" class="bg-[#304b54] text-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider cursor-pointer">${c.title || "Action Button"}</button>
                 </div>`;
               }
-              return `<div class="comp-item ${isSel ? "comp-selected" : ""}" data-comp-idx="${ci}" data-parent-block="${b.id}">
+              return `<div draggable="true" style="${styleStr}" class="comp-item ${isSel ? "comp-selected" : ""}" data-comp-idx="${ci}" data-parent-block="${b.id}">
+                <span class="drag-handle mb-1 inline-block">⠿ Drag / Resize Text</span>
                 <p class="text-sm leading-7">${c.title || "Custom text block — edit words in the box above."}</p>
               </div>`;
             }).join("")}
@@ -633,17 +700,22 @@
         : "";
 
       const isSectionOnly = b.id === selectedBlockId && selectedNodeKey === null && selectedCompIndex === null;
+      const minH = Number(b.minHeightPx) > 0 ? `min-height:${b.minHeightPx}px;` : "";
       return `
-        <section class="mirror-section ${isSectionOnly ? "selected" : ""} ${b.hidden ? "is-hidden" : ""}"
+        <section draggable="true"
+                 class="mirror-section ${isSectionOnly ? "selected" : ""} ${b.hidden ? "is-hidden" : ""}"
                  data-block="${b.id}"
-                 style="width:${b.widthPct || 100}%;margin:0 auto;${BG_STYLES[b.bgPreset || "default"] || BG_STYLES.default}">
-          <span class="section-badge">${idx + 1}. ${b.label} (${b.widthPct || 100}%)</span>
+                 style="width:${b.widthPct || 100}%;${minH}margin:0 auto;${BG_STYLES[b.bgPreset || "default"] || BG_STYLES.default}">
+          <div class="section-toolbar-row">
+            <span class="section-badge">${idx + 1}. ${b.label} (${b.widthPct || 100}%)</span>
+            <span class="drag-handle" title="Drag to reorder & snap into place">⠿ Drag &amp; Snap</span>
+          </div>
           ${inner}
           ${compsHtml}
         </section>`;
     }).join("");
 
-    // Clicking any inline text node, added component, or section
+    // Selection + Drag-and-Snap Handlers
     $("mirror-stage").querySelectorAll("[data-block]").forEach((sec) => {
       sec.addEventListener("click", (e) => {
         const nodeEl = e.target.closest("[data-node-key]");
@@ -672,6 +744,87 @@
         renderMirror();
         syncControls();
       });
+
+      // Drag start on section
+      sec.addEventListener("dragstart", (e) => {
+        if (e.target.closest("[data-comp-idx]")) return;
+        dragState = { kind: "section", blockId: sec.dataset.block };
+        e.dataTransfer.effectAllowed = "move";
+      });
+
+      sec.addEventListener("dragover", (e) => {
+        if (!dragState || dragState.kind !== "section" || dragState.blockId === sec.dataset.block) return;
+        e.preventDefault();
+        sec.classList.add("drag-over-top");
+      });
+
+      sec.addEventListener("dragleave", () => sec.classList.remove("drag-over-top", "drag-over-bottom"));
+
+      sec.addEventListener("drop", (e) => {
+        e.preventDefault();
+        sec.classList.remove("drag-over-top", "drag-over-bottom");
+        if (!dragState) return;
+        if (dragState.kind === "section" && dragState.blockId !== sec.dataset.block) {
+          const fromIdx = blocks.findIndex((x) => x.id === dragState.blockId);
+          const toIdx = blocks.findIndex((x) => x.id === sec.dataset.block);
+          if (fromIdx > -1 && toIdx > -1) {
+            const [moved] = blocks.splice(fromIdx, 1);
+            blocks.splice(toIdx, 0, moved);
+            selectedBlockId = moved.id;
+            renderMirror();
+            $("studio-status").textContent = "Snapped section into new position";
+          }
+        } else if (dragState.kind === "comp") {
+          // Allow snapping a component into another section
+          const srcBlock = blocks.find((x) => x.id === dragState.blockId);
+          const dstBlock = blocks.find((x) => x.id === sec.dataset.block);
+          if (srcBlock && dstBlock && srcBlock !== dstBlock && srcBlock.components?.[dragState.compIdx]) {
+            const [movedComp] = srcBlock.components.splice(dragState.compIdx, 1);
+            dstBlock.components = dstBlock.components || [];
+            dstBlock.components.push(movedComp);
+            selectedBlockId = dstBlock.id;
+            selectedCompIndex = dstBlock.components.length - 1;
+            renderMirror();
+            $("studio-status").textContent = "Moved component into section";
+          }
+        }
+        dragState = null;
+      });
+    });
+
+    // Drag-and-snap for inner components
+    $("mirror-stage").querySelectorAll("[data-comp-idx]").forEach((compEl) => {
+      compEl.addEventListener("dragstart", (e) => {
+        e.stopPropagation();
+        dragState = { kind: "comp", blockId: compEl.dataset.parentBlock, compIdx: Number(compEl.dataset.compIdx) };
+        e.dataTransfer.effectAllowed = "move";
+      });
+      compEl.addEventListener("dragover", (e) => {
+        if (dragState?.kind === "comp") {
+          e.preventDefault();
+          compEl.classList.add("drag-over-top");
+        }
+      });
+      compEl.addEventListener("dragleave", () => compEl.classList.remove("drag-over-top"));
+      compEl.addEventListener("drop", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        compEl.classList.remove("drag-over-top");
+        if (dragState?.kind !== "comp") return;
+        const srcBlock = blocks.find((x) => x.id === dragState.blockId);
+        const dstBlock = blocks.find((x) => x.id === compEl.dataset.parentBlock);
+        const toIdx = Number(compEl.dataset.compIdx);
+        if (srcBlock && dstBlock && srcBlock.components?.[dragState.compIdx]) {
+          const [moved] = srcBlock.components.splice(dragState.compIdx, 1);
+          dstBlock.components = dstBlock.components || [];
+          dstBlock.components.splice(toIdx, 0, moved);
+          selectedBlockId = dstBlock.id;
+          selectedCompIndex = toIdx;
+          renderMirror();
+          $("studio-status").textContent = "Snapped component into place";
+        }
+        dragState = null;
+      });
     });
 
     $("mirror-stage").querySelectorAll("[data-preview-btn]").forEach((btn) => {
@@ -693,19 +846,24 @@
       $("selected-type-badge").textContent = "Text Element";
       $("inp-text").value = (b.textOverrides && b.textOverrides[selectedNodeKey] !== undefined) ? b.textOverrides[selectedNodeKey] : clickedText;
       $("inp-link").value = "";
+      $("inp-width").value = String(b.widthPct || 100);
+      $("inp-height").value = b.minHeightPx || "";
     } else if (selectedCompIndex !== null && b.components?.[selectedCompIndex]) {
       const c = b.components[selectedCompIndex];
       $("selected-label").textContent = `${b.label} → ${c.type.toUpperCase()} #${selectedCompIndex + 1}`;
       $("selected-type-badge").textContent = c.type;
       $("inp-text").value = c.type === "photo" ? (c.content || "") : (c.title || "");
       $("inp-link").value = c.content || "";
+      $("inp-width").value = String(c.widthPct || 100);
+      $("inp-height").value = c.minHeightPx || "";
     } else {
       $("selected-label").textContent = b.label;
       $("selected-type-badge").textContent = "Section";
       $("inp-text").value = b.imageUrl || "";
       $("inp-link").value = "";
+      $("inp-width").value = String(b.widthPct || 100);
+      $("inp-height").value = b.minHeightPx || "";
     }
-    $("inp-width").value = String(b.widthPct || 100);
     $("inp-bg").value = b.bgPreset || "default";
   }
 
@@ -732,11 +890,19 @@
     renderMirror();
   });
 
-  ["inp-width", "inp-bg"].forEach((id) => {
+  ["inp-width", "inp-height", "inp-bg"].forEach((id) => {
     $(id).addEventListener("input", () => {
       const b = currentBlock();
       if (!b) return;
-      b.widthPct = Number($("inp-width").value) || 100;
+      const wVal = Number($("inp-width").value) || 100;
+      const hVal = Math.max(0, Number($("inp-height").value) || 0);
+      if (selectedCompIndex !== null && b.components?.[selectedCompIndex]) {
+        b.components[selectedCompIndex].widthPct = wVal;
+        b.components[selectedCompIndex].minHeightPx = hVal;
+      } else {
+        b.widthPct = wVal;
+        b.minHeightPx = hVal;
+      }
       b.bgPreset = $("inp-bg").value || "default";
       renderMirror();
     });
@@ -769,11 +935,37 @@
     renderMirror();
   });
 
+  // Copy / Duplicate selected component or section
+  $("tb-duplicate").addEventListener("click", () => {
+    const b = currentBlock();
+    if (!b) return;
+    if (selectedCompIndex !== null && b.components?.[selectedCompIndex]) {
+      const copy = JSON.parse(JSON.stringify(b.components[selectedCompIndex]));
+      b.components.splice(selectedCompIndex + 1, 0, copy);
+      selectedCompIndex += 1;
+      renderMirror();
+      syncControls();
+      $("studio-status").textContent = "✓ Duplicated component";
+    } else {
+      const idx = blocks.findIndex((x) => x.id === selectedBlockId);
+      if (idx < 0) return;
+      const copyBlock = JSON.parse(JSON.stringify(b));
+      copyBlock.templateId = b.templateId || b.id;
+      copyBlock.id = `${copyBlock.templateId}_copy_${Date.now().toString(36)}`;
+      copyBlock.label = `${b.label} (Copy)`;
+      blocks.splice(idx + 1, 0, copyBlock);
+      selectedBlockId = copyBlock.id;
+      renderMirror();
+      syncControls();
+      $("studio-status").textContent = "✓ Duplicated section block";
+    }
+  });
+
   function appendComponent(comp) {
     const b = currentBlock();
     if (!b) return;
     b.components = b.components || [];
-    b.components.push(comp);
+    b.components.push({ widthPct: 100, minHeightPx: 0, ...comp });
     selectedNodeKey = null;
     selectedCompIndex = b.components.length - 1;
     renderMirror();
@@ -804,6 +996,10 @@
     } else if (selectedNodeKey) {
       b.textOverrides = b.textOverrides || {};
       b.textOverrides[selectedNodeKey] = "";
+    } else if (b.id.includes("_copy_")) {
+      const idx = blocks.findIndex((x) => x.id === b.id);
+      if (idx > -1) blocks.splice(idx, 1);
+      selectedBlockId = blocks[0]?.id || null;
     } else {
       b.hidden = !b.hidden;
     }
@@ -855,7 +1051,7 @@
     });
   });
 
-  // --- CLOUDINARY UPLOAD + FIRESTORE + GITHUB AUTO-COMMIT ---
+  // --- CLOUDINARY UPLOAD + FIRESTORE + ROBUST GITHUB AUTO-COMMIT ---
   const folderFor = (d) => `talani/${d.category === "Trails" ? "trails" : d.category === "Hikes" ? "hikes" : "multi-day"}/${d.id}`;
   $("cld-dest").innerHTML = [
     ...ITINERARY_DATA.map((d) => `<option value="${d.id}" data-folder="${folderFor(d)}">${d.title} (${d.category})</option>`),
@@ -890,13 +1086,33 @@
     const startIdx = decoded.indexOf(marker) !== -1 ? decoded.indexOf(marker) : decoded.indexOf(altMarker);
     if (startIdx === -1) throw new Error(`Destination "${destId}" not found in itinerary-data.js`);
 
-    const photosKeyIdx = decoded.indexOf("photos:", startIdx);
-    const arrStart = decoded.indexOf("[", photosKeyIdx);
-    const arrEnd = decoded.indexOf("]", arrStart);
-    if (photosKeyIdx === -1 || arrStart === -1 || arrEnd === -1) throw new Error("Could not locate photos array");
+    const sub = decoded.slice(startIdx);
+    const keyMatch = sub.match(/["']?photos["']?\s*:/);
+    if (!keyMatch) throw new Error(`"photos" property not found for ${destId}`);
+
+    const valStart = startIdx + keyMatch.index + keyMatch[0].length;
+    const afterKey = decoded.slice(valStart);
+    const firstCharMatch = afterKey.match(/\S/);
+    if (!firstCharMatch) throw new Error("Empty photos value");
+
+    const openIdx = valStart + firstCharMatch.index;
+    const openChar = decoded[openIdx];
+    const closeChar = openChar === "[" ? "]" : openChar === "(" ? ")" : null;
+    if (!closeChar) throw new Error(`Unexpected photos format starting with ${openChar}`);
+
+    let depth = 0;
+    let endIdx = -1;
+    for (let i = openIdx; i < decoded.length; i++) {
+      if (decoded[i] === openChar) depth++;
+      else if (decoded[i] === closeChar) {
+        depth--;
+        if (depth === 0) { endIdx = i; break; }
+      }
+    }
+    if (endIdx === -1) throw new Error("Unclosed photos expression");
 
     const formattedPhotos = JSON.stringify(photosArray, null, 2);
-    const updatedSource = decoded.slice(0, arrStart) + formattedPhotos + decoded.slice(arrEnd + 1);
+    const updatedSource = decoded.slice(0, openIdx) + formattedPhotos + decoded.slice(endIdx + 1);
     const encoded = btoa(unescape(encodeURIComponent(updatedSource)));
 
     const putRes = await fetch(apiUrl, {
@@ -922,18 +1138,12 @@
 
     try {
       for (const file of files) {
-        const fd = new FormData();
-        fd.append("file", file);
-        fd.append("upload_preset", UPLOAD_PRESET);
-        fd.append("folder", folder);
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: "POST", body: fd });
-        if (!res.ok) throw new Error(`Cloudinary error ${res.status}`);
-        const data = await res.json();
+        const up = await uploadToCloudinary(file, folder);
         uploaded.push({
-          url: data.secure_url,
+          url: up.url,
           caption: file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ")
         });
-        $("cld-thumbs").innerHTML += `<img src="${data.secure_url}" alt="${file.name}" />`;
+        $("cld-thumbs").innerHTML += `<img src="${up.url}" alt="${file.name}" />`;
       }
 
       $("cld-json").value = JSON.stringify(uploaded, null, 2);
@@ -960,11 +1170,101 @@
     }
   });
 
-  // --- ACTIVE TRIPS, STORIES, REELS & CLOSED-LOOP LEADS ---
+  // --- GOOGLE FORM APPS SCRIPT + STANDALONE DOWNLOADABLE FORM GENERATOR ---
+  $("gen-gs-btn").addEventListener("click", () => {
+    const tripTitle = $("t-title").value.trim() || "Talani Active Departure";
+    const fields = $("t-form-fields").value.split(",").map((s) => s.trim()).filter(Boolean);
+    const scriptText = `// Paste into script.google.com and run setupTalaniForm()
+// Auto-creates the Google Form AND syncs direct Google Form signups into Firestore leads!
+function setupTalaniForm() {
+  var form = FormApp.create(${JSON.stringify(tripTitle + " — Registration")});
+  form.setDescription("Talani Adventures official booking form.");
+${fields.map((f) => `  form.addTextItem().setTitle(${JSON.stringify(f)}).setRequired(true);`).join("\n")}
+
+  ScriptApp.newTrigger("onTalaniFormSubmit")
+    .forForm(form)
+    .onFormSubmit()
+    .create();
+
+  Logger.log("Customer Google Form URL: " + form.getPublishedUrl());
+  Logger.log("Form Action Endpoint: " + form.getPublishedUrl().replace("/viewform", "/formResponse"));
+}
+
+function onTalaniFormSubmit(e) {
+  var responses = e.response.getItemResponses();
+  var answers = {};
+  responses.forEach(function(r) {
+    answers[r.getItem().getTitle()] = r.getResponse();
+  });
+
+  var firestoreUrl = "https://firestore.googleapis.com/v1/projects/talani-adventures/databases/(default)/documents/leads";
+  var payload = {
+    fields: {
+      tripName: { stringValue: ${JSON.stringify(tripTitle)} },
+      name: { stringValue: String(answers["Full Name"] || Object.values(answers)[0] || "Google Form Guest") },
+      phone: { stringValue: String(answers["WhatsApp Phone"] || Object.values(answers)[1] || "") },
+      pax: { integerValue: String(parseInt(answers["Number of Slots (Pax)"] || "1", 10) || 1) },
+      aiSummary: { stringValue: "Google Form Signup: " + JSON.stringify(answers) },
+      status: { stringValue: "GOOGLE_FORM_LEAD" },
+      source: { stringValue: "google-form-trigger" }
+    }
+  };
+  UrlFetchApp.fetch(firestoreUrl, {
+    method: "post",
+    contentType: "application/json",
+    payload: JSON.stringify(payload)
+  });
+}`;
+    $("gs-output").value = scriptText;
+    $("gs-output").classList.remove("hidden");
+    $("studio-status").textContent = "✓ Generated Google Apps Script";
+  });
+
+  $("dl-form-btn").addEventListener("click", () => {
+    const tripTitle = $("t-title").value.trim() || "Talani Active Departure";
+    const fields = $("t-form-fields").value.split(",").map((s) => s.trim()).filter(Boolean);
+    const standalone = `<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${tripTitle} — Registration Form</title>
+<style>body{font-family:sans-serif;background:#f8f7f3;color:#304b54;max-width:560px;margin:32px auto;padding:20px}
+.card{background:#fff;border:1px solid #dcded9;padding:24px}label{display:block;font-size:12px;font-weight:700;margin:12px 0 4px}
+input{width:100%;padding:10px;border:1px solid #dcded9;background:#f8f7f3;box-sizing:border-box}
+button{margin-top:18px;width:100%;padding:13px;background:#304b54;color:#fff;border:0;font-weight:700;cursor:pointer}</style></head>
+<body><div class="card"><h2>${tripTitle}</h2><p>Fill in your details to reserve your slot.</p>
+<form id="f">${fields.map((f, idx) => `<label>${f}</label><input name="field_${idx}" data-label="${f.replace(/"/g, "&quot;")}" required />`).join("")}
+<button type="submit">Submit Booking</button><p id="st"></p></form></div>
+<script>
+document.getElementById("f").addEventListener("submit", async function(e){
+  e.preventDefault();
+  const data = {};
+  this.querySelectorAll("input").forEach(i => data[i.dataset.label] = i.value);
+  await fetch("https://firestore.googleapis.com/v1/projects/talani-adventures/databases/(default)/documents/leads", {
+    method: "POST", headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ fields: {
+      tripName: { stringValue: ${JSON.stringify(tripTitle)} },
+      name: { stringValue: data["Full Name"] || Object.values(data)[0] || "Guest" },
+      phone: { stringValue: data["WhatsApp Phone"] || Object.values(data)[1] || "" },
+      aiSummary: { stringValue: JSON.stringify(data) },
+      status: { stringValue: "STANDALONE_FORM_LEAD" }
+    }})
+  });
+  document.getElementById("st").textContent = "Submitted! Our team will reach out shortly.";
+  this.reset();
+});
+<\/script></body></html>`;
+    const blob = new Blob([standalone], { type: "text/html" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `${tripTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-form.html`;
+    a.click();
+  });
+
+  // --- ACTIVE TRIPS, STORIES (DEVICE UPLOAD OR URL), REELS & LEADS ---
   $("trip-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!db) return;
     const title = $("t-title").value.trim();
+    const customFields = $("t-form-fields").value.split(",").map((s) => s.trim()).filter(Boolean);
     const docRef = await addDoc(collection(db, "trips"), {
       brand: $("t-brand").value,
       title,
@@ -981,6 +1281,7 @@
       packageIncludes: $("t-package").value.trim(),
       packChecklist: $("t-packlist").value.trim(),
       cancellationPolicy: $("t-policy").value.trim(),
+      customFormFields: customFields,
       googleFormActionUrl: $("t-form-action").value.trim(),
       formUrl: `./active-trip.html?trip=${encodeURIComponent(title)}`,
       createdAt: serverTimestamp()
@@ -993,9 +1294,22 @@
   $("story-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!db) return;
+    let mediaUrl = $("s-media").value.trim();
+    let mediaType = "image";
+    const file = $("s-file").files?.[0];
+    if (file) {
+      $("studio-status").textContent = "Uploading story media...";
+      const up = await uploadToCloudinary(file, "talani/stories");
+      mediaUrl = up.url;
+      mediaType = up.isVideo ? "video" : "image";
+    } else if (/\.(mp4|webm|mov)(\?|$)/i.test(mediaUrl)) {
+      mediaType = "video";
+    }
+    if (!mediaUrl) { $("studio-status").textContent = "Choose a file or paste a URL."; return; }
     await addDoc(collection(db, "stories"), {
       label: $("s-label").value.trim(),
-      mediaUrl: $("s-media").value.trim(),
+      mediaUrl,
+      mediaType,
       caption: $("s-caption").value.trim(),
       createdAt: serverTimestamp()
     });
@@ -1006,9 +1320,18 @@
   $("post-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!db) return;
-    const webUrl = $("p-web").value.trim();
+    let webUrl = $("p-web").value.trim();
+    let postType = $("p-type").value;
+    const file = $("p-file").files?.[0];
+    if (file) {
+      $("studio-status").textContent = "Uploading memory / reel...";
+      const up = await uploadToCloudinary(file, "talani/memories");
+      webUrl = up.url;
+      postType = up.isVideo ? "video" : "image";
+    }
+    if (!webUrl) { $("studio-status").textContent = "Choose a file or paste a URL."; return; }
     await addDoc(collection(db, "posts"), {
-      type: $("p-type").value,
+      type: postType,
       webUrl,
       rawUrl: $("p-raw").value.trim() || webUrl,
       caption: $("p-caption").value.trim(),
