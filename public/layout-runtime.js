@@ -1,4 +1,4 @@
-// Shared runtime for applying published Studio layouts, text overrides, added components & Cloudinary media
+// Shared Navigation & Published Layout Runtime for all Talani Adventures pages
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -33,6 +33,39 @@ export function safeActionUrl(value) {
     return parsed.protocol === "https:" || parsed.protocol === "http:" ? parsed.href : null;
   } catch {
     return null;
+  }
+}
+
+// Unified Navigation Bar injected across ALL pages automatically
+export function syncUnifiedNavigation(activePageKey = "") {
+  const topActions = document.querySelector(".header-actions");
+  if (topActions && !topActions.querySelector('a[href="./studio.html"]')) {
+    const studioBtn = document.createElement("a");
+    studioBtn.href = "./studio.html";
+    studioBtn.className = "border border-[#304b54] bg-[#304b54] px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90";
+    studioBtn.textContent = "Studio ↗";
+    topActions.appendChild(studioBtn);
+  }
+
+  const subnav = document.querySelector(".subnav-strip");
+  if (!subnav) return;
+
+  const navItems = [
+    { key: "index", href: "./index.html", label: "Overview" },
+    { key: "active-trip", href: "./active-trip.html", label: "Active Trips & Booking" },
+    { key: "group-ya-ile-kitu", href: "./group-ya-ile-kitu.html", label: "Group ya Ile Kitu" },
+    { key: "outdoor-adventures", href: "./outdoor-adventures.html", label: "Outdoor Adventures" },
+    { key: "talani-adventures", href: "./talani-adventures.html", label: "Hikes & Trails" },
+    { key: "adamanti", href: "./adamanti.html", label: "Adamanti (Coming Soon)" },
+    { key: "talani-premium", href: "./talani-premium.html", label: "Talani Premium" }
+  ];
+
+  // Only replace if it's a customer page link strip (not Studio's <button> tabs)
+  if (subnav.querySelector("a.subnav-link")) {
+    subnav.innerHTML = navItems.map((item) => {
+      const isCurrent = item.key === activePageKey || window.location.pathname.endsWith(`${item.key}.html`);
+      return `<a class="subnav-link${isCurrent ? " active" : ""}" href="${item.href}">${item.label}</a>`;
+    }).join("");
   }
 }
 
@@ -119,7 +152,6 @@ function renderCustomComponents(sectionEl, components = [], legacyButtons = []) 
       return;
     }
 
-    // Text component
     btnRow = null;
     const textVal = String(comp.title || comp.content || "").trim();
     if (!textVal) return;
@@ -133,7 +165,6 @@ function renderCustomComponents(sectionEl, components = [], legacyButtons = []) 
   targetContainer.appendChild(wrap);
 }
 
-// Merge live Firestore destination_media/{id} Cloudinary photos onto ITINERARY_DATA
 export async function hydrateDestinationMedia(itineraryArray) {
   if (!Array.isArray(itineraryArray)) return itineraryArray;
   try {
@@ -157,6 +188,8 @@ export async function hydrateDestinationMedia(itineraryArray) {
 }
 
 export async function applyPublishedLayout(pageKey) {
+  syncUnifiedNavigation(pageKey);
+
   try {
     const db = getDb();
     const snap = await getDoc(doc(db, "site_layouts", pageKey));
@@ -172,16 +205,28 @@ export async function applyPublishedLayout(pageKey) {
       sectionMap.set(el.dataset.blockId, el);
     });
 
+    // Only reorder sections that were actually included in the Studio layout so un-mirrored sections don't jump awkwardly
     const ordered = [...blocks].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
     ordered.forEach((cfg) => {
       const el = sectionMap.get(cfg.id);
       if (!el) return;
 
       el.style.display = cfg.hidden ? "none" : "";
-      const widthPct = Math.min(100, Math.max(40, Number(cfg.widthPct) || 100));
-      el.style.maxWidth = widthPct < 100 ? `${widthPct}%` : "";
-      el.style.marginLeft = widthPct < 100 ? "auto" : "";
-      el.style.marginRight = widthPct < 100 ? "auto" : "";
+
+      // Prevent warping: keep full-bleed background wrappers full-width and constrain inner container if widthPct < 100
+      const widthPct = Math.min(100, Math.max(50, Number(cfg.widthPct) || 100));
+      const innerContainer = el.querySelector(":scope > .max-w-7xl") || el;
+      if (widthPct < 100) {
+        innerContainer.style.maxWidth = `${widthPct}%`;
+        innerContainer.style.marginLeft = "auto";
+        innerContainer.style.marginRight = "auto";
+      } else {
+        innerContainer.style.maxWidth = "";
+      }
+
+      if (Number(cfg.minHeightPx) > 0) {
+        el.style.minHeight = `${Number(cfg.minHeightPx)}px`;
+      }
 
       if (cfg.bgPreset && BG_MAP[cfg.bgPreset]) {
         el.style.backgroundColor = BG_MAP[cfg.bgPreset].bg;
