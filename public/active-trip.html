@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Active Departure &amp; Booking — Talani Adventures</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#304b54;--stone:#968d80;--paper:#f8f7f3;--line:#dcded9;--mist:#e9eeec}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;width:100%;font-family:Raleway,sans-serif;color:var(--ink);background:var(--paper)}
+    .display{font-family:Fraunces,serif}
+    .eyebrow{letter-spacing:.23em;text-transform:uppercase}
+    :is(a,button,input,select,textarea):focus-visible{outline:3px solid #ad8970;outline-offset:3px}
+    .sticky-header{position:sticky;top:0;z-index:30;background:rgba(248,247,243,.97);backdrop-filter:blur(14px)}
+    .header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .header-brand{display:flex;align-items:center;gap:12px;min-width:0}
+    .header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .subnav-strip{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:10px 0}
+    .subnav-strip::-webkit-scrollbar{display:none}
+    .subnav-link{flex:none;font-size:12px;font-weight:700;color:var(--ink);text-decoration:none;padding:8px 14px;border:1px solid var(--line);background:white;white-space:nowrap}
+    .subnav-link.active,.subnav-link:hover{border-color:var(--ink);background:var(--mist)}
+    .slot-badge{background:#e5eee8;color:#315d4d;padding:7px 11px;font-size:11px;font-weight:800;white-space:nowrap}
+    @media(max-width:767px){.header-actions{width:100%;justify-content:flex-start}}
+  </style>
+  <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
+</head>
+<body class="w-full" style="background: rgb(248, 247, 243);">
+  <header class="sticky-header w-full border-b border-[#dcded9]">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 py-3 header-top">
+      <div class="header-brand">
+        <a href="./index.html" aria-label="Talani Adventures home" class="shrink-0">
+          <img class="w-12 h-12 md:w-14 md:h-14 object-contain" loading="lazy" src="../IMG-20261110-WA0045.jpg" alt="Talani Adventures logo">
+        </a>
+        <div class="min-w-0">
+          <p class="display font-medium leading-tight text-[#304b54] text-lg md:text-xl">Talani Adventures</p>
+          <p class="text-[11px] tracking-wide text-[#968d80] font-semibold">Active Departure &amp; Booking Portal</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a id="top-wa-channel" href="https://whatsapp.com/channel/0029Vb6x" target="_blank" rel="noopener noreferrer" class="border border-[#dcded9] bg-white px-3 py-1.5 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">WhatsApp Channel ↗</a>
+        <a href="./index.html" class="border border-[#304b54] bg-[#304b54] px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90">← Back to Overview</a>
+      </div>
+    </div>
+    <div class="border-t border-[#e6e8e3] bg-[#f8f7f3]">
+      <div class="max-w-7xl mx-auto px-6 md:px-10 subnav-strip">
+        <a class="subnav-link" href="./index.html">Overview</a>
+        <a class="subnav-link" href="./group-ya-ile-kitu.html">Group ya Ile Kitu</a>
+        <a class="subnav-link" href="./outdoor-adventures.html">Outdoor Adventures</a>
+        <a class="subnav-link" href="./talani-adventures.html">Hikes &amp; Trails</a>
+        <a class="subnav-link" href="./adamanti.html">Adamanti (Coming Soon)</a>
+        <a class="subnav-link" href="./talani-premium.html">Talani Premium</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 md:px-10 py-10 md:py-16 space-y-12">
+    <!-- SECTION 1: TRIP OVERVIEW & ONE-TAP WHATSAPP -->
+    <section data-block-id="trip-overview" class="grid lg:grid-cols-[1.05fr_.95fr] gap-8 items-start">
+      <div class="space-y-5">
+        <div class="flex flex-wrap items-center gap-3">
+          <span id="trip-eyebrow" data-node-key="at_eyebrow" class="eyebrow text-xs font-bold text-[#968d80]">Active Departure • 5 December 2026</span>
+          <span id="trip-slots" class="slot-badge">18 slots left</span>
+        </div>
+        <h1 id="trip-title" data-node-key="at_title" class="display text-3xl md:text-5xl leading-[1.1] text-[#304b54]">Gatamaiyu Forest Reserve Hike</h1>
+        <p id="trip-meta" data-node-key="at_meta" class="text-xs md:text-sm font-bold bg-[#e9eeec] border-l-2 border-[#304b54] px-4 py-3 text-[#304b54]">
+          Distance: 10 km • Total Price: KSh 3,000 • Non-refundable Deposit: KSh 1,800 • Deadline: Dec 2, 2026
+        </p>
+        <p id="trip-package" data-node-key="at_package" class="text-sm leading-7 text-[#52636a]">
+          Package Includes: Round-trip transport from Nairobi CBD, KFS forest entry &amp; guide fees, trail snacks &amp; drinking water, standby emergency support, and photography.
+        </p>
+        <p id="trip-payment-mode" class="text-xs font-bold text-[#304b54]">Payment Mode: M-Pesa Till / Paybill (details shared on confirmation or via WhatsApp)</p>
+
+        <!-- ONE-TAP WHATSAPP BOOKING, CHANNEL & CALL/TEXT -->
+        <div class="flex flex-wrap gap-3 pt-2">
+          <a id="wa-book-btn" href="#" target="_blank" rel="noopener noreferrer" class="bg-[#304b54] text-white px-6 py-3.5 text-xs font-bold uppercase tracking-wider hover:opacity-85">
+            One-Tap WhatsApp Booking ↗
+          </a>
+          <a id="wa-channel-btn" href="https://whatsapp.com/channel/0029Vb6x" target="_blank" rel="noopener noreferrer" class="border border-[#304b54] bg-white text-[#304b54] px-5 py-3.5 text-xs font-bold uppercase tracking-wider hover:bg-[#e9eeec]">
+            Join WhatsApp Channel ↗
+          </a>
+          <a id="call-inquiry-btn" href="tel:+254700000000" class="border border-[#dcded9] bg-white text-[#304b54] px-5 py-3.5 text-xs font-bold uppercase tracking-wider hover:bg-[#e9eeec]">
+            Call / Text Inquiries
+          </a>
+        </div>
+      </div>
+
+      <div class="border border-[#dcded9] bg-white overflow-hidden">
+        <img id="trip-cover" src="https://images.pexels.com/photos/145685/pexels-photo-145685.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Trip cover" class="w-full h-72 md:h-80 object-cover" />
+        <div class="p-4 bg-[#f8f7f3] border-t border-[#dcded9] flex flex-wrap justify-between gap-2 text-xs font-semibold text-[#52636a]">
+          <span id="trip-price-box">Total: KSh 3,000</span>
+          <span id="trip-deposit-box">Deposit: KSh 1,800</span>
+          <span id="trip-deadline-box">Deadline: Dec 2, 2026</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: WHAT TO PACK CHECKLIST & CANCELLATION POLICY FAQ -->
+    <section data-block-id="trip-checklist-faq" class="grid md:grid-cols-2 gap-6">
+      <div class="bg-white border border-[#dcded9] p-6 md:p-8">
+        <p class="eyebrow text-[10px] font-bold text-[#968d80] mb-2">Excursion Readiness</p>
+        <h2 data-node-key="pack_title" class="display text-2xl text-[#304b54] mb-4">What to Pack Checklist</h2>
+        <ul id="pack-list" class="space-y-2 text-sm text-[#52636a]"></ul>
+      </div>
+
+      <div class="bg-white border border-[#dcded9] p-6 md:p-8">
+        <p class="eyebrow text-[10px] font-bold text-[#968d80] mb-2">Terms &amp; FAQ</p>
+        <h2 data-node-key="faq_title" class="display text-2xl text-[#304b54] mb-4">Cancellation &amp; Replacement Policy</h2>
+        <p id="policy-text" data-node-key="faq_body" class="text-sm leading-7 text-[#52636a]">
+          Deposits secure transport, guides, and park logistics and are non-refundable within 72 hours of departure. If your plans change, you may transfer your slot to a replacement guest before the manifest closes—just notify us on WhatsApp.
+        </p>
+      </div>
+    </section>
+
+    <!-- SECTION 3: CLOSED-LOOP BOOKING FORM & PAYMENT CONFIRMATION PORTAL -->
+    <section data-block-id="trip-booking-loop" class="grid lg:grid-cols-2 gap-8">
+      <!-- STEP A: MASKED GOOGLE FORM / COMPANION APP REGISTRATION -->
+      <div class="bg-white border border-[#dcded9] p-6 md:p-8">
+        <p class="eyebrow text-[10px] font-bold text-[#968d80] mb-2">Step 1 · Reserve Slot</p>
+        <h2 data-node-key="form_title" class="display text-2xl text-[#304b54] mb-2">Guest Registration Form</h2>
+        <p data-node-key="form_sub" class="text-xs text-[#52636a] leading-6 mb-5">Fill in your details below to register your slot. Your submission notifies our companion app and syncs with our booking sheet.</p>
+
+        <form id="booking-form" class="space-y-4">
+          <div>
+            <label for="b-name" class="block text-xs font-bold uppercase tracking-wider mb-1">Full Name</label>
+            <input id="b-name" type="text" required placeholder="e.g., Amina Njoroge" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-2.5 text-sm" />
+          </div>
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div>
+              <label for="b-phone" class="block text-xs font-bold uppercase tracking-wider mb-1">WhatsApp Phone</label>
+              <input id="b-phone" type="tel" required placeholder="e.g., 0712 345 678" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-2.5 text-sm" />
+            </div>
+            <div>
+              <label for="b-pax" class="block text-xs font-bold uppercase tracking-wider mb-1">Slots (Pax)</label>
+              <input id="b-pax" type="number" min="1" value="1" required class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-2.5 text-sm" />
+            </div>
+          </div>
+          <div>
+            <label for="b-pickup" class="block text-xs font-bold uppercase tracking-wider mb-1">Pickup Point &amp; Emergency Contact</label>
+            <input id="b-pickup" type="text" required placeholder="e.g., Kencom CBD • Emergency: 07XX XXX XXX" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-2.5 text-sm" />
+          </div>
+          <button type="submit" class="w-full bg-[#304b54] text-white py-3.5 text-xs font-bold uppercase tracking-wider cursor-pointer hover:opacity-85">Submit Registration ↗</button>
+          <p id="booking-status" class="text-xs font-bold text-[#315d4d] min-h-[1.25rem]"></p>
+        </form>
+      </div>
+
+      <!-- STEP B: PAYMENT CONFIRMATION PORTAL (ROUTES TO ACCOUNTS APP) -->
+      <div class="bg-white border border-[#dcded9] p-6 md:p-8">
+        <p class="eyebrow text-[10px] font-bold text-[#968d80] mb-2">Step 2 · Confirm Payment</p>
+        <h2 class="display text-2xl text-[#304b54] mb-2">Submit M-Pesa Payment Confirmation</h2>
+        <p class="text-xs text-[#52636a] leading-6 mb-5">Already paid your deposit or full amount? Paste your M-Pesa transaction code below so our Accounts team can verify and post your receipt.</p>
+
+        <form id="payment-form" class="space-y-4">
+          <div>
+            <label for="p-phone" class="block text-xs font-bold uppercase tracking-wider mb-1">Phone Number Used to Book / Pay</label>
+            <input id="p-phone" type="tel" required placeholder="e.g., 0712 345 678" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-2.5 text-sm" />
+          </div>
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div>
+              <label for="p-code" class="block text-xs font-bold uppercase tracking-wider mb-1">M-Pesa Reference Code</label>
+              <input id="p-code" type="text" required placeholder="e.g., SL89K2M1P0" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-2.5 text-sm uppercase font-mono" />
+            </div>
+            <div>
+              <label for="p-amount" class="block text-xs font-bold uppercase tracking-wider mb-1">Amount Paid (KSh)</label>
+              <input id="p-amount" type="number" required placeholder="e.g., 1800" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-2.5 text-sm" />
+            </div>
+          </div>
+          <div>
+            <label for="p-raw-msg" class="block text-xs font-bold uppercase tracking-wider mb-1">Full M-Pesa SMS (Optional)</label>
+            <textarea id="p-raw-msg" rows="2" placeholder="Paste full M-Pesa confirmation message here..." class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-2 text-xs"></textarea>
+          </div>
+          <button type="submit" class="w-full border border-[#304b54] bg-[#e9eeec] text-[#304b54] py-3.5 text-xs font-bold uppercase tracking-wider cursor-pointer hover:bg-[#304b54] hover:text-white">Send Payment Confirmation ↗</button>
+          <p id="payment-status" class="text-xs font-bold text-[#315d4d] min-h-[1.25rem]"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="w-full border-t border-[#dcded9] mt-12">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 py-9 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+      <a href="./index.html" class="flex items-center gap-3">
+        <img class="w-16 h-16 object-contain" loading="lazy" src="../IMG-20261110-WA0046.jpg" alt="Talani Adventures footer logo">
+        <span class="text-xs text-[#6f7877]">Talani Adventures · Active Departure Portal</span>
+      </a>
+      <div class="flex flex-wrap gap-6 text-sm font-semibold text-[#304b54]">
+        <a href="./index.html" class="hover:underline">Overview</a>
+        <a href="./group-ya-ile-kitu.html" class="hover:underline">All Destinations</a>
+        <a href="./talani-adventures.html" class="hover:underline">Hikes &amp; Trails</a>
+        <a href="./talani-premium.html" class="hover:underline">Talani Premium</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+  import { applyPublishedLayout, getDb, safeActionUrl } from "./layout-runtime.js";
+  import { doc, getDoc, collection, addDoc, updateDoc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  await applyPublishedLayout("active-trip");
+
+  const $ = (id) => document.getElementById(id);
+  const params = new URLSearchParams(window.location.search);
+  const tripId = params.get("id");
+  const tripQueryTitle = params.get("trip");
+
+  let activeTrip = {
+    id: "gatamaiyu-dec-5",
+    title: "Gatamaiyu Forest Reserve Hike",
+    date: "5 December 2026",
+    price: 3000,
+    deposit: 1800,
+    slotsLeft: 18,
+    distance: "10 km • Moderate",
+    deadline: "Dec 2, 2026",
+    whatsappNumber: "254700000000",
+    whatsappChannelUrl: "https://whatsapp.com/channel/0029Vb6x",
+    paymentMode: "M-Pesa Till / Paybill",
+    coverUrl: "https://images.pexels.com/photos/145685/pexels-photo-145685.jpeg?auto=compress&cs=tinysrgb&w=1000",
+    packageIncludes: "Round-trip transport from Nairobi CBD, KFS forest entry & guide fees, trail snacks & drinking water, standby emergency support, and photography.",
+    packChecklist: "Sturdy grip hiking boots, 2L drinking water, Rain jacket / poncho, Warm fleece layer, Extra socks, ID / Passport",
+    cancellationPolicy: "Deposits secure transport, guides, and park logistics and are non-refundable within 72 hours of departure. If your plans change, you may transfer your slot to a replacement guest before the manifest closes.",
+    googleFormActionUrl: ""
+  };
+
+  let db = null;
+  try {
+    db = getDb();
+    if (tripId) {
+      const snap = await getDoc(doc(db, "trips", tripId));
+      if (snap.exists()) activeTrip = { ...activeTrip, id: snap.id, ...snap.data() };
+    } else if (tripQueryTitle) {
+      const q = query(collection(db, "trips"), where("title", "==", tripQueryTitle));
+      const snaps = await getDocs(q);
+      if (!snaps.empty) activeTrip = { ...activeTrip, id: snaps.docs[0].id, ...snaps.docs[0].data() };
+    }
+  } catch {}
+
+  function renderTripDetails() {
+    const fmt = (n) => Math.max(0, Number(n) || 0).toLocaleString("en-KE");
+    const dateLabel = activeTrip.date?.toDate?.().toLocaleDateString("en-KE", { day: "numeric", month: "long", year: "numeric" }) || activeTrip.date || "";
+
+    $("trip-eyebrow").textContent = `Active Departure • ${dateLabel}`;
+    $("trip-title").textContent = activeTrip.title;
+    $("trip-slots").textContent = `${fmt(activeTrip.slotsLeft)} slots left`;
+    $("trip-meta").textContent = `${activeTrip.distance ? `Distance: ${activeTrip.distance} • ` : ""}Total: KSh ${fmt(activeTrip.price)} • Non-refundable Deposit: KSh ${fmt(activeTrip.deposit)}${activeTrip.deadline ? ` • Deadline: ${activeTrip.deadline}` : ""}`;
+    if (activeTrip.packageIncludes) $("trip-package").textContent = `What's in the Package: ${activeTrip.packageIncludes}`;
+    if (activeTrip.paymentMode) $("trip-payment-mode").textContent = `Payment Mode: ${activeTrip.paymentMode}`;
+    if (safeActionUrl(activeTrip.coverUrl)) $("trip-cover").src = safeActionUrl(activeTrip.coverUrl);
+
+    $("trip-price-box").textContent = `Total: KSh ${fmt(activeTrip.price)}`;
+    $("trip-deposit-box").textContent = `Deposit: KSh ${fmt(activeTrip.deposit)}`;
+    $("trip-deadline-box").textContent = `Deadline: ${activeTrip.deadline || "Open"}`;
+
+    const cleanPhone = String(activeTrip.whatsappNumber || "254700000000").replace(/\D/g, "");
+    const prefillMsg = encodeURIComponent(`Hi Talani Adventures! I'd like to book a slot for the ${dateLabel} ${activeTrip.title}.`);
+    $("wa-book-btn").href = `https://wa.me/${cleanPhone}?text=${prefillMsg}`;
+    $("call-inquiry-btn").href = `tel:+${cleanPhone}`;
+
+    const chUrl = safeActionUrl(activeTrip.whatsappChannelUrl);
+    if (chUrl) {
+      $("wa-channel-btn").href = chUrl;
+      $("top-wa-channel").href = chUrl;
+    }
+
+    const items = String(activeTrip.packChecklist || "").split(/[\n,]+/).map((s) => s.trim()).filter(Boolean);
+    $("pack-list").innerHTML = items.map((it) => `<li class="flex items-start gap-2"><span class="text-[#304b54] font-bold">✓</span><span>${it}</span></li>`).join("");
+
+    if (activeTrip.cancellationPolicy) $("policy-text").textContent = activeTrip.cancellationPolicy;
+  }
+
+  renderTripDetails();
+
+  let lastLeadDocId = null;
+
+  $("booking-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const status = $("booking-status");
+    const name = $("b-name").value.trim();
+    const phone = $("b-phone").value.trim();
+    const pax = Math.max(1, Number($("b-pax").value) || 1);
+    const pickup = $("b-pickup").value.trim();
+
+    status.textContent = "Submitting registration...";
+    try {
+      if (db) {
+        const ref = await addDoc(collection(db, "leads"), {
+          tripId: activeTrip.id,
+          tripName: activeTrip.title,
+          name,
+          phone,
+          pax,
+          notes: `Pickup/Emergency: ${pickup}`,
+          aiSummary: `Active Trip Registration • ${pax} pax • ${pickup}`,
+          status: "REGISTERED_AWAITING_PAYMENT",
+          source: "active-trip-portal",
+          createdAt: serverTimestamp()
+        });
+        lastLeadDocId = ref.id;
+      }
+
+      // Optional dual-sync to Google Form formResponse endpoint if configured in Studio
+      const gfUrl = safeActionUrl(activeTrip.googleFormActionUrl);
+      if (gfUrl) {
+        const fd = new FormData();
+        fd.append("entry.name", name);
+        fd.append("entry.phone", phone);
+        fd.append("entry.pax", String(pax));
+        fd.append("entry.notes", `${activeTrip.title} | ${pickup}`);
+        fetch(gfUrl, { method: "POST", mode: "no-cors", body: fd }).catch(() => {});
+      }
+
+      $("p-phone").value = phone;
+      status.textContent = "✓ Registered! Proceed to Step 2 once you make your deposit/payment.";
+    } catch (err) {
+      status.textContent = "Could not register: " + err.message;
+    }
+  });
+
+  $("payment-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const status = $("payment-status");
+    const phone = $("p-phone").value.trim();
+    const mpesaCode = $("p-code").value.trim().toUpperCase();
+    const amountPaid = Number($("p-amount").value) || 0;
+    const rawSms = $("p-raw-msg").value.trim();
+
+    if (!db) {
+      status.textContent = "Connect Firebase to route payment confirmations.";
+      return;
+    }
+
+    status.textContent = "Sending confirmation to Accounts...";
+    try {
+      if (lastLeadDocId) {
+        await updateDoc(doc(db, "leads", lastLeadDocId), {
+          mpesaCode,
+          amountPaid,
+          rawMpesaSms: rawSms,
+          status: "PAYMENT_SUBMITTED",
+          paymentSubmittedAt: serverTimestamp()
+        });
+      } else {
+        await addDoc(collection(db, "leads"), {
+          tripId: activeTrip.id,
+          tripName: activeTrip.title,
+          name: "Payment Confirmation",
+          phone,
+          pax: 1,
+          mpesaCode,
+          amountPaid,
+          rawMpesaSms: rawSms,
+          aiSummary: `M-Pesa ${mpesaCode} • KSh ${amountPaid}`,
+          status: "PAYMENT_SUBMITTED",
+          source: "payment-portal",
+          createdAt: serverTimestamp()
+        });
+      }
+      $("payment-form").reset();
+      status.textContent = `✓ Payment (${mpesaCode}) sent to Accounts for verification & receipt posting!`;
+    } catch (err) {
+      status.textContent = "Error sending payment confirmation: " + err.message;
+    }
+  });
+  </script>
+</body>
+</html>
