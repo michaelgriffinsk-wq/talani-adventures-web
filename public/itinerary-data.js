@@ -438,31 +438,11 @@ export const ITINERARY_DATA = [
       "Active Dec 5, 2026 Talani departure"
     ],
     "photos": [
-      {
-        "url": "https://images.pexels.com/photos/1671325/pexels-photo-1671325.jpeg?auto=compress&cs=tinysrgb&w=1000",
-        "caption": "Towering indigenous canopy inside Gatamaiyu Forest Reserve"
-      },
-      {
-        "url": "https://images.pexels.com/photos/210186/pexels-photo-210186.jpeg?auto=compress&cs=tinysrgb&w=1000",
-        "caption": "Gatamaiyu waterfall cascading into a forest pool"
-      },
-      {
-        "url": "https://images.pexels.com/photos/38136/pexels-photo-38136.jpeg?auto=compress&cs=tinysrgb&w=1000",
-        "caption": "Dense bamboo zone along the upper trail"
-      },
-      {
-        "url": "https://images.pexels.com/photos/145685/pexels-photo-145685.jpeg?auto=compress&cs=tinysrgb&w=1000",
-        "caption": "Shaded rainforest path beside the river"
-      },
-      {
-        "url": "https://images.pexels.com/photos/1179229/pexels-photo-1179229.jpeg?auto=compress&cs=tinysrgb&w=1000",
-        "caption": "Lush ferns and moss along the stream bank"
-      },
-      {
-        "url": "https://images.pexels.com/photos/358457/pexels-photo-358457.jpeg?auto=compress&cs=tinysrgb&w=1000",
-        "caption": "Clear mountain water flowing through the reserve"
-      }
-    ]
+  {
+    "url": "https://res.cloudinary.com/nx35scok/image/upload/v1795325384/talani/trails/gatamaiyu-forest-reserve/zlw6t7gvcxdllwjx2nmu.jpg",
+    "caption": "1000685571"
+  }
+]
   },
   {
     "id": "ngare-ndare-forest-blue-pools",
