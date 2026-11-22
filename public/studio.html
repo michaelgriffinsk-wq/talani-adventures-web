@@ -372,6 +372,20 @@
           </div>`
       },
       {
+        id: "stories",
+        label: "Field Dispatches / Latest Stories",
+        render: (b) => `
+          <div class="p-8 md:p-10">
+            ${ed(b, "st_eyebrow", "Field dispatches / latest stories", "p", "eyebrow text-xs font-bold mb-3 opacity-75 block")}
+            <div class="flex gap-4">
+              <div class="text-center w-20">
+                <div class="w-16 h-16 rounded-full mx-auto border-2 border-[#304b54] bg-[#e9eeec] flex items-center justify-center text-[10px] font-bold text-[#304b54]">Story</div>
+                <span class="text-[11px] font-bold block mt-1">Gatamaiyu</span>
+              </div>
+            </div>
+          </div>`
+      },
+      {
         id: "active-spotlight",
         label: "Active Tours, Hikes & Expeditions",
         render: (b) => `
@@ -443,6 +457,24 @@
                 ${ed(b, "rev2_author", "— Group ya Ile Kitu Guest", "p", "text-xs font-bold text-[#968d80] mt-2 block")}
               </div>
             </div>
+          </div>`
+      },
+      {
+        id: "memories",
+        label: "D-Day Memories & Reels",
+        render: (b) => `
+          <div class="p-8 md:p-10">
+            ${ed(b, "mem_eyebrow", "The moments that stay", "p", "eyebrow text-xs font-bold mb-2 opacity-75 block")}
+            ${ed(b, "mem_title", "D-Day Memories & Reels", "h2", "display text-2xl block")}
+          </div>`
+      },
+      {
+        id: "about",
+        label: "One Company. Many Horizons.",
+        render: (b) => `
+          <div class="p-8 md:p-10">
+            ${ed(b, "ab_eyebrow", "One company. Many horizons.", "p", "eyebrow text-xs font-bold mb-2 opacity-75 block")}
+            ${ed(b, "ab_title", "Built around real trails, clear planning, and shared moments.", "h2", "display text-2xl block")}
           </div>`
       }
     ],
