@@ -25,9 +25,15 @@
     .filter-pill{flex:none;border:1px solid #bfc9c5;border-radius:99px;background:transparent;color:var(--ink);padding:10px 17px;font-size:12px;font-weight:700;cursor:pointer}
     .filter-pill[aria-pressed=true]{background:var(--ink);color:white;border-color:var(--ink)}
     .dest-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:20px}
-    .dest-card{background:white;border:1px solid var(--line);overflow:hidden;display:flex;flex-direction:column;justify-content:space-between}
-    .photo-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line)}
-    .photo-strip img{width:100%;height:112px;object-fit:cover;display:block;cursor:pointer}
+    .dest-card{background:white;border:1px solid rgba(220,222,217,.75);overflow:hidden;display:flex;flex-direction:column;justify-content:space-between}
+    .swipe-shell{position:relative;overflow:hidden;border-bottom:1px solid rgba(220,222,217,.65);background:#e9eeec}
+    .swipe-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+    .swipe-track::-webkit-scrollbar{display:none}
+    .swipe-slide{flex:none;width:100%;scroll-snap-align:start;border-right:1px solid rgba(220,222,217,.55)}
+    .swipe-slide:last-child{border-right:0}
+    .swipe-slide img{width:100%;height:195px;object-fit:cover;display:block}
+    .swipe-counter{position:absolute;bottom:8px;right:8px;z-index:2;background:rgba(48,75,84,.82);color:#fff;padding:4px 8px;font-size:10px;font-weight:700;letter-spacing:.06em;pointer-events:none}
+    .swipe-slide img{cursor:pointer}
     .cat-tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#61767b;background:var(--mist);padding:5px 9px}
     .viewer{position:fixed;inset:0;z-index:60;background:rgba(25,39,42,.96);display:flex;align-items:center;justify-content:center;padding:22px;color:white}
     .viewer[hidden]{display:none}
@@ -69,7 +75,7 @@
     <section data-block-id="group-hero" class="max-w-3xl mb-12">
       <p class="eyebrow text-xs font-bold mb-4 text-[#968d80]">Group ya Ile Kitu · Full Destination Hub</p>
       <h1 class="display text-3xl md:text-5xl leading-[1.1] tracking-[-.04em] text-[#304b54]">Every destination in one place for group &amp; custom inquiries.</h1>
-      <p class="leading-8 mt-5 text-[#52636a] text-base">Curated for small groups, corporate teams, and families. Browse all destinations from our shared itinerary catalog and reach out about any destination.</p>
+      <p class="leading-8 mt-5 text-[#52636a] text-base">Curated for small groups, corporate teams, and families. Swipe across any destination card to browse up to 10 photos and reach out about any destination.</p>
       <div class="mt-6 border-l-2 border-[#968d80] bg-[#e9eeec] px-4 py-3 text-xs md:text-sm font-semibold text-[#304b54]">
         Group Tiers: 5% off (3–5 pax) • 7% off (5–7 pax) • 10% off (7–10 pax) • Custom quotes for larger corporate &amp; family groups.
       </div>
@@ -158,7 +164,7 @@
   </footer>
 
   <script type="module">
-  import { applyPublishedLayout, hydrateDestinationMedia, getDb } from "./layout-runtime.js";
+  import { applyPublishedLayout, hydrateDestinationMedia, renderSwipeCarousel, bindSwipeCounters, getDb } from "./layout-runtime.js";
   import { ITINERARY_DATA, getDestinationsByCategory } from "./itinerary-data.js";
   import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -167,12 +173,17 @@
   let activeCat = "ALL";
   const $ = (id) => document.getElementById(id);
 
-  $("lead-dest").innerHTML = ITINERARY_DATA
-    .map((d) => `<option value="${d.title.replace(/"/g, "&quot;")}">${d.title} (${d.category})</option>`)
-    .join("");
-
-  const preselectDest = new URLSearchParams(window.location.search).get("dest");
-  if (preselectDest) $("lead-dest").value = preselectDest;
+  function syncLeadDropdown() {
+    const prev = $("lead-dest").value;
+    $("lead-dest").innerHTML = ITINERARY_DATA
+      .filter((d) => !d.hidden)
+      .map((d) => `<option value="${d.title.replace(/"/g, "&quot;")}">${d.title} (${d.category})</option>`)
+      .join("");
+    const preselectDest = new URLSearchParams(window.location.search).get("dest");
+    if (prev) $("lead-dest").value = prev;
+    else if (preselectDest) $("lead-dest").value = preselectDest;
+  }
+  syncLeadDropdown();
 
   function openPhoto(url, cap) {
     $("photo-modal-img").src = url;
@@ -183,14 +194,12 @@
   $("photo-modal").addEventListener("click", (e) => { if (e.target === $("photo-modal")) $("photo-modal").hidden = true; });
 
   function renderCatalog() {
-    const filtered = getDestinationsByCategory(activeCat);
+    const filtered = getDestinationsByCategory(activeCat).filter((d) => !d.hidden);
     $("catalog-count").textContent = `${filtered.length} destinations`;
     $("catalog-grid").innerHTML = filtered.map((item) => `
       <article class="dest-card">
         <div>
-          <div class="photo-strip">
-            ${(item.photos || []).slice(0, 3).map((p) => `<img src="${p.url}" alt="${item.title} — ${p.caption}" loading="lazy" data-url="${p.url}" data-cap="${item.title} — ${p.caption}" class="preview-img" />`).join("")}
-          </div>
+          ${renderSwipeCarousel(item, true)}
           <div class="p-5 pb-0">
             <span class="cat-tag">${item.category}</span>
             <h3 class="display text-lg text-[#304b54] mt-3 leading-snug">${item.title}</h3>
@@ -207,6 +216,7 @@
       </article>
     `).join("");
 
+    bindSwipeCounters($("catalog-grid"));
     document.querySelectorAll(".preview-img").forEach((img) => {
       img.addEventListener("click", () => openPhoto(img.dataset.url, img.dataset.cap));
     });
@@ -227,7 +237,10 @@
   });
 
   renderCatalog();
-  hydrateDestinationMedia(ITINERARY_DATA).then(renderCatalog);
+  hydrateDestinationMedia(ITINERARY_DATA).then(() => {
+    syncLeadDropdown();
+    renderCatalog();
+  });
 
   let db = null;
   try { db = getDb(); } catch {}
