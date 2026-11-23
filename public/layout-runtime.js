@@ -37,15 +37,6 @@ export function safeActionUrl(value) {
 }
 
 export function syncUnifiedNavigation(activePageKey = "") {
-  const footer = document.querySelector("footer");
-  if (footer) {
-    footer.style.backgroundColor = "#304b54";
-    footer.style.color = "#ffffff";
-    footer.style.borderTop = "1px solid #22373e";
-    footer.querySelectorAll("a, span, p").forEach((node) => {
-      node.style.color = node.tagName === "SPAN" ? "#d2dcd9" : "#ffffff";
-    });
-  }
   const topActions = document.querySelector(".header-actions");
   if (topActions && !topActions.querySelector('a[href="./studio.html"]')) {
     const studioBtn = document.createElement("a");
@@ -229,7 +220,7 @@ export function renderSwipeCarousel(item, clickable = false) {
         ${photos.map((p, idx) => `
           <div class="swipe-slide" style="width:${Number(p.widthPct) > 0 ? p.widthPct : 100}%;">
             <img src="${p.url}"
-                 alt="${String(item.title \vert{}\vert{} "").replace(/"/g, "&quot;")} — ${String(p.caption || `Photo ${idx + 1}`).replace(/"/g, "&quot;")}"
+                 alt="${String(item.title || "").replace(/"/g, "&quot;")} — ${String(p.caption || `Photo ${idx + 1}`).replace(/"/g, "&quot;")}"
                  loading="lazy"
                  style="height:${h};"
                  ${clickable ? `data-url="${p.url}" data-cap="${String(item.title || "").replace(/"/g, "&quot;")} — ${String(p.caption || "").replace(/"/g, "&quot;")}" class="preview-img"` : ""} />
