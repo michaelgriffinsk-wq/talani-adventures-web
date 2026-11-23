@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Multi-Day Expeditions &amp; Retreats — Talani Premium</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&amp;family=Raleway:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
   <style>
     :root{--ink:#304b54;--stone:#968d80;--paper:#f8f7f3;--line:#dcded9;--mist:#e9eeec}
     *{box-sizing:border-box}
@@ -22,9 +22,14 @@
     .subnav-link{flex:none;font-size:12px;font-weight:700;color:var(--ink);text-decoration:none;padding:8px 14px;border:1px solid var(--line);background:white;white-space:nowrap}
     .subnav-link.active,.subnav-link:hover{border-color:var(--ink);background:var(--mist)}
     .exp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:20px}
-    .exp-card{background:white;border:1px solid var(--line);overflow:hidden;display:flex;flex-direction:column;justify-content:space-between}
-    .photo-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line)}
-    .photo-strip img{width:100%;height:112px;object-fit:cover;display:block}
+    .exp-card{background:white;border:1px solid rgba(220,222,217,.75);overflow:hidden;display:flex;flex-direction:column;justify-content:space-between}
+    .swipe-shell{position:relative;overflow:hidden;border-bottom:1px solid rgba(220,222,217,.65);background:#e9eeec}
+    .swipe-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+    .swipe-track::-webkit-scrollbar{display:none}
+    .swipe-slide{flex:none;width:100%;scroll-snap-align:start;border-right:1px solid rgba(220,222,217,.55)}
+    .swipe-slide:last-child{border-right:0}
+    .swipe-slide img{width:100%;height:195px;object-fit:cover;display:block}
+    .swipe-counter{position:absolute;bottom:8px;right:8px;z-index:2;background:rgba(48,75,84,.82);color:#fff;padding:4px 8px;font-size:10px;font-weight:700;letter-spacing:.06em;pointer-events:none}
     @media(max-width:767px){.header-actions{width:100%;justify-content:flex-start}}
   </style>
   <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
@@ -63,7 +68,7 @@
     <section data-block-id="premium-hero" class="max-w-3xl mb-14">
       <p class="eyebrow text-xs font-bold mb-4 text-[#968d80]">Talani Premium · Multi-Day Expeditions &amp; Retreats</p>
       <h1 class="display text-3xl md:text-5xl leading-[1.1] tracking-[-.04em] text-[#304b54]">Extended expeditions across mountains, bush camps, deserts, and islands.</h1>
-      <p class="leading-8 mt-5 text-[#52636a] text-base">Multi-day itineraries spanning Zanzibar, Lamu, coastal escapes, mountain peaks, and overland routes.</p>
+      <p class="leading-8 mt-5 text-[#52636a] text-base">Multi-day itineraries spanning Zanzibar, Lamu, coastal escapes, mountain peaks, and overland routes—swipe across each card to browse up to 10 photos.</p>
     </section>
 
     <section data-block-id="premium-grid-section" aria-labelledby="multiday-list-heading">
@@ -89,19 +94,17 @@
   </footer>
 
   <script type="module">
-    import { applyPublishedLayout, hydrateDestinationMedia } from "./layout-runtime.js";
+    import { applyPublishedLayout, hydrateDestinationMedia, renderSwipeCarousel, bindSwipeCounters } from "./layout-runtime.js";
     import { getDestinationsByCategory } from "./itinerary-data.js";
 
     applyPublishedLayout("talani-premium");
 
     function renderGrid() {
-      const items = getDestinationsByCategory("Multi-Day");
+      const items = getDestinationsByCategory("Multi-Day").filter((d) => !d.hidden);
       document.getElementById("premium-grid").innerHTML = items.map((item) => `
         <article class="exp-card">
           <div>
-            <div class="photo-strip">
-              ${(item.photos || []).slice(0, 3).map((p) => `<img src="${p.url}" alt="${item.title} — ${p.caption}" loading="lazy" />`).join("")}
-            </div>
+            ${renderSwipeCarousel(item, false)}
             <div class="p-5 pb-0">
               <p class="eyebrow text-[10px] font-bold mb-2 text-[#968d80]">${item.duration || ""} • ${item.difficulty || ""}</p>
               <h3 class="display text-lg text-[#304b54] leading-snug">${item.title}</h3>
@@ -110,10 +113,11 @@
             </div>
           </div>
           <div class="p-5 pt-3">
-            <a href="./group-ya-ile-kitu.html#inquiry-section" class="text-xs font-bold uppercase tracking-wider text-[#304b54] hover:underline">Inquire or Book This Retreat →</a>
+            <a href="./group-ya-ile-kitu.html?dest=${encodeURIComponent(item.title)}#inquiry-section" class="text-xs font-bold uppercase tracking-wider text-[#304b54] hover:underline">Inquire or Book This Retreat →</a>
           </div>
         </article>
       `).join("");
+      bindSwipeCounters(document.getElementById("premium-grid"));
     }
 
     renderGrid();
