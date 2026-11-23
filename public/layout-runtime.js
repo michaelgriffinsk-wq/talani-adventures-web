@@ -1,4 +1,4 @@
-// Shared Navigation & Published Layout Runtime for all Talani Adventures pages
+// Shared Navigation, Published Layout & Destination Media/Override Runtime
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -36,7 +36,6 @@ export function safeActionUrl(value) {
   }
 }
 
-// Unified Navigation Bar injected across ALL pages automatically
 export function syncUnifiedNavigation(activePageKey = "") {
   const topActions = document.querySelector(".header-actions");
   if (topActions && !topActions.querySelector('a[href="./studio.html"]')) {
@@ -56,11 +55,11 @@ export function syncUnifiedNavigation(activePageKey = "") {
     { key: "group-ya-ile-kitu", href: "./group-ya-ile-kitu.html", label: "Group ya Ile Kitu" },
     { key: "outdoor-adventures", href: "./outdoor-adventures.html", label: "Outdoor Adventures" },
     { key: "talani-adventures", href: "./talani-adventures.html", label: "Hikes & Trails" },
+    { key: "memories", href: "./memories.html", label: "Past Trips & Reels" },
     { key: "adamanti", href: "./adamanti.html", label: "Adamanti (Coming Soon)" },
     { key: "talani-premium", href: "./talani-premium.html", label: "Talani Premium" }
   ];
 
-  // Only replace if it's a customer page link strip (not Studio's <button> tabs)
   if (subnav.querySelector("a.subnav-link")) {
     subnav.innerHTML = navItems.map((item) => {
       const isCurrent = item.key === activePageKey || window.location.pathname.endsWith(`${item.key}.html`);
@@ -165,26 +164,83 @@ function renderCustomComponents(sectionEl, components = [], legacyButtons = []) 
   targetContainer.appendChild(wrap);
 }
 
+// Hydrate destination photos (up to 10) + independent destination text/size overrides from Firestore
 export async function hydrateDestinationMedia(itineraryArray) {
   if (!Array.isArray(itineraryArray)) return itineraryArray;
   try {
     const db = getDb();
-    const snap = await getDocs(collection(db, "destination_media"));
-    if (snap.empty) return itineraryArray;
+    const [mediaSnap, ovSnap] = await Promise.all([
+      getDocs(collection(db, "destination_media")),
+      getDocs(collection(db, "destination_overrides"))
+    ]);
+
     const mediaMap = new Map();
-    snap.forEach((d) => {
+    mediaSnap.forEach((d) => {
       const data = d.data();
-      if (Array.isArray(data.photos) && data.photos.length) {
-        mediaMap.set(d.id, data.photos);
+      if (Array.isArray(data.photos)) {
+        mediaMap.set(d.id, data.photos.slice(0, 10));
       }
     });
+
+    const ovMap = new Map();
+    ovSnap.forEach((d) => ovMap.set(d.id, d.data()));
+
     itineraryArray.forEach((item) => {
       if (mediaMap.has(item.id)) {
         item.photos = mediaMap.get(item.id);
       }
+      if (ovMap.has(item.id)) {
+        const ov = ovMap.get(item.id);
+        if (ov.title !== undefined) item.title = ov.title;
+        if (ov.region !== undefined) item.region = ov.region;
+        if (ov.duration !== undefined) item.duration = ov.duration;
+        if (ov.difficulty !== undefined) item.difficulty = ov.difficulty;
+        if (ov.summary !== undefined) item.summary = ov.summary;
+        if (Array.isArray(ov.activities)) item.activities = ov.activities;
+        if (Number(ov.photoHeightPx) > 0) item.photoHeightPx = Number(ov.photoHeightPx);
+        if (ov.hidden) item.hidden = true;
+      }
     });
   } catch {}
   return itineraryArray;
+}
+
+// Shared helper to render the swipeable 10-photo carousel with lazy borders
+export function renderSwipeCarousel(item, clickable = false) {
+  const photos = (item.photos || []).slice(0, 10);
+  if (!photos.length) return "";
+  const h = Number(item.photoHeightPx) > 0 ? `${Number(item.photoHeightPx)}px` : "195px";
+  const countBadge = photos.length > 1
+    ? `<span class="swipe-counter" aria-hidden="true">1 / ${photos.length} · Swipe →</span>`
+    : "";
+  return `
+    <div class="swipe-shell" style="--slide-h:${h};">
+      ${countBadge}
+      <div class="swipe-track" role="region" aria-label="${String(item.title || "Destination").replace(/"/g, "&quot;")} photos (${photos.length})">
+        ${photos.map((p, idx) => `
+          <div class="swipe-slide" style="width:${Number(p.widthPct) > 0 ? p.widthPct : 100}%;">
+            <img src="${p.url}"
+                 alt="${String(item.title || "").replace(/"/g, "&quot;")} — ${String(p.caption || `Photo ${idx + 1}`).replace(/"/g, "&quot;")}"
+                 loading="lazy"
+                 style="height:${h};"
+                 ${clickable ? `data-url="${p.url}" data-cap="${String(item.title || "").replace(/"/g, "&quot;")} — ${String(p.caption || "").replace(/"/g, "&quot;")}" class="preview-img"` : ""} />
+          </div>`).join("")}
+      </div>
+    </div>`;
+}
+
+export function bindSwipeCounters(rootEl = document) {
+  rootEl.querySelectorAll(".swipe-shell").forEach((shell) => {
+    const track = shell.querySelector(".swipe-track");
+    const badge = shell.querySelector(".swipe-counter");
+    if (!track || !badge) return;
+    const total = track.querySelectorAll(".swipe-slide").length;
+    track.addEventListener("scroll", () => {
+      const w = track.clientWidth || 1;
+      const idx = Math.min(total, Math.max(1, Math.round(track.scrollLeft / w) + 1));
+      badge.textContent = idx === 1 ? `1 / ${total} · Swipe →` : `${idx} / ${total}`;
+    }, { passive: true });
+  });
 }
 
 export async function applyPublishedLayout(pageKey) {
@@ -212,7 +268,6 @@ export async function applyPublishedLayout(pageKey) {
 
       el.style.display = cfg.hidden ? "none" : "";
 
-      // Prevent warping: keep full-bleed background wrappers full-width and constrain inner container if widthPct < 100
       const widthPct = Math.min(100, Math.max(50, Number(cfg.widthPct) || 100));
       const innerContainer = el.querySelector(":scope > .max-w-7xl") || el;
       if (widthPct < 100) {
