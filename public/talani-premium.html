@@ -89,31 +89,35 @@
   </footer>
 
   <script type="module">
-    import { applyPublishedLayout } from "./layout-runtime.js";
+    import { applyPublishedLayout, hydrateDestinationMedia } from "./layout-runtime.js";
     import { getDestinationsByCategory } from "./itinerary-data.js";
 
     applyPublishedLayout("talani-premium");
 
-    const items = getDestinationsByCategory("Multi-Day");
+    function renderGrid() {
+      const items = getDestinationsByCategory("Multi-Day");
+      document.getElementById("premium-grid").innerHTML = items.map((item) => `
+        <article class="exp-card">
+          <div>
+            <div class="photo-strip">
+              ${(item.photos || []).slice(0, 3).map((p) => `<img src="${p.url}" alt="${item.title} — ${p.caption}" loading="lazy" />`).join("")}
+            </div>
+            <div class="p-5 pb-0">
+              <p class="eyebrow text-[10px] font-bold mb-2 text-[#968d80]">${item.duration || ""} • ${item.difficulty || ""}</p>
+              <h3 class="display text-lg text-[#304b54] leading-snug">${item.title}</h3>
+              <p class="text-[11px] font-semibold text-[#61767b] mt-1">${item.region || ""}</p>
+              <p class="text-xs text-[#52636a] leading-6 mt-2">${item.summary || ""}</p>
+            </div>
+          </div>
+          <div class="p-5 pt-3">
+            <a href="./group-ya-ile-kitu.html#inquiry-section" class="text-xs font-bold uppercase tracking-wider text-[#304b54] hover:underline">Inquire or Book This Retreat →</a>
+          </div>
+        </article>
+      `).join("");
+    }
 
-    document.getElementById("premium-grid").innerHTML = items.map((item) => `
-      <article class="exp-card">
-        <div>
-          <div class="photo-strip">
-            ${(item.photos || []).slice(0, 3).map((p) => `<img src="${p.url}" alt="${item.title} — ${p.caption}" loading="lazy" />`).join("")}
-          </div>
-          <div class="p-5 pb-0">
-            <p class="eyebrow text-[10px] font-bold mb-2 text-[#968d80]">${item.duration || ""} • ${item.difficulty || ""}</p>
-            <h3 class="display text-lg text-[#304b54] leading-snug">${item.title}</h3>
-            <p class="text-[11px] font-semibold text-[#61767b] mt-1">${item.region || ""}</p>
-            <p class="text-xs text-[#52636a] leading-6 mt-2">${item.summary || ""}</p>
-          </div>
-        </div>
-        <div class="p-5 pt-3">
-          <a href="./group-ya-ile-kitu.html#inquiry-section" class="text-xs font-bold uppercase tracking-wider text-[#304b54] hover:underline">Inquire or Book This Retreat →</a>
-        </div>
-      </article>
-    `).join("");
+    renderGrid();
+    hydrateDestinationMedia(getDestinationsByCategory("ALL")).then(renderGrid);
   </script>
 </body>
 </html>
