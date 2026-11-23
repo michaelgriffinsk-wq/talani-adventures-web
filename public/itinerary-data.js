@@ -431,8 +431,8 @@ export const ITINERARY_DATA = [
     ],
     "photos": [
   {
-    "url": "https://res.cloudinary.com/nx35scok/image/upload/v1795325384/talani/trails/gatamaiyu-forest-reserve/zlw6t7gvcxdllwjx2nmu.jpg",
-    "caption": "1000685571"
+    "url": "https://res.cloudinary.com/nx35scok/image/upload/v1795416993/talani/trails/gatamaiyu-forest-reserve/hmvzflkggbcqawlvaxxw.jpg",
+    "caption": "20260831 111310"
   }
 ]
   },
