@@ -419,6 +419,19 @@
     return `<${tag} data-node-key="${key}" data-parent-block="${block.id}" class="editable-node ${isSel ? "node-selected" : ""} ${cls}">${val}</${tag}>`;
   };
 
+  const imgNode = (block, imgKey, fallbackUrl, altText, cls = "") => {
+    const ov = block.imageOverrides && block.imageOverrides[imgKey];
+    if (ov && ov.hidden) {
+      const isSel = block.id === selectedBlockId && selectedImageKey === imgKey;
+      return `<div data-image-key="${imgKey}" data-parent-block="${block.id}" class="editable-node ${isSel ? "node-selected" : ""} border-2 border-dashed border-[#968d80] p-4 text-xs text-center opacity-70">Hidden Image (${imgKey}) — Tap Delete/Hide again to restore</div>`;
+    }
+    const src = (ov && ov.url) || block.imageUrl || fallbackUrl;
+    const wStyle = ov && ov.widthPct ? `width:${ov.widthPct}%;` : "";
+    const hStyle = ov && ov.heightPx ? `height:${ov.heightPx}px;` : "";
+    const isSel = block.id === selectedBlockId && selectedImageKey === imgKey;
+    return `<img data-image-key="${imgKey}" data-parent-block="${block.id}" src="${src}" alt="${altText}" style="${wStyle}${hStyle}" class="editable-node ${isSel ? "node-selected" : ""} ${cls}" />`;
+  };
+
   const PAGE_TEMPLATES = {
     "index": [
       {
@@ -433,7 +446,7 @@
               ${ed(b, "intro_2", "From guided forest trails, mountain hikes, and wildlife outings to upcountry road trips, cozy cabin getaways, coastal escapes, and multi-day retreats—we curate both scheduled group departures and custom trips tailored on request for solos, families, couples, friend groups, and corporate teams.", "p", "text-sm leading-7 opacity-90 block")}
               ${ed(b, "intro_3", "Every journey is built around safety-first planning, warm, zero-pressure hosting, and effortless good vibes—with Adamanti hospitality coming soon.", "p", "text-sm leading-7 font-semibold block")}
             </div>
-            <img src="${b.imageUrl || "https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=900"}" alt="Wildlife landscape" class="w-full h-72 object-cover border border-[#dcded9]" />
+            ${imgNode(b, "hero_img", "https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=900", "Wildlife landscape", "w-full h-72 object-cover border border-[#dcded9]")}
           </div>`
       },
       {
@@ -634,7 +647,7 @@
               ${ed(b, "oa_title", "Closer to wildlife, savannah horizons, and bush country.", "h1", "display text-3xl block")}
               ${ed(b, "oa_body", "Guided game drives, conservancy outings, and wildlife itineraries across Kenya.", "p", "text-sm mt-3 opacity-90 block")}
             </div>
-            <img src="${b.imageUrl || "https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=900"}" alt="Wildlife safari" class="w-full h-56 object-cover border border-[#dcded9]" />
+            ${imgNode(b, "safari_img", "https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=900", "Wildlife safari", "w-full h-56 object-cover border border-[#dcded9]")}
           </div>`
       }
     ],
@@ -688,6 +701,7 @@
   let blocks = [];
   let selectedBlockId = null;
   let selectedNodeKey = null;
+  let selectedImageKey = null;
   let selectedCompIndex = null;
   let selectedDestId = null;
   let selectedDestPhotoIdx = null;
@@ -698,7 +712,7 @@
     const isDestSel = selectedDestId === d.id;
     const hPx = Number(d.photoHeightPx) > 0 ? Number(d.photoHeightPx) : 100;
     return `
-      <div class="dest-comp ${isDestSel ? "dest-selected" : ""}" data-dest-card="${d.id}">
+      <div class="dest-comp ${isDestSel ? "dest-selected" : ""} ${d.hidden ? "opacity-40 grayscale" : ""}" data-dest-card="${d.id}">
         <div class="dest-photo-row">
           ${photos.map((p, pi) => {
             const isPhotoSel = isDestSel && selectedDestPhotoIdx === pi;
@@ -828,6 +842,7 @@
       sec.addEventListener("click", (e) => {
         const destPhotoEl = e.target.closest("[data-dest-photo-idx]");
         const destCardEl = e.target.closest("[data-dest-card]");
+        const imgEl = e.target.closest("[data-image-key]");
         const nodeEl = e.target.closest("[data-node-key]");
         const compEl = e.target.closest("[data-comp-idx]");
 
@@ -837,7 +852,21 @@
           selectedDestId = destPhotoEl.dataset.destId;
           selectedDestPhotoIdx = Number(destPhotoEl.dataset.destPhotoIdx);
           selectedNodeKey = null;
+          selectedImageKey = null;
           selectedCompIndex = null;
+          renderMirror();
+          syncControls();
+          return;
+        }
+        if (imgEl) {
+          e.stopPropagation();
+          selectedBlockId = imgEl.dataset.parentBlock;
+          selectedImageKey = imgEl.dataset.imageKey;
+          selectedNodeKey = null;
+          selectedImageKey = null;
+          selectedCompIndex = null;
+          selectedDestId = null;
+          selectedDestPhotoIdx = null;
           renderMirror();
           syncControls();
           return;
@@ -848,6 +877,7 @@
           selectedDestId = destCardEl.dataset.destCard;
           selectedDestPhotoIdx = null;
           selectedNodeKey = null;
+          selectedImageKey = null;
           selectedCompIndex = null;
           renderMirror();
           syncControls();
@@ -877,6 +907,7 @@
         }
         selectedBlockId = sec.dataset.block;
         selectedNodeKey = null;
+        selectedImageKey = null;
         selectedCompIndex = null;
         selectedDestId = null;
         selectedDestPhotoIdx = null;
@@ -977,7 +1008,23 @@
   function syncControls(clickedText = "") {
     const b = currentBlock();
     if (!b) return;
-    if (selectedNodeKey) {
+    if (selectedDestId) {
+      const dObj = ITINERARY_DATA.find((x) => x.id === selectedDestId);
+      $("selected-label").textContent = selectedDestPhotoIdx !== null
+        ? `${dObj?.title || "Destination"} → Photo #${selectedDestPhotoIdx + 1}`
+        : `Destination Card: ${dObj?.title || selectedDestId}`;
+      $("selected-type-badge").textContent = selectedDestPhotoIdx !== null ? "Destination Photo" : "Destination Card";
+      $("inp-text").value = selectedDestPhotoIdx !== null ? (dObj?.photos?.[selectedDestPhotoIdx]?.url || "") : (dObj?.title || "");
+      $("inp-link").value = "";
+    } else if (selectedImageKey) {
+      const ov = (b.imageOverrides && b.imageOverrides[selectedImageKey]) || {};
+      $("selected-label").textContent = `${b.label} → Image (${selectedImageKey})`;
+      $("selected-type-badge").textContent = "Image Element";
+      $("inp-text").value = ov.url || b.imageUrl || "";
+      $("inp-link").value = "";
+      $("inp-width").value = String(ov.widthPct || 100);
+      $("inp-height").value = ov.heightPx || "";
+    } else if (selectedNodeKey) {
       $("selected-label").textContent = `${b.label} → Text (${selectedNodeKey})`;
       $("selected-type-badge").textContent = "Text Element";
       $("inp-text").value = (b.textOverrides && b.textOverrides[selectedNodeKey] !== undefined) ? b.textOverrides[selectedNodeKey] : clickedText;
@@ -1099,7 +1146,13 @@
   $("inp-text").addEventListener("input", () => {
     const b = currentBlock();
     if (!b) return;
-    if (selectedNodeKey) {
+    if (selectedDestId && selectedDestPhotoIdx !== null) {
+      const dObj = ITINERARY_DATA.find((x) => x.id === selectedDestId);
+      if (dObj?.photos?.[selectedDestPhotoIdx]) dObj.photos[selectedDestPhotoIdx].url = $("inp-text").value.trim();
+    } else if (selectedImageKey) {
+      b.imageOverrides = b.imageOverrides || {};
+      b.imageOverrides[selectedImageKey] = { ...(b.imageOverrides[selectedImageKey] || {}), url: $("inp-text").value.trim() };
+    } else if (selectedNodeKey) {
       b.textOverrides = b.textOverrides || {};
       b.textOverrides[selectedNodeKey] = $("inp-text").value;
     } else if (selectedCompIndex !== null && b.components?.[selectedCompIndex]) {
@@ -1125,7 +1178,10 @@
       if (!b) return;
       const wVal = Number($("inp-width").value) || 100;
       const hVal = Math.max(0, Number($("inp-height").value) || 0);
-      if (selectedCompIndex !== null && b.components?.[selectedCompIndex]) {
+      if (selectedImageKey) {
+        b.imageOverrides = b.imageOverrides || {};
+        b.imageOverrides[selectedImageKey] = { ...(b.imageOverrides[selectedImageKey] || {}), widthPct: wVal, heightPx: hVal };
+      } else if (selectedCompIndex !== null && b.components?.[selectedCompIndex]) {
         b.components[selectedCompIndex].widthPct = wVal;
         b.components[selectedCompIndex].minHeightPx = hVal;
       } else {
@@ -1214,9 +1270,42 @@
     renderMirror();
   });
 
-  $("tb-delete").addEventListener("click", () => {
+  $("tb-delete").addEventListener("click", async () => {
     const b = currentBlock();
     if (!b) return;
+    if (selectedDestId && selectedDestPhotoIdx !== null) {
+      const dObj = ITINERARY_DATA.find((x) => x.id === selectedDestId);
+      if (dObj?.photos?.[selectedDestPhotoIdx]) {
+        dObj.photos.splice(selectedDestPhotoIdx, 1);
+        selectedDestPhotoIdx = null;
+        renderMirror();
+        syncControls();
+        $("studio-status").textContent = "✓ Removed photo — click 'Save Destination Live ↗' to persist";
+      }
+      return;
+    }
+    if (selectedDestId) {
+      const dObj = ITINERARY_DATA.find((x) => x.id === selectedDestId);
+      if (dObj) {
+        dObj.hidden = !dObj.hidden;
+        if (db) {
+          await setDoc(doc(db, "destination_overrides", dObj.id), { hidden: Boolean(dObj.hidden), updatedAt: serverTimestamp() }, { merge: true });
+        }
+        renderMirror();
+        syncControls();
+        $("studio-status").textContent = dObj.hidden ? `✓ Hidden ${dObj.title}` : `✓ Restored ${dObj.title}`;
+      }
+      return;
+    }
+    if (selectedImageKey) {
+      b.imageOverrides = b.imageOverrides || {};
+      const cur = b.imageOverrides[selectedImageKey] || {};
+      b.imageOverrides[selectedImageKey] = { ...cur, hidden: !cur.hidden };
+      renderMirror();
+      syncControls();
+      $("studio-status").textContent = b.imageOverrides[selectedImageKey].hidden ? "✓ Image hidden (Publish Live to apply)" : "✓ Image restored";
+      return;
+    }
     if (selectedCompIndex !== null && b.components?.[selectedCompIndex]) {
       b.components.splice(selectedCompIndex, 1);
       selectedCompIndex = null;
