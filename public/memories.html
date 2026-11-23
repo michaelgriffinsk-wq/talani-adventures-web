@@ -48,7 +48,7 @@
         </a>
         <div class="min-w-0">
           <p class="display font-medium leading-tight text-[#304b54] text-lg md:text-xl">Past Trips &amp; Reels</p>
-          <p class="text-[11px] tracking-wide text-[#968d80] font-semibold">D-Day Memories, Trail Reels &amp; Traveler Uploads • @talani.adventures</p>
+          <p class="text-[11px] tracking-wide text-[#968d80] font-semibold">Curated D-Day Memories &amp; Traveler Submissions • @talani.adventures</p>
         </div>
       </div>
       <div class="header-actions">
@@ -75,25 +75,25 @@
     <!-- HERO -->
     <section data-block-id="memories-hero" class="flex flex-col md:flex-row md:items-end justify-between gap-6">
       <div class="max-w-2xl">
-        <p data-node-key="mem_eyebrow" class="eyebrow text-xs font-bold mb-4 text-[#968d80]">The Moments That Stay · Archive &amp; Gallery</p>
+        <p data-node-key="mem_eyebrow" class="eyebrow text-xs font-bold mb-4 text-[#968d80]">The Moments That Stay · Curated Gallery</p>
         <h1 data-node-key="mem_title" class="display text-3xl md:text-5xl leading-[1.1] tracking-[-.04em] text-[#304b54]">Past Trips, Trail Reels &amp; D-Day Memories.</h1>
-        <p data-node-key="mem_sub" class="leading-8 mt-4 text-[#52636a] text-sm md:text-base">Relive our forest walks, waterfall chases, summit pushes, and coastal escapes—or share photos and videos from a Talani excursion you joined.</p>
+        <p data-node-key="mem_sub" class="leading-8 mt-4 text-[#52636a] text-sm md:text-base">Relive our forest walks, waterfall chases, summit pushes, and coastal escapes—or share your own photos and videos for our team to feature in the gallery.</p>
       </div>
       <div class="flex flex-wrap gap-3 shrink-0">
-        <a href="#upload-section" class="bg-[#304b54] text-white px-6 py-3.5 text-xs font-bold uppercase tracking-wider hover:opacity-85">Upload Photos / Videos ↗</a>
+        <a href="#upload-section" class="bg-[#304b54] text-white px-6 py-3.5 text-xs font-bold uppercase tracking-wider hover:opacity-85">Share Your Photos / Videos ↗</a>
         <a href="./active-trip.html" class="border border-[#304b54] bg-white text-[#304b54] px-5 py-3.5 text-xs font-bold uppercase tracking-wider hover:bg-[#e9eeec]">Join Next Trip →</a>
       </div>
     </section>
 
-    <!-- GALLERY SECTION -->
+    <!-- APPROVED GALLERY SECTION -->
     <section data-block-id="memories-gallery" aria-labelledby="gallery-heading">
       <div class="flex flex-wrap items-center justify-between gap-4 mb-3">
-        <h2 id="gallery-heading" class="display text-2xl text-[#304b54]">Expedition Gallery</h2>
-        <span id="gallery-status" class="text-xs font-bold text-[#61767b]">● Connecting to live archive</span>
+        <h2 id="gallery-heading" class="display text-2xl text-[#304b54]">Featured Expedition Gallery</h2>
+        <span id="gallery-status" class="text-xs font-bold text-[#61767b]">● Connecting to curated archive</span>
       </div>
 
       <div id="media-pills" class="filter-row" role="group" aria-label="Filter gallery by media type">
-        <button type="button" class="filter-pill" data-filter="ALL" aria-pressed="true">All Memories</button>
+        <button type="button" class="filter-pill" data-filter="ALL" aria-pressed="true">All Featured</button>
         <button type="button" class="filter-pill" data-filter="image" aria-pressed="false">Photos</button>
         <button type="button" class="filter-pill" data-filter="video" aria-pressed="false">Video Reels</button>
       </div>
@@ -101,11 +101,11 @@
       <div id="memories-feed" class="memory-grid"></div>
     </section>
 
-    <!-- UPLOAD PHOTOS & VIDEOS FROM PAST TRIPS -->
+    <!-- GUEST SUBMISSION FORM (QUEUED FOR STUDIO APPROVAL) -->
     <section data-block-id="memories-upload" id="upload-section" class="bg-white border border-[#dcded9] p-7 md:p-10 max-w-3xl">
-      <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">Share Your D-Day Shots</p>
-      <h2 class="display text-2xl md:text-3xl text-[#304b54] mb-2">Upload Photos &amp; Videos From a Past Trip</h2>
-      <p class="text-sm text-[#52636a] leading-7 mb-6">Select photos or short videos directly from your phone or laptop—they upload straight to Cloudinary and appear in the live gallery above.</p>
+      <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">Traveler Submissions</p>
+      <h2 class="display text-2xl md:text-3xl text-[#304b54] mb-2">Share Photos &amp; Videos From a Past Trip</h2>
+      <p class="text-sm text-[#52636a] leading-7 mb-6">Upload your favorite D-Day shots or trail clips below. Our team reviews submissions in Studio before publishing them to the live gallery.</p>
 
       <form id="guest-upload-form" class="space-y-4">
         <div class="grid sm:grid-cols-2 gap-4">
@@ -115,7 +115,7 @@
           </div>
           <div>
             <label for="u-author" class="block text-xs font-bold uppercase tracking-wider mb-1.5">Your Name / Handle (Optional)</label>
-            <input id="u-author" type="text" placeholder="e.g., Maiko / @talani.adventures" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-3 text-sm" />
+            <input id="u-author" type="text" placeholder="e.g., Amina / @amina.kenya" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-3 text-sm" />
           </div>
         </div>
 
@@ -129,7 +129,7 @@
           <textarea id="u-caption" rows="2" placeholder="Waterfall crossing at 11 AM, summit group photo, trail snacks..." class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-2.5 text-sm"></textarea>
         </div>
 
-        <button id="u-submit-btn" type="submit" class="bg-[#304b54] text-white px-7 py-3.5 text-xs font-bold uppercase tracking-wider hover:opacity-85 cursor-pointer">Upload to Past Trips Gallery ↗</button>
+        <button id="u-submit-btn" type="submit" class="bg-[#304b54] text-white px-7 py-3.5 text-xs font-bold uppercase tracking-wider hover:opacity-85 cursor-pointer">Send Photos / Videos for Review ↗</button>
         <p id="u-status" class="text-xs font-bold text-[#315d4d] min-h-[1.25rem]"></p>
         <div id="u-thumbs" class="upload-thumbs"></div>
       </form>
@@ -181,6 +181,7 @@
     {
       id: "demo_1",
       type: "image",
+      status: "APPROVED",
       tripLabel: "Gatamaiyu Forest Reserve",
       author: "Talani Field Team",
       webUrl: "https://images.pexels.com/photos/145685/pexels-photo-145685.jpeg?auto=compress&cs=tinysrgb&w=900",
@@ -190,6 +191,7 @@
     {
       id: "demo_2",
       type: "image",
+      status: "APPROVED",
       tripLabel: "Savannah & Conservancy",
       author: "Outdoor Adventures",
       webUrl: "https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=900",
@@ -202,10 +204,15 @@
   let activeFilter = "ALL";
   let previousFocus = null;
 
+  // Forward-facing gate: show ONLY team-approved posts (or legacy posts created before status field existed)
+  const isPubliclyApproved = (p) => !p.status || p.status === "APPROVED";
+
   function renderGallery() {
     const root = $("memories-feed");
     root.replaceChildren();
-    const filtered = postsData.filter((p) => activeFilter === "ALL" || p.type === activeFilter);
+    const filtered = postsData
+      .filter(isPubliclyApproved)
+      .filter((p) => activeFilter === "ALL" || p.type === activeFilter);
 
     filtered.forEach((post) => {
       const url = safeActionUrl(post.webUrl);
@@ -319,11 +326,13 @@
   try {
     db = getDb();
     onSnapshot(query(collection(db, "posts")), (snap) => {
-      const rows = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+      const approvedRows = snap.docs
+        .map((d) => ({ id: d.id, ...d.data() }))
+        .filter(isPubliclyApproved)
         .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-      postsData = rows.length ? rows : fallbackPosts;
+      postsData = approvedRows.length ? approvedRows : fallbackPosts;
       renderGallery();
-      $("gallery-status").textContent = rows.length ? `● Live archive (${rows.length} memories)` : "● Showing featured archive";
+      $("gallery-status").textContent = approvedRows.length ? `● Curated archive (${approvedRows.length} featured)` : "● Featured archive";
     }, () => { $("gallery-status").textContent = "● Featured archive"; });
   } catch { $("gallery-status").textContent = "● Featured archive"; }
 
@@ -339,7 +348,7 @@
     const caption = $("u-caption").value.trim();
 
     btn.disabled = true;
-    status.textContent = `Uploading ${files.length} file(s) to Cloudinary...`;
+    status.textContent = `Uploading ${files.length} file(s) for team review...`;
     $("u-thumbs").innerHTML = "";
 
     try {
@@ -349,7 +358,7 @@
         const fd = new FormData();
         fd.append("file", file);
         fd.append("upload_preset", UPLOAD_PRESET);
-        fd.append("folder", "talani/memories");
+        fd.append("folder", "talani/submissions");
 
         const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${resourceType}/upload`, {
           method: "POST",
@@ -365,18 +374,20 @@
         if (db) {
           await addDoc(collection(db, "posts"), {
             type: isVideo ? "video" : "image",
+            status: "PENDING",
+            submittedByGuest: true,
             tripLabel,
             author,
             webUrl: data.secure_url,
             rawUrl: data.secure_url,
-            caption: caption || `${tripLabel} — D-Day memory`,
+            caption: caption || `${tripLabel} — Traveler submission`,
             createdAt: serverTimestamp()
           });
         }
       }
 
       $("guest-upload-form").reset();
-      status.textContent = `✓ Uploaded ${files.length} memory(ies) to the live Past Trips gallery!`;
+      status.textContent = `✓ Submitted ${files.length} file(s)! They will appear on the site once approved by our team in Studio.`;
     } catch (err) {
       status.textContent = "Upload error: " + err.message;
     } finally {
