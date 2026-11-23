@@ -1,3 +1,4 @@
+import { mountFormDanceCompanion } from "./customer-dance-companion.js";
 // Shared Navigation, Published Layout & Destination Media/Override Runtime
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -37,6 +38,15 @@ export function safeActionUrl(value) {
 }
 
 export function syncUnifiedNavigation(activePageKey = "") {
+  const footer = document.querySelector("footer");
+  if (footer) {
+    footer.style.backgroundColor = "#304b54";
+    footer.style.color = "#ffffff";
+    footer.style.borderTop = "1px solid #22373e";
+    footer.querySelectorAll("a, span, p").forEach((node) => {
+      node.style.color = node.tagName === "SPAN" ? "#d2dcd9" : "#ffffff";
+    });
+  }
   const topActions = document.querySelector(".header-actions");
   if (topActions && !topActions.querySelector('a[href="./studio.html"]')) {
     const studioBtn = document.createElement("a");
@@ -65,6 +75,11 @@ export function syncUnifiedNavigation(activePageKey = "") {
       const isCurrent = item.key === activePageKey || window.location.pathname.endsWith(`${item.key}.html`);
       return `<a class="subnav-link${isCurrent ? " active" : ""}" href="${item.href}">${item.label}</a>`;
     }).join("");
+  }
+
+  // Mount the form companion on customer/public pages (never inside Studio's full-screen auth/editor)
+  if (activePageKey !== "studio") {
+    mountFormDanceCompanion();
   }
 }
 
