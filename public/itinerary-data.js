@@ -23,31 +23,23 @@ export const ITINERARY_DATA = [
       "Colobus monkey & forest bird habitat"
     ],
     "photos": [
-      {
-        "url": "https://images.pexels.com/photos/210186/pexels-photo-210186.jpeg?auto=compress&cs=tinysrgb&w=1000",
-        "caption": "Kamweti Falls cascading through montane forest"
-      },
-      {
-        "url": "https://images.pexels.com/photos/1671325/pexels-photo-1671325.jpeg?auto=compress&cs=tinysrgb&w=1000",
-        "caption": "Towering indigenous trees along the Castle Forest trail"
-      },
-      {
-        "url": "https://images.pexels.com/photos/358457/pexels-photo-358457.jpeg?auto=compress&cs=tinysrgb&w=1000",
-        "caption": "Clear mountain stream along the Kamweti River"
-      },
-      {
-        "url": "https://images.pexels.com/photos/1179229/pexels-photo-1179229.jpeg?auto=compress&cs=tinysrgb&w=1000",
-        "caption": "Bamboo and fern-lined footpath on Mt. Kenya's southern slope"
-      },
-      {
-        "url": "https://images.pexels.com/photos/145685/pexels-photo-145685.jpeg?auto=compress&cs=tinysrgb&w=1000",
-        "caption": "Shaded woodland approach toward the falls"
-      },
-      {
-        "url": "https://images.pexels.com/photos/957024/forest-trees-perspective-bright-957024.jpeg?auto=compress&cs=tinysrgb&w=1000",
-        "caption": "Morning sunbeams filtering through the rainforest canopy"
-      }
-    ]
+  {
+    "url": "https://res.cloudinary.com/nx35scok/image/upload/v1795410414/talani/trails/castle-forest-kamweti-falls/d0jh9nnxzdoxgjn2oxlv.jpg",
+    "caption": "1000694950"
+  },
+  {
+    "url": "https://res.cloudinary.com/nx35scok/image/upload/v1795410415/talani/trails/castle-forest-kamweti-falls/cmbcjt0ikniemifnpnbw.jpg",
+    "caption": "1000694952"
+  },
+  {
+    "url": "https://res.cloudinary.com/nx35scok/image/upload/v1795410418/talani/trails/castle-forest-kamweti-falls/knm8kuzszhntsfhv4eh1.jpg",
+    "caption": "1000694954"
+  },
+  {
+    "url": "https://res.cloudinary.com/nx35scok/image/upload/v1795410420/talani/trails/castle-forest-kamweti-falls/vzxqdmfsi6ehiclyyfof.jpg",
+    "caption": "1000694955"
+  }
+]
   },
   {
     "id": "kathandeni-forest-waterfall-chase",
