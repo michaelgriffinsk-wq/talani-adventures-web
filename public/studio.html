@@ -73,6 +73,11 @@
     .upload-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}
     .upload-thumbs img{width:100%;height:82px;object-fit:cover;border:1px solid var(--line)}
     .hidden{display:none!important}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .spinner{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+    .pub-toast{position:fixed;bottom:18px;right:18px;z-index:80;background:#304b54;color:#fff;border:1px solid rgba(255,255,255,.2);padding:12px 18px;font-size:12px;font-weight:700;box-shadow:0 12px 28px rgba(0,0,0,.22);display:flex;align-items:center;gap:8px;transition:opacity .2s,transform .2s}
+    .pub-toast.done{background:#234d3e}
+    .pub-toast.err{background:#8f2424}
     @media(max-width:767px){.header-actions{width:100%;justify-content:flex-start}}
   </style>
   <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
@@ -313,6 +318,20 @@
 
         <button type="submit" class="sm:col-span-3 bg-[#304b54] text-white px-4 py-3 text-xs font-bold uppercase tracking-wider cursor-pointer hover:opacity-85">Publish Active Trip &amp; Form ↗</button>
       </form>
+      <div class="bg-[#e9eeec] border border-[#bfc9c5] p-4 space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <p class="eyebrow text-[10px] font-bold text-[#61767b]">Signed Waiver &amp; Agreement Sync • Manifest Automation</p>
+            <h3 class="display text-lg text-[#304b54]">Connect Agreement Form (<code>forms.gle/j72nR7PKm16wF6N48</code>) to Live Manifest</h3>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <a href="https://forms.gle/j72nR7PKm16wF6N48" target="_blank" rel="noopener noreferrer" class="border border-[#304b54] bg-white px-3 py-1.5 text-xs font-bold text-[#304b54]">Open Agreement Form ↗</a>
+            <button type="button" id="gen-agreement-gs-btn" class="bg-[#304b54] text-white px-3.5 py-1.5 text-xs font-bold cursor-pointer">Generate Manifest Sync Script</button>
+          </div>
+        </div>
+        <p class="text-xs text-[#52636a] leading-6">Attach this Apps Script trigger to your Agreement Form's linked Sheet (<strong>Extensions → Apps Script</strong>). Whenever a guest signs the agreement, it matches their phone/name and marks <code>agreementSigned: true</code> on the live manifest in Studio and Tiffany's Companion app.</p>
+        <textarea id="agreement-gs-output" rows="5" readonly class="hidden w-full border border-[#dcded9] bg-white p-2.5 text-[11px] font-mono"></textarea>
+      </div>
     </div>
 
     <!-- DRAWER 4: STORIES, REELS & GUEST UPLOAD MODERATION -->
@@ -863,7 +882,6 @@
           selectedBlockId = imgEl.dataset.parentBlock;
           selectedImageKey = imgEl.dataset.imageKey;
           selectedNodeKey = null;
-          selectedImageKey = null;
           selectedCompIndex = null;
           selectedDestId = null;
           selectedDestPhotoIdx = null;
@@ -1118,8 +1136,11 @@
 
   $("dest-save-btn").addEventListener("click", async () => {
     const destObj = selectedDestId ? ITINERARY_DATA.find((x) => x.id === selectedDestId) : null;
+    const btn = $("dest-save-btn");
     if (!destObj || !db) return;
-    $("studio-status").textContent = `Saving ${destObj.title}...`;
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner"></span>Saving...`;
+    showToast(`<span class="spinner"></span>Saving ${destObj.title} live...`, "busy");
     try {
       await Promise.all([
         setDoc(doc(db, "destination_overrides", destObj.id), {
@@ -1129,17 +1150,24 @@
           difficulty: destObj.difficulty || "",
           summary: destObj.summary || "",
           photoHeightPx: Number(destObj.photoHeightPx) || 195,
+          hidden: Boolean(destObj.hidden),
           updatedAt: serverTimestamp()
-        }),
+        }, { merge: true }),
         setDoc(doc(db, "destination_media", destObj.id), {
           destinationId: destObj.id,
           photos: (destObj.photos || []).slice(0, 10),
           updatedAt: serverTimestamp()
         })
       ]);
+      btn.innerHTML = "✓ Saved Live!";
       $("studio-status").textContent = `✓ Saved ${destObj.title} & its ${(destObj.photos || []).length} photos live!`;
+      showToast(`✓ Saved! ${destObj.title} updated live.`, "done", 3500);
+      setTimeout(() => { btn.innerHTML = "Save Destination Live ↗"; btn.disabled = false; }, 2000);
     } catch (err) {
+      btn.innerHTML = "Save Destination Live ↗";
+      btn.disabled = false;
       $("studio-status").textContent = "Save error: " + err.message;
+      showToast(`✕ Save failed: ${err.message}`, "err", 5000);
     }
   });
 
@@ -1328,9 +1356,23 @@
     $("studio-status").textContent = `Draft saved for ${activePage}.html`;
   });
 
+  let toastTimer = null;
+  function showToast(html, state = "busy", autoHideMs = 0) {
+    const t = $("pub-toast");
+    if (!t) return;
+    clearTimeout(toastTimer);
+    t.className = `pub-toast ${state === "done" ? "done" : state === "err" ? "err" : ""}`;
+    t.innerHTML = html;
+    if (autoHideMs > 0) toastTimer = setTimeout(() => t.classList.add("hidden"), autoHideMs);
+  }
+
   $("tb-publish").addEventListener("click", async () => {
+    const btn = $("tb-publish");
     if (!db) { $("studio-status").textContent = "Connect Firestore to publish live."; return; }
-    $("studio-status").textContent = "Publishing...";
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner"></span>Publishing...`;
+    $("studio-status").innerHTML = `<span class="spinner"></span>Publishing ${activePage}.html...`;
+    showToast(`<span class="spinner"></span>Publishing ${activePage}.html to live site...`, "busy");
     try {
       const payload = blocks.map((b) => ({
         ...b,
@@ -1347,9 +1389,15 @@
         updatedAt: serverTimestamp()
       });
       localStorage.removeItem(`talani_mirror_draft_${activePage}`);
+      btn.innerHTML = "✓ Published Live!";
       $("studio-status").textContent = `✓ Published ${activePage}.html live!`;
+      showToast(`✓ Publish Complete! ${activePage}.html is now live.`, "done", 4000);
+      setTimeout(() => { btn.innerHTML = "Publish Live ↗"; btn.disabled = false; }, 2200);
     } catch (err) {
+      btn.innerHTML = "Publish Live ↗";
+      btn.disabled = false;
       $("studio-status").textContent = "Publish error: " + err.message;
+      showToast(`✕ Publish failed: ${err.message}`, "err", 5000);
     }
   });
 
@@ -1487,6 +1535,64 @@
   });
 
   // --- GOOGLE FORM APPS SCRIPT + STANDALONE DOWNLOADABLE FORM GENERATOR ---
+  $("gen-agreement-gs-btn").addEventListener("click", () => {
+    const code = `function installAgreementTrigger() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  ScriptApp.newTrigger("onAgreementSigned").forSpreadsheet(ss).onFormSubmit().create();
+}
+function normalizePhone(raw) {
+  var d = String(raw || "").replace(/\D/g, "");
+  return d.length >= 9 ? d.slice(-9) : d;
+}
+function onAgreementSigned(e) {
+  var named = e.namedValues || {}, flat = {};
+  Object.keys(named).forEach(function(k) { flat[k.toLowerCase()] = String(named[k][0] || "").trim(); });
+  var fullName = "", phone = "", emergency = "", idNumber = "";
+  Object.keys(flat).forEach(function(k) {
+    if (k.indexOf("name") > -1 && !fullName) fullName = flat[k];
+    if ((k.indexOf("phone") > -1 || k.indexOf("whatsapp") > -1 || k.indexOf("mobile") > -1) && k.indexOf("emerg") === -1 && !phone) phone = flat[k];
+    if (k.indexOf("emerg") > -1 || k.indexOf("next of kin") > -1) emergency = flat[k];
+    if (k.indexOf("id") > -1 || k.indexOf("passport") > -1) idNumber = flat[k];
+  });
+  var baseUrl = "https://firestore.googleapis.com/v1/projects/talani-adventures/databases/(default)/documents";
+  var tail = normalizePhone(phone);
+  var qRes = UrlFetchApp.fetch(baseUrl + ":runQuery", {
+    method: "post", contentType: "application/json",
+    payload: JSON.stringify({ structuredQuery: { from: [{ collectionId: "leads" }], limit: 100 } })
+  });
+  var rows = JSON.parse(qRes.getContentText() || "[]"), matched = null;
+  rows.forEach(function(r) {
+    if (!r.document || !r.document.fields) return;
+    var p = normalizePhone(r.document.fields.phone && r.document.fields.phone.stringValue);
+    if (tail && p === tail) matched = r.document.name;
+  });
+  var patch = {
+    agreementSigned: { booleanValue: true },
+    agreementSignedAt: { stringValue: new Date().toISOString() },
+    agreementFormUrl: { stringValue: "https://forms.gle/j72nR7PKm16wF6N48" }
+  };
+  if (fullName) patch.name = { stringValue: fullName };
+  if (emergency) patch.emergencyContact = { stringValue: emergency };
+  if (idNumber) patch.idOrPassport = { stringValue: idNumber };
+  if (matched) {
+    var mask = Object.keys(patch).map(function(k) { return "updateMask.fieldPaths=" + encodeURIComponent(k); }).join("&");
+    UrlFetchApp.fetch("https://firestore.googleapis.com/v1/" + matched + "?" + mask, {
+      method: "patch", contentType: "application/json", payload: JSON.stringify({ fields: patch })
+    });
+  } else {
+    patch.phone = { stringValue: phone };
+    patch.tripName = { stringValue: "Signed Waiver / Manifest Entry" };
+    patch.status = { stringValue: "AGREEMENT_SIGNED" };
+    UrlFetchApp.fetch(baseUrl + "/leads", {
+      method: "post", contentType: "application/json", payload: JSON.stringify({ fields: patch })
+    });
+  }
+}`;
+    $("agreement-gs-output").value = code;
+    $("agreement-gs-output").classList.remove("hidden");
+    $("studio-status").textContent = "✓ Generated Agreement Form -> Manifest Sync Script";
+  });
+
   $("gen-gs-btn").addEventListener("click", () => {
     const tripTitle = $("t-title").value.trim() || "Talani Active Departure";
     const fields = $("t-form-fields").value.split(",").map((s) => s.trim()).filter(Boolean);
@@ -1567,7 +1673,8 @@ document.getElementById("f").addEventListener("submit", async function(e){
   document.getElementById("st").textContent = "Submitted! Our team will reach out shortly.";
   this.reset();
 });
-<\/script></body></html>`;
+<\/script>  <div id="pub-toast" class="pub-toast hidden" role="status" aria-live="polite"></div>
+</body></html>`;
     const blob = new Blob([standalone], { type: "text/html" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
@@ -1736,5 +1843,6 @@ document.getElementById("f").addEventListener("submit", async function(e){
 
   hydrateDestinationMedia(ITINERARY_DATA).then(() => selectPage("index"));
   </script>
+  <div id="pub-toast" class="pub-toast hidden" role="status" aria-live="polite"></div>
 </body>
 </html>
