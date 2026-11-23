@@ -111,6 +111,7 @@
       </div>
       <div class="header-actions">
         <a href="./index.html" class="border border-[#304b54] bg-[#304b54] px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90">View Live Site ↗</a>
+        <button type="button" id="studio-logout-btn" class="hidden border border-[#dcded9] bg-white px-3 py-1.5 text-xs font-semibold text-[#304b54] hover:bg-[#e9eeec] cursor-pointer">Sign Out</button>
       </div>
     </div>
 
@@ -451,6 +452,7 @@
   <script type="module">
   import { ITINERARY_DATA, getDestinationsByCategory } from "./itinerary-data.js";
   import { TALANI_FIREBASE_CONFIG, triggerButtonAction, hydrateDestinationMedia } from "./layout-runtime.js";
+  import { requireStudioAuth, logoutStudio } from "./firebase-auth-modal.js";
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getFirestore, collection, doc, setDoc, getDoc, addDoc, updateDoc, deleteDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -1855,7 +1857,6 @@ document.getElementById("f").addEventListener("submit", async function(e){
       return;
     }
 
-    // Group items by normalized trip / destination name
     const groups = new Map();
     items.forEach((item) => {
       const cleanTrip = String(item.tripName || "General Inquiry")
@@ -1925,7 +1926,6 @@ document.getElementById("f").addEventListener("submit", async function(e){
   }
 
   if (db) {
-    // Moderation Queue Listener for Past Trips & Reels
     onSnapshot(query(collection(db, "posts")), (snap) => {
       const items = snap.docs
         .map((d) => ({ id: d.id, ...d.data() }))
@@ -1979,7 +1979,6 @@ document.getElementById("f").addEventListener("submit", async function(e){
       });
     });
 
-    // Grouped Collapsible Leads, Bookings & Manifests Listener
     onSnapshot(query(collection(db, "leads")), (snap) => {
       const all = snap.docs
         .map((d) => ({ id: d.id, ...d.data() }))
@@ -1999,7 +1998,12 @@ document.getElementById("f").addEventListener("submit", async function(e){
     });
   }
 
-  hydrateDestinationMedia(ITINERARY_DATA).then(() => selectPage("index"));
+  $("studio-logout-btn").addEventListener("click", () => logoutStudio());
+  requireStudioAuth((user) => {
+    $("studio-logout-btn").classList.remove("hidden");
+    $("studio-status").textContent = `Signed in (${user.email || "Admin"})`;
+    hydrateDestinationMedia(ITINERARY_DATA).then(() => selectPage("index"));
+  });
   </script>
   <div id="pub-toast" class="pub-toast hidden" role="status" aria-live="polite"></div>
 </body>
