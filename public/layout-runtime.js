@@ -293,6 +293,18 @@ export async function applyPublishedLayout(pageKey) {
         if (safeImg && imgEl) imgEl.src = safeImg;
       }
 
+      if (cfg.imageOverrides && typeof cfg.imageOverrides === "object") {
+        Object.entries(cfg.imageOverrides).forEach(([imgKey, ov]) => {
+          const targetImg = el.querySelector(`[data-image-key="${imgKey}"]`) || el.querySelector("img");
+          if (!targetImg) return;
+          if (ov.hidden) { targetImg.style.display = "none"; return; }
+          targetImg.style.display = "";
+          if (ov.url && safeActionUrl(ov.url)) targetImg.src = safeActionUrl(ov.url);
+          if (Number(ov.widthPct) > 0) targetImg.style.width = `${Number(ov.widthPct)}%`;
+          if (Number(ov.heightPx) > 0) targetImg.style.height = `${Number(ov.heightPx)}px`;
+        });
+      }
+
       if (cfg.textOverrides && typeof cfg.textOverrides === "object") {
         Object.entries(cfg.textOverrides).forEach(([nodeKey, newVal]) => {
           const targetNode = el.querySelector(`[data-node-key="${nodeKey}"]`);
