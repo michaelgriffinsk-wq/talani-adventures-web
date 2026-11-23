@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Past Trips &amp; Reels — Talani Adventures</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#304b54;--stone:#968d80;--paper:#f8f7f3;--line:#dcded9;--mist:#e9eeec}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;width:100%;font-family:Raleway,sans-serif;color:var(--ink);background:var(--paper)}
+    .display{font-family:Fraunces,serif}
+    .eyebrow{letter-spacing:.23em;text-transform:uppercase}
+    :is(a,button,input,select,textarea):focus-visible{outline:3px solid #ad8970;outline-offset:3px}
+    .sticky-header{position:sticky;top:0;z-index:30;background:rgba(248,247,243,.97);backdrop-filter:blur(14px)}
+    .header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .header-brand{display:flex;align-items:center;gap:12px;min-width:0}
+    .header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .subnav-strip{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:10px 0}
+    .subnav-strip::-webkit-scrollbar,.filter-row::-webkit-scrollbar{display:none}
+    .subnav-link{flex:none;font-size:12px;font-weight:700;color:var(--ink);text-decoration:none;padding:8px 14px;border:1px solid var(--line);background:white;white-space:nowrap}
+    .subnav-link.active,.subnav-link:hover{border-color:var(--ink);background:var(--mist)}
+    .filter-row{display:flex;gap:9px;overflow-x:auto;scrollbar-width:none;padding:4px 0 18px}
+    .filter-pill{flex:none;border:1px solid #bfc9c5;border-radius:99px;background:transparent;color:var(--ink);padding:10px 17px;font-size:12px;font-weight:700;cursor:pointer}
+    .filter-pill[aria-pressed=true]{background:var(--ink);color:white;border-color:var(--ink)}
+    .memory-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:16px}
+    .memory-card{background:white;border:1px solid var(--line);overflow:hidden;display:flex;flex-direction:column;justify-content:space-between}
+    .memory-media-box{position:relative;width:100%;aspect-ratio:4/3;background:#dce3de;overflow:hidden;cursor:pointer}
+    .memory-media-box img,.memory-media-box video{width:100%;height:100%;object-fit:cover;display:block}
+    .reel-mark{position:absolute;top:10px;right:10px;background:rgba(48,75,84,.88);color:white;padding:5px 9px;font-size:10px;font-weight:800;letter-spacing:.1em}
+    .viewer{position:fixed;inset:0;z-index:60;background:rgba(25,39,42,.96);display:flex;align-items:center;justify-content:center;padding:22px;color:white}
+    .viewer[hidden]{display:none}
+    .viewer-panel{width:min(100%,760px);display:flex;flex-direction:column;align-items:center}
+    .viewer-media{width:100%;max-height:72vh;object-fit:contain}
+    .upload-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px}
+    .upload-thumbs img{width:100%;height:76px;object-fit:cover;border:1px solid var(--line)}
+    @media(max-width:767px){.header-actions{width:100%;justify-content:flex-start}}
+  </style>
+  <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
+</head>
+<body class="w-full" style="background: rgb(248, 247, 243);">
+  <header class="sticky-header w-full border-b border-[#dcded9]">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 py-3 header-top">
+      <div class="header-brand">
+        <a href="./index.html" aria-label="Talani Adventures home" class="shrink-0">
+          <img class="w-12 h-12 md:w-14 md:h-14 object-contain" loading="lazy" src="../IMG-20261110-WA0045.jpg" alt="Talani Adventures logo">
+        </a>
+        <div class="min-w-0">
+          <p class="display font-medium leading-tight text-[#304b54] text-lg md:text-xl">Past Trips &amp; Reels</p>
+          <p class="text-[11px] tracking-wide text-[#968d80] font-semibold">D-Day Memories, Trail Reels &amp; Traveler Uploads • @talani.adventures</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="https://www.instagram.com/talani.adventures/" target="_blank" rel="noopener noreferrer" class="border border-[#dcded9] bg-white px-3 py-1.5 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">Instagram ↗</a>
+        <a href="https://www.tiktok.com/@talani.adventures" target="_blank" rel="noopener noreferrer" class="border border-[#dcded9] bg-white px-3 py-1.5 text-xs font-semibold hover:bg-[#e9eeec] text-[#304b54]">TikTok ↗</a>
+        <a href="./studio.html" class="border border-[#304b54] bg-[#304b54] px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90">Studio ↗</a>
+      </div>
+    </div>
+    <div class="border-t border-[#e6e8e3] bg-[#f8f7f3]">
+      <div class="max-w-7xl mx-auto px-6 md:px-10 subnav-strip">
+        <a class="subnav-link" href="./index.html">Overview</a>
+        <a class="subnav-link" href="./active-trip.html">Active Trips &amp; Booking</a>
+        <a class="subnav-link" href="./group-ya-ile-kitu.html">Group ya Ile Kitu</a>
+        <a class="subnav-link" href="./outdoor-adventures.html">Outdoor Adventures</a>
+        <a class="subnav-link" href="./talani-adventures.html">Hikes &amp; Trails</a>
+        <a class="subnav-link active" href="./memories.html">Past Trips &amp; Reels</a>
+        <a class="subnav-link" href="./adamanti.html">Adamanti (Coming Soon)</a>
+        <a class="subnav-link" href="./talani-premium.html">Talani Premium</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 md:px-10 py-12 md:py-20 space-y-16">
+    <!-- HERO -->
+    <section data-block-id="memories-hero" class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div class="max-w-2xl">
+        <p data-node-key="mem_eyebrow" class="eyebrow text-xs font-bold mb-4 text-[#968d80]">The Moments That Stay · Archive &amp; Gallery</p>
+        <h1 data-node-key="mem_title" class="display text-3xl md:text-5xl leading-[1.1] tracking-[-.04em] text-[#304b54]">Past Trips, Trail Reels &amp; D-Day Memories.</h1>
+        <p data-node-key="mem_sub" class="leading-8 mt-4 text-[#52636a] text-sm md:text-base">Relive our forest walks, waterfall chases, summit pushes, and coastal escapes—or share photos and videos from a Talani excursion you joined.</p>
+      </div>
+      <div class="flex flex-wrap gap-3 shrink-0">
+        <a href="#upload-section" class="bg-[#304b54] text-white px-6 py-3.5 text-xs font-bold uppercase tracking-wider hover:opacity-85">Upload Photos / Videos ↗</a>
+        <a href="./active-trip.html" class="border border-[#304b54] bg-white text-[#304b54] px-5 py-3.5 text-xs font-bold uppercase tracking-wider hover:bg-[#e9eeec]">Join Next Trip →</a>
+      </div>
+    </section>
+
+    <!-- GALLERY SECTION -->
+    <section data-block-id="memories-gallery" aria-labelledby="gallery-heading">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-3">
+        <h2 id="gallery-heading" class="display text-2xl text-[#304b54]">Expedition Gallery</h2>
+        <span id="gallery-status" class="text-xs font-bold text-[#61767b]">● Connecting to live archive</span>
+      </div>
+
+      <div id="media-pills" class="filter-row" role="group" aria-label="Filter gallery by media type">
+        <button type="button" class="filter-pill" data-filter="ALL" aria-pressed="true">All Memories</button>
+        <button type="button" class="filter-pill" data-filter="image" aria-pressed="false">Photos</button>
+        <button type="button" class="filter-pill" data-filter="video" aria-pressed="false">Video Reels</button>
+      </div>
+
+      <div id="memories-feed" class="memory-grid"></div>
+    </section>
+
+    <!-- UPLOAD PHOTOS & VIDEOS FROM PAST TRIPS -->
+    <section data-block-id="memories-upload" id="upload-section" class="bg-white border border-[#dcded9] p-7 md:p-10 max-w-3xl">
+      <p class="eyebrow text-xs font-bold mb-3 text-[#968d80]">Share Your D-Day Shots</p>
+      <h2 class="display text-2xl md:text-3xl text-[#304b54] mb-2">Upload Photos &amp; Videos From a Past Trip</h2>
+      <p class="text-sm text-[#52636a] leading-7 mb-6">Select photos or short videos directly from your phone or laptop—they upload straight to Cloudinary and appear in the live gallery above.</p>
+
+      <form id="guest-upload-form" class="space-y-4">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label for="u-trip" class="block text-xs font-bold uppercase tracking-wider mb-1.5">Which Trip / Destination?</label>
+            <input id="u-trip" type="text" required placeholder="e.g., Gatamaiyu Forest Reserve, Kereita, Mt. Longonot" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-3 text-sm" />
+          </div>
+          <div>
+            <label for="u-author" class="block text-xs font-bold uppercase tracking-wider mb-1.5">Your Name / Handle (Optional)</label>
+            <input id="u-author" type="text" placeholder="e.g., Maiko / @talani.adventures" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-3 text-sm" />
+          </div>
+        </div>
+
+        <div>
+          <label for="u-files" class="block text-xs font-bold uppercase tracking-wider mb-1.5">Choose Photos or Videos (Up to 6 files)</label>
+          <input id="u-files" type="file" accept="image/*,video/*" multiple required class="w-full border border-[#dcded9] bg-[#f8f7f3] p-3 text-xs" />
+        </div>
+
+        <div>
+          <label for="u-caption" class="block text-xs font-bold uppercase tracking-wider mb-1.5">Caption / Story Behind the Moment</label>
+          <textarea id="u-caption" rows="2" placeholder="Waterfall crossing at 11 AM, summit group photo, trail snacks..." class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3.5 py-2.5 text-sm"></textarea>
+        </div>
+
+        <button id="u-submit-btn" type="submit" class="bg-[#304b54] text-white px-7 py-3.5 text-xs font-bold uppercase tracking-wider hover:opacity-85 cursor-pointer">Upload to Past Trips Gallery ↗</button>
+        <p id="u-status" class="text-xs font-bold text-[#315d4d] min-h-[1.25rem]"></p>
+        <div id="u-thumbs" class="upload-thumbs"></div>
+      </form>
+    </section>
+  </main>
+
+  <!-- FULLSCREEN LIGHTBOX VIEWER -->
+  <div id="viewer-modal" class="viewer" role="dialog" aria-modal="true" aria-label="Memory media viewer" hidden>
+    <div class="viewer-panel space-y-4">
+      <div id="modal-media-wrap" class="w-full"></div>
+      <div class="text-center max-w-xl">
+        <p id="modal-trip-tag" class="eyebrow text-[10px] font-bold text-[#d2dcd9] mb-1"></p>
+        <p id="modal-caption" class="text-sm leading-6 text-white"></p>
+      </div>
+      <div class="flex gap-3 flex-wrap justify-center">
+        <a id="modal-hd-link" class="border border-[#b3c3c2] text-white px-4 py-2 text-xs font-bold" target="_blank" rel="noopener noreferrer" hidden>Open Original HD ↗</a>
+        <button id="modal-close-btn" type="button" class="border border-[#b3c3c2] text-white px-5 py-2 text-xs font-bold cursor-pointer">✕ Close</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="w-full border-t border-[#dcded9] mt-12">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 py-9 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+      <a href="./index.html" class="flex items-center gap-3">
+        <img class="w-16 h-16 object-contain" loading="lazy" src="../IMG-20261110-WA0046.jpg" alt="Talani Adventures footer logo">
+        <span class="text-xs text-[#6f7877]">Talani Adventures · Past Trips &amp; Reels</span>
+      </a>
+      <div class="flex flex-wrap gap-6 text-sm font-semibold text-[#304b54]">
+        <a href="./index.html" class="hover:underline">Overview</a>
+        <a href="./active-trip.html" class="hover:underline">Active Trips</a>
+        <a href="./group-ya-ile-kitu.html" class="hover:underline">Group ya Ile Kitu</a>
+        <a href="./talani-adventures.html" class="hover:underline">Hikes &amp; Trails</a>
+        <a href="./talani-premium.html" class="hover:underline">Talani Premium</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+  import { applyPublishedLayout, getDb, safeActionUrl } from "./layout-runtime.js";
+  import { collection, addDoc, query, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  applyPublishedLayout("memories");
+
+  const CLOUD_NAME = "Nx35scok";
+  const UPLOAD_PRESET = "talani_unsigned";
+  const $ = (id) => document.getElementById(id);
+
+  const fallbackPosts = [
+    {
+      id: "demo_1",
+      type: "image",
+      tripLabel: "Gatamaiyu Forest Reserve",
+      author: "Talani Field Team",
+      webUrl: "https://images.pexels.com/photos/145685/pexels-photo-145685.jpeg?auto=compress&cs=tinysrgb&w=900",
+      rawUrl: "https://images.pexels.com/photos/145685/pexels-photo-145685.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      caption: "River crossing and canopy trail during our Gatamaiyu Forest reconnaissance."
+    },
+    {
+      id: "demo_2",
+      type: "image",
+      tripLabel: "Savannah & Conservancy",
+      author: "Outdoor Adventures",
+      webUrl: "https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=900",
+      rawUrl: "https://images.pexels.com/photos/631317/pexels-photo-631317.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      caption: "Early morning wildlife sightings across open plains."
+    }
+  ];
+
+  let postsData = fallbackPosts;
+  let activeFilter = "ALL";
+  let previousFocus = null;
+
+  function renderGallery() {
+    const root = $("memories-feed");
+    root.replaceChildren();
+    const filtered = postsData.filter((p) => activeFilter === "ALL" || p.type === activeFilter);
+
+    filtered.forEach((post) => {
+      const url = safeActionUrl(post.webUrl);
+      if (!url) return;
+
+      const card = document.createElement("article");
+      card.className = "memory-card";
+
+      const mediaBox = document.createElement("div");
+      mediaBox.className = "memory-media-box";
+      mediaBox.setAttribute("role", "button");
+      mediaBox.tabIndex = 0;
+      mediaBox.setAttribute("aria-label", `Open ${post.type === "video" ? "video reel" : "photo"}: ${post.caption || "Past trip memory"}`);
+
+      if (post.type === "video") {
+        const video = document.createElement("video");
+        video.src = url;
+        video.muted = true;
+        video.playsInline = true;
+        video.preload = "metadata";
+        mediaBox.append(video);
+        const mark = document.createElement("span");
+        mark.className = "reel-mark";
+        mark.textContent = "▶ REEL";
+        mediaBox.append(mark);
+      } else {
+        const img = document.createElement("img");
+        img.src = url;
+        img.alt = post.caption || post.tripLabel || "Talani Adventures memory";
+        img.loading = "lazy";
+        mediaBox.append(img);
+      }
+
+      const openHandler = () => openModal(post);
+      mediaBox.addEventListener("click", openHandler);
+      mediaBox.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openHandler(); } });
+
+      const meta = document.createElement("div");
+      meta.className = "p-4 space-y-1.5";
+      const tag = document.createElement("p");
+      tag.className = "eyebrow text-[10px] font-bold text-[#968d80]";
+      tag.textContent = `${post.tripLabel || "Talani Expedition"}${post.author ? ` • ${post.author}` : ""}`;
+      const cap = document.createElement("p");
+      cap.className = "text-xs leading-6 text-[#52636a]";
+      cap.textContent = post.caption || "Captured on the trail with Talani Adventures.";
+      meta.append(tag, cap);
+
+      card.append(mediaBox, meta);
+      root.append(card);
+    });
+  }
+
+  function openModal(post) {
+    const url = safeActionUrl(post.webUrl);
+    if (!url) return;
+    previousFocus = document.activeElement;
+    const wrap = $("modal-media-wrap");
+    wrap.replaceChildren();
+
+    if (post.type === "video") {
+      const video = document.createElement("video");
+      video.className = "viewer-media mx-auto";
+      video.src = url;
+      video.controls = true;
+      video.autoplay = true;
+      video.playsInline = true;
+      wrap.append(video);
+    } else {
+      const img = document.createElement("img");
+      img.className = "viewer-media mx-auto";
+      img.src = url;
+      img.alt = post.caption || "Past trip photo";
+      wrap.append(img);
+    }
+
+    $("modal-trip-tag").textContent = `${post.tripLabel || "Talani Adventures"}${post.author ? ` • ${post.author}` : ""}`;
+    $("modal-caption").textContent = post.caption || "";
+
+    const hd = $("modal-hd-link");
+    const raw = safeActionUrl(post.rawUrl);
+    hd.hidden = !raw;
+    if (raw) hd.href = raw; else hd.removeAttribute("href");
+
+    $("viewer-modal").hidden = false;
+    document.body.style.overflow = "hidden";
+    $("modal-close-btn").focus();
+  }
+
+  function closeModal() {
+    $("modal-media-wrap").replaceChildren();
+    $("viewer-modal").hidden = true;
+    document.body.style.overflow = "";
+    previousFocus?.focus();
+  }
+
+  $("modal-close-btn").addEventListener("click", closeModal);
+  $("viewer-modal").addEventListener("click", (e) => { if (e.target === $("viewer-modal")) closeModal(); });
+  document.addEventListener("keydown", (e) => { if (!$("viewer-modal").hidden && e.key === "Escape") closeModal(); });
+
+  $("media-pills").addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-filter]");
+    if (!btn) return;
+    activeFilter = btn.dataset.filter;
+    $("media-pills").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+    renderGallery();
+  });
+
+  renderGallery();
+
+  let db = null;
+  try {
+    db = getDb();
+    onSnapshot(query(collection(db, "posts")), (snap) => {
+      const rows = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+      postsData = rows.length ? rows : fallbackPosts;
+      renderGallery();
+      $("gallery-status").textContent = rows.length ? `● Live archive (${rows.length} memories)` : "● Showing featured archive";
+    }, () => { $("gallery-status").textContent = "● Featured archive"; });
+  } catch { $("gallery-status").textContent = "● Featured archive"; }
+
+  $("guest-upload-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const files = Array.from($("u-files").files || []).slice(0, 6);
+    if (!files.length) return;
+
+    const status = $("u-status");
+    const btn = $("u-submit-btn");
+    const tripLabel = $("u-trip").value.trim();
+    const author = $("u-author").value.trim();
+    const caption = $("u-caption").value.trim();
+
+    btn.disabled = true;
+    status.textContent = `Uploading ${files.length} file(s) to Cloudinary...`;
+    $("u-thumbs").innerHTML = "";
+
+    try {
+      for (const file of files) {
+        const isVideo = String(file.type || "").startsWith("video/");
+        const resourceType = isVideo ? "video" : "image";
+        const fd = new FormData();
+        fd.append("file", file);
+        fd.append("upload_preset", UPLOAD_PRESET);
+        fd.append("folder", "talani/memories");
+
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${resourceType}/upload`, {
+          method: "POST",
+          body: fd
+        });
+        if (!res.ok) throw new Error(`Upload failed (${res.status})`);
+        const data = await res.json();
+
+        if (!isVideo) {
+          $("u-thumbs").innerHTML += `<img src="${data.secure_url}" alt="${file.name}" />`;
+        }
+
+        if (db) {
+          await addDoc(collection(db, "posts"), {
+            type: isVideo ? "video" : "image",
+            tripLabel,
+            author,
+            webUrl: data.secure_url,
+            rawUrl: data.secure_url,
+            caption: caption || `${tripLabel} — D-Day memory`,
+            createdAt: serverTimestamp()
+          });
+        }
+      }
+
+      $("guest-upload-form").reset();
+      status.textContent = `✓ Uploaded ${files.length} memory(ies) to the live Past Trips gallery!`;
+    } catch (err) {
+      status.textContent = "Upload error: " + err.message;
+    } finally {
+      btn.disabled = false;
+    }
+  });
+  </script>
+</body>
+</html>
