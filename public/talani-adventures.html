@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Hikes &amp; Forest Trails — Talani Adventures</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&amp;family=Raleway:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
   <style>
     :root{--ink:#304b54;--stone:#968d80;--paper:#f8f7f3;--line:#dcded9;--mist:#e9eeec}
     *{box-sizing:border-box}
@@ -118,22 +118,11 @@
   </footer>
 
   <script type="module">
-  import { applyPublishedLayout } from "./layout-runtime.js";
+  import { applyPublishedLayout, hydrateDestinationMedia, getDb } from "./layout-runtime.js";
   import { getDestinationsByCategory } from "./itinerary-data.js";
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   applyPublishedLayout("talani-adventures");
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyDhdiJxS7bI4BX0E9ObXGjMA4Y95sXZftc",
-    authDomain: "talani-adventures.firebaseapp.com",
-    projectId: "talani-adventures",
-    storageBucket: "talani-adventures.firebasestorage.app",
-    messagingSenderId: "698912000783",
-    appId: "1:698912000783:web:ab04f85cb956c994558c7a",
-    measurementId: "G-X2HVRDMRDM"
-  };
 
   const fallbackTrips = [{
     title: "Gatamaiyu Forest Reserve Hike",
@@ -207,10 +196,11 @@
   });
 
   renderDirectory();
+  hydrateDestinationMedia(getDestinationsByCategory("ALL")).then(renderDirectory);
   renderTrips(fallbackTrips);
 
   try {
-    const db = getFirestore(initializeApp(firebaseConfig));
+    const db = getDb();
     onSnapshot(query(collection(db, "trips"), orderBy("date", "asc")), (snap) => {
       if (!snap.empty) {
         const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
