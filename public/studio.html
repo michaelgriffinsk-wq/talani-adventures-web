@@ -61,9 +61,14 @@
     .comp-item.comp-selected{border:2px solid #ad8970;background:rgba(255,255,255,.65)}
     .comp-item.drag-over-top{border-top:3px solid #304b54}
 
-    /* Shared Live Site Card Styles */
-    .photo-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line)}
-    .photo-strip img{width:100%;height:105px;object-fit:cover;display:block}
+    /* Shared Live Site Card Styles & Independent Destination Components */
+    .dest-comp{background:#fff;border:1px solid rgba(220,222,217,.8);overflow:hidden;transition:outline .15s}
+    .dest-comp.dest-selected{outline:3px solid #ad8970}
+    .dest-photo-row{display:flex;gap:4px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:4px;background:#f0efea;border-bottom:1px solid rgba(220,222,217,.6)}
+    .dest-photo-row::-webkit-scrollbar{display:none}
+    .dest-photo-item{position:relative;flex:none;width:130px;scroll-snap-align:start;border:1px solid rgba(220,222,217,.6);resize:horizontal;overflow:hidden;min-width:85px;max-width:100%}
+    .dest-photo-item.photo-selected{outline:3px solid #304b54}
+    .dest-photo-item img{width:100%;height:100px;object-fit:cover;display:block}
     .slot-badge{background:#e5eee8;color:#315d4d;padding:6px 9px;font-size:11px;font-weight:700;white-space:nowrap}
     .upload-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}
     .upload-thumbs img{width:100%;height:82px;object-fit:cover;border:1px solid var(--line)}
@@ -172,6 +177,52 @@
               <option value="mist">Mist</option>
               <option value="ink">Slate</option>
             </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- INDEPENDENT DESTINATION & PHOTO INSPECTOR (WHEN A DESTINATION CARD OR PHOTO IS TAPPED) -->
+      <div id="dest-inspector" class="hidden mt-4 pt-4 border-t border-[#dcded9] bg-[#f8f7f3] p-4 space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <p class="eyebrow text-[10px] font-bold text-[#968d80]">Independent Destination Component</p>
+            <h3 id="dest-insp-title" class="display text-base text-[#304b54]">Editing Destination</h3>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" id="dest-photo-left" class="tb-btn">← Move Photo</button>
+            <button type="button" id="dest-photo-right" class="tb-btn">Move Photo →</button>
+            <button type="button" id="dest-photo-del" class="tb-btn danger">✕ Delete Photo</button>
+            <button type="button" id="dest-save-btn" class="tb-btn primary">Save Destination Live ↗</button>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div>
+            <label for="d-title" class="block text-[10px] font-bold uppercase mb-1">Destination Name</label>
+            <input id="d-title" type="text" class="w-full border border-[#dcded9] bg-white px-2.5 py-2 text-xs font-semibold" />
+          </div>
+          <div>
+            <label for="d-region" class="block text-[10px] font-bold uppercase mb-1">Location / Region</label>
+            <input id="d-region" type="text" class="w-full border border-[#dcded9] bg-white px-2.5 py-2 text-xs" />
+          </div>
+          <div>
+            <label for="d-duration" class="block text-[10px] font-bold uppercase mb-1">Duration &amp; Difficulty</label>
+            <input id="d-duration" type="text" class="w-full border border-[#dcded9] bg-white px-2.5 py-2 text-xs" />
+          </div>
+          <div>
+            <label for="d-photo-h" class="block text-[10px] font-bold uppercase mb-1">Photo Strip Height (px) / Selected Photo Width %</label>
+            <div class="grid grid-cols-2 gap-1.5">
+              <input id="d-photo-h" type="number" min="110" max="420" step="10" placeholder="195" class="border border-[#dcded9] bg-white px-2 py-2 text-xs" />
+              <select id="d-photo-w" class="border border-[#dcded9] bg-white px-2 py-2 text-xs">
+                <option value="100">100% slide</option>
+                <option value="85">85% slide</option>
+                <option value="70">70% slide</option>
+                <option value="50">50% slide</option>
+              </select>
+            </div>
+          </div>
+          <div class="sm:col-span-2 lg:col-span-4">
+            <label for="d-summary" class="block text-[10px] font-bold uppercase mb-1">Description / Details</label>
+            <textarea id="d-summary" rows="2" class="w-full border border-[#dcded9] bg-white px-2.5 py-2 text-xs"></textarea>
           </div>
         </div>
       </div>
@@ -331,7 +382,7 @@
 
   <script type="module">
   import { ITINERARY_DATA, getDestinationsByCategory } from "./itinerary-data.js";
-  import { TALANI_FIREBASE_CONFIG, triggerButtonAction } from "./layout-runtime.js";
+  import { TALANI_FIREBASE_CONFIG, triggerButtonAction, hydrateDestinationMedia } from "./layout-runtime.js";
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getFirestore, collection, doc, setDoc, getDoc, addDoc, updateDoc, deleteDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -562,23 +613,14 @@
       },
       {
         id: "catalog-section",
-        label: "All Destinations Catalog (54)",
-        render: (b) => {
-          const sample = ITINERARY_DATA.slice(0, 6);
-          return `<div class="p-8 md:p-10">
+        label: "All Destinations Catalog (Tap any card or photo to edit)",
+        render: (b) => `
+          <div class="p-8 md:p-10">
             ${ed(b, "cat_title", `All Destinations (${ITINERARY_DATA.length} total)`, "h2", "display text-xl mb-4 block")}
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-[#304b54]">
-              ${sample.map((d) => `
-                <div class="bg-white border border-[#dcded9] overflow-hidden">
-                  <div class="photo-strip">${(d.photos || []).slice(0, 3).map((p) => `<img src="${p.url}" alt="${d.title}" />`).join("")}</div>
-                  <div class="p-4">
-                    <span class="text-[10px] font-bold uppercase text-[#968d80]">${d.category}</span>
-                    <p class="display text-base mt-1">${d.title}</p>
-                  </div>
-                </div>`).join("")}
+              ${ITINERARY_DATA.map((d) => renderDestCompCard(d)).join("")}
             </div>
-          </div>`;
-        }
+          </div>`
       }
     ],
     "outdoor-adventures": [
@@ -599,21 +641,14 @@
     "talani-adventures": [
       {
         id: "trails-hero",
-        label: "Hikes & Forest Trails Directory",
+        label: "Hikes & Forest Trails Directory (Tap any card or photo to edit)",
         render: (b) => {
-          const list = [...getDestinationsByCategory("Trails").slice(0, 3), ...getDestinationsByCategory("Hikes").slice(0, 3)];
+          const list = [...getDestinationsByCategory("Trails"), ...getDestinationsByCategory("Hikes")];
           return `<div class="p-8 md:p-10">
             ${ed(b, "ta_eyebrow", "Talani Adventures · Trails & Hikes", "p", "eyebrow text-xs font-bold mb-2 opacity-75 block")}
             ${ed(b, "ta_title", "Forest canopies, waterfall chases, craters, and high ridges.", "h1", "display text-3xl mb-5 block")}
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-[#304b54]">
-              ${list.map((d) => `
-                <div class="bg-white border border-[#dcded9] overflow-hidden">
-                  <div class="photo-strip">${(d.photos || []).slice(0, 3).map((p) => `<img src="${p.url}" alt="${d.title}" />`).join("")}</div>
-                  <div class="p-4">
-                    <span class="text-[10px] font-bold uppercase text-[#968d80]">${d.category}</span>
-                    <p class="display text-base mt-1">${d.title}</p>
-                  </div>
-                </div>`).join("")}
+              ${list.map((d) => renderDestCompCard(d)).join("")}
             </div>
           </div>`;
         }
@@ -634,21 +669,14 @@
     "talani-premium": [
       {
         id: "premium-hero",
-        label: "Talani Premium Multi-Day Retreats",
+        label: "Talani Premium Multi-Day Retreats (Tap any card or photo to edit)",
         render: (b) => {
-          const list = getDestinationsByCategory("Multi-Day").slice(0, 6);
+          const list = getDestinationsByCategory("Multi-Day");
           return `<div class="p-8 md:p-10">
             ${ed(b, "tp_eyebrow", "Talani Premium · Multi-Day Expeditions", "p", "eyebrow text-xs font-bold mb-2 opacity-75 block")}
             ${ed(b, "tp_title", "Extended expeditions across mountains, bush camps, deserts, and islands.", "h1", "display text-3xl mb-5 block")}
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-[#304b54]">
-              ${list.map((d) => `
-                <div class="bg-white border border-[#dcded9] overflow-hidden">
-                  <div class="photo-strip">${(d.photos || []).slice(0, 3).map((p) => `<img src="${p.url}" alt="${d.title}" />`).join("")}</div>
-                  <div class="p-4">
-                    <span class="text-[10px] font-bold uppercase text-[#968d80]">${d.duration || "Multi-Day"}</span>
-                    <p class="display text-base mt-1">${d.title}</p>
-                  </div>
-                </div>`).join("")}
+              ${list.map((d) => renderDestCompCard(d)).join("")}
             </div>
           </div>`;
         }
@@ -661,7 +689,39 @@
   let selectedBlockId = null;
   let selectedNodeKey = null;
   let selectedCompIndex = null;
+  let selectedDestId = null;
+  let selectedDestPhotoIdx = null;
   let dragState = null;
+
+  function renderDestCompCard(d) {
+    const photos = (d.photos || []).slice(0, 10);
+    const isDestSel = selectedDestId === d.id;
+    const hPx = Number(d.photoHeightPx) > 0 ? Number(d.photoHeightPx) : 100;
+    return `
+      <div class="dest-comp ${isDestSel ? "dest-selected" : ""}" data-dest-card="${d.id}">
+        <div class="dest-photo-row">
+          ${photos.map((p, pi) => {
+            const isPhotoSel = isDestSel && selectedDestPhotoIdx === pi;
+            return `<div draggable="true"
+                         class="dest-photo-item ${isPhotoSel ? "photo-selected" : ""}"
+                         data-dest-id="${d.id}"
+                         data-dest-photo-idx="${pi}"
+                         style="${Number(p.widthPct) > 0 ? `width:${p.widthPct}%;` : ""}">
+              <img src="${p.url}" alt="${d.title}" style="height:${hPx}px;" />
+            </div>`;
+          }).join("")}
+        </div>
+        <div class="p-4 space-y-1">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-[10px] font-bold uppercase text-[#968d80]">${d.category} • ${photos.length}/10 photos</span>
+            <span class="text-[10px] font-bold text-[#304b54]">✎ Edit</span>
+          </div>
+          <p class="display text-base leading-snug">${d.title}</p>
+          <p class="text-[11px] font-semibold text-[#61767b]">${d.region || ""} • ${d.duration || ""}</p>
+          <p class="text-xs text-[#52636a] line-clamp-2">${d.summary || ""}</p>
+        </div>
+      </div>`;
+  }
 
   function buildInitialBlocks(pageKey) {
     return (PAGE_TEMPLATES[pageKey] || []).map((tpl, idx) => ({
@@ -766,13 +826,40 @@
 
     $("mirror-stage").querySelectorAll("[data-block]").forEach((sec) => {
       sec.addEventListener("click", (e) => {
+        const destPhotoEl = e.target.closest("[data-dest-photo-idx]");
+        const destCardEl = e.target.closest("[data-dest-card]");
         const nodeEl = e.target.closest("[data-node-key]");
         const compEl = e.target.closest("[data-comp-idx]");
+
+        if (destPhotoEl) {
+          e.stopPropagation();
+          selectedBlockId = sec.dataset.block;
+          selectedDestId = destPhotoEl.dataset.destId;
+          selectedDestPhotoIdx = Number(destPhotoEl.dataset.destPhotoIdx);
+          selectedNodeKey = null;
+          selectedCompIndex = null;
+          renderMirror();
+          syncControls();
+          return;
+        }
+        if (destCardEl) {
+          e.stopPropagation();
+          selectedBlockId = sec.dataset.block;
+          selectedDestId = destCardEl.dataset.destCard;
+          selectedDestPhotoIdx = null;
+          selectedNodeKey = null;
+          selectedCompIndex = null;
+          renderMirror();
+          syncControls();
+          return;
+        }
         if (nodeEl) {
           e.stopPropagation();
           selectedBlockId = nodeEl.dataset.parentBlock;
           selectedNodeKey = nodeEl.dataset.nodeKey;
           selectedCompIndex = null;
+          selectedDestId = null;
+          selectedDestPhotoIdx = null;
           renderMirror();
           syncControls(nodeEl.textContent);
           return;
@@ -782,6 +869,8 @@
           selectedBlockId = compEl.dataset.parentBlock;
           selectedCompIndex = Number(compEl.dataset.compIdx);
           selectedNodeKey = null;
+          selectedDestId = null;
+          selectedDestPhotoIdx = null;
           renderMirror();
           syncControls();
           return;
@@ -789,6 +878,8 @@
         selectedBlockId = sec.dataset.block;
         selectedNodeKey = null;
         selectedCompIndex = null;
+        selectedDestId = null;
+        selectedDestPhotoIdx = null;
         renderMirror();
         syncControls();
       });
@@ -910,7 +1001,100 @@
       $("inp-height").value = b.minHeightPx || "";
     }
     $("inp-bg").value = b.bgPreset || "default";
+
+    const destInsp = $("dest-inspector");
+    const destObj = selectedDestId ? ITINERARY_DATA.find((x) => x.id === selectedDestId) : null;
+    if (destObj) {
+      destInsp.classList.remove("hidden");
+      $("dest-insp-title").textContent = selectedDestPhotoIdx !== null
+        ? `${destObj.title} → Photo #${selectedDestPhotoIdx + 1} of ${(destObj.photos || []).length}`
+        : `Editing Destination: ${destObj.title}`;
+      $("d-title").value = destObj.title || "";
+      $("d-region").value = destObj.region || "";
+      $("d-duration").value = [destObj.duration, destObj.difficulty].filter(Boolean).join(" • ");
+      $("d-summary").value = destObj.summary || "";
+      $("d-photo-h").value = destObj.photoHeightPx || 195;
+      const curPhoto = selectedDestPhotoIdx !== null ? destObj.photos?.[selectedDestPhotoIdx] : null;
+      $("d-photo-w").value = String(curPhoto?.widthPct || 100);
+    } else {
+      destInsp.classList.add("hidden");
+    }
   }
+
+  ["d-title", "d-region", "d-duration", "d-summary", "d-photo-h", "d-photo-w"].forEach((id) => {
+    $(id).addEventListener("input", () => {
+      const destObj = selectedDestId ? ITINERARY_DATA.find((x) => x.id === selectedDestId) : null;
+      if (!destObj) return;
+      destObj.title = $("d-title").value;
+      destObj.region = $("d-region").value;
+      const parts = $("d-duration").value.split("•").map((s) => s.trim());
+      destObj.duration = parts[0] || "";
+      if (parts[1]) destObj.difficulty = parts[1];
+      destObj.summary = $("d-summary").value;
+      destObj.photoHeightPx = Number($("d-photo-h").value) || 195;
+      if (selectedDestPhotoIdx !== null && destObj.photos?.[selectedDestPhotoIdx]) {
+        destObj.photos[selectedDestPhotoIdx].widthPct = Number($("d-photo-w").value) || 100;
+      }
+      renderMirror();
+    });
+  });
+
+  $("dest-photo-left").addEventListener("click", () => {
+    const destObj = selectedDestId ? ITINERARY_DATA.find((x) => x.id === selectedDestId) : null;
+    if (!destObj || selectedDestPhotoIdx === null || selectedDestPhotoIdx <= 0) return;
+    const arr = destObj.photos;
+    [arr[selectedDestPhotoIdx - 1], arr[selectedDestPhotoIdx]] = [arr[selectedDestPhotoIdx], arr[selectedDestPhotoIdx - 1]];
+    selectedDestPhotoIdx -= 1;
+    renderMirror();
+    syncControls();
+  });
+
+  $("dest-photo-right").addEventListener("click", () => {
+    const destObj = selectedDestId ? ITINERARY_DATA.find((x) => x.id === selectedDestId) : null;
+    if (!destObj || selectedDestPhotoIdx === null || selectedDestPhotoIdx >= (destObj.photos?.length || 0) - 1) return;
+    const arr = destObj.photos;
+    [arr[selectedDestPhotoIdx + 1], arr[selectedDestPhotoIdx]] = [arr[selectedDestPhotoIdx], arr[selectedDestPhotoIdx + 1]];
+    selectedDestPhotoIdx += 1;
+    renderMirror();
+    syncControls();
+  });
+
+  $("dest-photo-del").addEventListener("click", () => {
+    const destObj = selectedDestId ? ITINERARY_DATA.find((x) => x.id === selectedDestId) : null;
+    if (!destObj || selectedDestPhotoIdx === null || !destObj.photos?.[selectedDestPhotoIdx]) return;
+    destObj.photos.splice(selectedDestPhotoIdx, 1);
+    selectedDestPhotoIdx = null;
+    renderMirror();
+    syncControls();
+    $("studio-status").textContent = "Removed photo — click 'Save Destination Live ↗' to persist";
+  });
+
+  $("dest-save-btn").addEventListener("click", async () => {
+    const destObj = selectedDestId ? ITINERARY_DATA.find((x) => x.id === selectedDestId) : null;
+    if (!destObj || !db) return;
+    $("studio-status").textContent = `Saving ${destObj.title}...`;
+    try {
+      await Promise.all([
+        setDoc(doc(db, "destination_overrides", destObj.id), {
+          title: destObj.title || "",
+          region: destObj.region || "",
+          duration: destObj.duration || "",
+          difficulty: destObj.difficulty || "",
+          summary: destObj.summary || "",
+          photoHeightPx: Number(destObj.photoHeightPx) || 195,
+          updatedAt: serverTimestamp()
+        }),
+        setDoc(doc(db, "destination_media", destObj.id), {
+          destinationId: destObj.id,
+          photos: (destObj.photos || []).slice(0, 10),
+          updatedAt: serverTimestamp()
+        })
+      ]);
+      $("studio-status").textContent = `✓ Saved ${destObj.title} & its ${(destObj.photos || []).length} photos live!`;
+    } catch (err) {
+      $("studio-status").textContent = "Save error: " + err.message;
+    }
+  });
 
   $("inp-text").addEventListener("input", () => {
     const b = currentBlock();
@@ -1171,7 +1355,7 @@
   }
 
   $("cld-auto-save-btn").addEventListener("click", async () => {
-    const files = Array.from($("cld-files").files || []).slice(0, 8);
+    const files = Array.from($("cld-files").files || []).slice(0, 10);
     if (!files.length) { $("cld-status").textContent = "Choose at least one photo first."; return; }
     const destId = $("cld-dest").value;
     const folder = $("cld-folder").value.trim() || "talani/general";
@@ -1461,7 +1645,7 @@ document.getElementById("f").addEventListener("submit", async function(e){
     });
   }
 
-  selectPage("index");
+  hydrateDestinationMedia(ITINERARY_DATA).then(() => selectPage("index"));
   </script>
 </body>
 </html>
