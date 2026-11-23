@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Talani Studio — Live Mirror Editor, Drag &amp; Snap, Media Uploader, Forms &amp; Leads</title>
+  <title>Talani Studio — Live Mirror Editor, Drag &amp; Snap, Media Moderation &amp; Leads</title>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root{--ink:#304b54;--stone:#968d80;--paper:#f8f7f3;--line:#dcded9;--mist:#e9eeec}
@@ -99,6 +99,7 @@
         <button type="button" class="subnav-link" data-page="adamanti">Adamanti (Coming Soon)</button>
         <button type="button" class="subnav-link" data-page="talani-premium">Talani Premium</button>
         <button type="button" class="subnav-link" data-page="active-trip">Active Trip &amp; Booking Page</button>
+        <button type="button" class="subnav-link" data-page="memories">Past Trips &amp; Reels</button>
       </div>
     </div>
 
@@ -108,7 +109,7 @@
         <button type="button" class="mode-pill" data-drawer="editor-drawer" aria-pressed="true">1. Page &amp; Component Editor</button>
         <button type="button" class="mode-pill" data-drawer="cloudinary-drawer" aria-pressed="false">2. Cloudinary Folders</button>
         <button type="button" class="mode-pill" data-drawer="trips-drawer" aria-pressed="false">3. Active Trips &amp; Form Builder</button>
-        <button type="button" class="mode-pill" data-drawer="stories-drawer" aria-pressed="false">4. Stories &amp; Reels (Upload/URL)</button>
+        <button type="button" class="mode-pill" data-drawer="stories-drawer" aria-pressed="false">4. Stories, Reels &amp; Approvals</button>
         <button type="button" class="mode-pill" data-drawer="leads-drawer" aria-pressed="false">5. Leads &amp; Payment Confirmations</button>
         <span id="studio-status" class="text-[11px] text-[#d2dcd9] ml-auto whitespace-nowrap">Ready</span>
       </div>
@@ -263,8 +264,20 @@
       </form>
     </div>
 
-    <!-- DRAWER 4: STORIES & REELS (DIRECT DEVICE UPLOAD OR URL) -->
+    <!-- DRAWER 4: STORIES, REELS & GUEST UPLOAD MODERATION -->
     <div id="stories-drawer" class="hidden bg-white border border-[#dcded9] p-5 md:p-6 mb-5 space-y-6">
+      <!-- MODERATION QUEUE FOR GUEST SUBMISSIONS -->
+      <div class="bg-[#f8f7f3] border border-[#dcded9] p-4 space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <p class="eyebrow text-[10px] font-bold text-[#968d80]">Forward-Facing Gallery Gatekeeper</p>
+            <h3 class="display text-lg text-[#304b54]">Guest Photo &amp; Video Submissions (Approve What Goes Live)</h3>
+          </div>
+          <span id="pending-count-badge" class="slot-badge">0 pending</span>
+        </div>
+        <div id="moderation-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">Loading gallery submissions...</div>
+      </div>
+
       <div class="grid md:grid-cols-2 gap-6">
         <form id="story-form" class="space-y-3">
           <h3 class="display text-lg text-[#304b54]">Post Field Dispatch / Story (Photo or Video)</h3>
@@ -279,7 +292,8 @@
         </form>
 
         <form id="post-form" class="space-y-3">
-          <h3 class="display text-lg text-[#304b54]">Post D-Day Memory / Reel (Photo or Video)</h3>
+          <h3 class="display text-lg text-[#304b54]">Post Official D-Day Memory / Reel (Auto-Approved)</h3>
+          <input id="p-trip-label" type="text" placeholder="Trip / Destination label (e.g., Gatamaiyu Forest)" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
           <select id="p-type" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs font-semibold">
             <option value="image">Photo Memory</option>
             <option value="video">Video Reel (.mp4 / mobile video)</option>
@@ -291,7 +305,7 @@
           <input id="p-web" type="url" placeholder="Or paste Photo / Video URL (https://...)" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
           <input id="p-raw" type="url" placeholder="Optional Original HD URL" class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
           <input id="p-caption" type="text" placeholder="Memory caption..." class="w-full border border-[#dcded9] bg-[#f8f7f3] px-3 py-2 text-xs" />
-          <button type="submit" class="bg-[#304b54] text-white px-4 py-2.5 text-xs font-bold uppercase cursor-pointer">Publish Memory ↗</button>
+          <button type="submit" class="bg-[#304b54] text-white px-4 py-2.5 text-xs font-bold uppercase cursor-pointer">Publish Live Memory ↗</button>
         </form>
       </div>
     </div>
@@ -319,7 +333,7 @@
   import { ITINERARY_DATA, getDestinationsByCategory } from "./itinerary-data.js";
   import { TALANI_FIREBASE_CONFIG, triggerButtonAction } from "./layout-runtime.js";
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, doc, setDoc, getDoc, addDoc, updateDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getFirestore, collection, doc, setDoc, getDoc, addDoc, updateDoc, deleteDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const CLOUD_NAME = "Nx35scok";
   const UPLOAD_PRESET = "talani_unsigned";
@@ -372,20 +386,6 @@
           </div>`
       },
       {
-        id: "stories",
-        label: "Field Dispatches / Latest Stories",
-        render: (b) => `
-          <div class="p-8 md:p-10">
-            ${ed(b, "st_eyebrow", "Field dispatches / latest stories", "p", "eyebrow text-xs font-bold mb-3 opacity-75 block")}
-            <div class="flex gap-4">
-              <div class="text-center w-20">
-                <div class="w-16 h-16 rounded-full mx-auto border-2 border-[#304b54] bg-[#e9eeec] flex items-center justify-center text-[10px] font-bold text-[#304b54]">Story</div>
-                <span class="text-[11px] font-bold block mt-1">Gatamaiyu</span>
-              </div>
-            </div>
-          </div>`
-      },
-      {
         id: "active-spotlight",
         label: "Active Tours, Hikes & Expeditions",
         render: (b) => `
@@ -434,6 +434,10 @@
                 ${ed(b, "c4_body", "Multi-day retreats across Coast, Zanzibar & peaks.", "p", "block")}
               </div>
               <div class="bg-white border border-[#dcded9] p-5">
+                ${ed(b, "c6_title", "Past Trips & Reels", "strong", "display text-base block mb-1")}
+                ${ed(b, "c6_body", "Curated D-Day memories & guest submissions.", "p", "block")}
+              </div>
+              <div class="bg-white border border-[#dcded9] p-5">
                 ${ed(b, "c5_title", "Adamanti", "strong", "display text-base block mb-1")}
                 ${ed(b, "c5_body", "Concierge & hospitality — Coming Soon.", "p", "block")}
               </div>
@@ -460,15 +464,6 @@
           </div>`
       },
       {
-        id: "memories",
-        label: "D-Day Memories & Reels",
-        render: (b) => `
-          <div class="p-8 md:p-10">
-            ${ed(b, "mem_eyebrow", "The moments that stay", "p", "eyebrow text-xs font-bold mb-2 opacity-75 block")}
-            ${ed(b, "mem_title", "D-Day Memories & Reels", "h2", "display text-2xl block")}
-          </div>`
-      },
-      {
         id: "about",
         label: "One Company. Many Horizons.",
         render: (b) => `
@@ -476,6 +471,28 @@
             ${ed(b, "ab_eyebrow", "One company. Many horizons.", "p", "eyebrow text-xs font-bold mb-2 opacity-75 block")}
             ${ed(b, "ab_title", "Built around real trails, clear planning, and shared moments.", "h2", "display text-2xl block")}
           </div>`
+      }
+    ],
+    "memories": [
+      {
+        id: "memories-hero",
+        label: "Past Trips & Reels Header",
+        render: (b) => `
+          <div class="p-8 md:p-10">
+            ${ed(b, "mem_eyebrow", "The Moments That Stay · Curated Gallery", "p", "eyebrow text-xs font-bold mb-2 opacity-75 block")}
+            ${ed(b, "mem_title", "Past Trips, Trail Reels & D-Day Memories.", "h1", "display text-3xl block")}
+            ${ed(b, "mem_sub", "Relive our forest walks, waterfall chases, summit pushes, and coastal escapes—or share your own photos and videos for our team to feature in the gallery.", "p", "text-sm mt-3 opacity-90 block")}
+          </div>`
+      },
+      {
+        id: "memories-gallery",
+        label: "Featured Expedition Gallery (Approved Only)",
+        render: (b) => `<div class="p-8 md:p-10"><h2 class="display text-xl">Featured Expedition Gallery</h2><p class="text-xs opacity-80 mt-1">Displays only team-approved photos &amp; reels.</p></div>`
+      },
+      {
+        id: "memories-upload",
+        label: "Traveler Submission Box",
+        render: (b) => `<div class="p-8 md:p-10"><h2 class="display text-xl">Share Photos &amp; Videos From a Past Trip</h2><p class="text-xs opacity-80 mt-1">Guest uploads enter the Pending approval queue in Studio.</p></div>`
       }
     ],
     "active-trip": [
@@ -1285,7 +1302,7 @@ document.getElementById("f").addEventListener("submit", async function(e){
     a.click();
   });
 
-  // --- ACTIVE TRIPS, STORIES (DEVICE UPLOAD OR URL), REELS & LEADS ---
+  // --- ACTIVE TRIPS, STORIES, OFFICIAL POSTS & MODERATION GATEKEEPER ---
   $("trip-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!db) return;
@@ -1358,16 +1375,72 @@ document.getElementById("f").addEventListener("submit", async function(e){
     if (!webUrl) { $("studio-status").textContent = "Choose a file or paste a URL."; return; }
     await addDoc(collection(db, "posts"), {
       type: postType,
+      status: "APPROVED",
+      tripLabel: $("p-trip-label").value.trim() || "Talani Adventures",
       webUrl,
       rawUrl: $("p-raw").value.trim() || webUrl,
       caption: $("p-caption").value.trim(),
       createdAt: serverTimestamp()
     });
     $("post-form").reset();
-    $("studio-status").textContent = "✓ Memory / Reel published!";
+    $("studio-status").textContent = "✓ Official Memory / Reel published live!";
   });
 
   if (db) {
+    // Moderation Queue Listener for Past Trips & Reels
+    onSnapshot(query(collection(db, "posts")), (snap) => {
+      const items = snap.docs
+        .map((d) => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+
+      const pendingCount = items.filter((x) => x.status === "PENDING").length;
+      $("pending-count-badge").textContent = `${pendingCount} pending review`;
+
+      $("moderation-list").innerHTML = items.length === 0
+        ? "<p>No gallery uploads or submissions yet.</p>"
+        : items.map((item) => {
+            const status = item.status || "APPROVED";
+            const badgeCls = status === "PENDING" ? "bg-[#f1e9db] text-[#785a37]" : status === "APPROVED" ? "bg-[#e5eee8] text-[#315d4d]" : "bg-[#f5e1e1] text-[#8f2424]";
+            const preview = item.type === "video"
+              ? `<video src="${item.webUrl}" muted playsinline class="w-full h-28 object-cover border border-[#dcded9]"></video>`
+              : `<img src="${item.webUrl}" alt="${item.caption || ""}" class="w-full h-28 object-cover border border-[#dcded9]" />`;
+            return `<div class="bg-white border border-[#dcded9] p-3 flex flex-col justify-between gap-2">
+              <div>
+                ${preview}
+                <div class="flex items-center justify-between gap-1 mt-2">
+                  <strong class="truncate">${item.tripLabel || "Submission"}</strong>
+                  <span class="px-2 py-0.5 text-[10px] font-bold ${badgeCls}">${status}</span>
+                </div>
+                <p class="text-[11px] text-[#61767b] mt-1">${item.author ? `By ${item.author} • ` : ""}${item.caption || ""}</p>
+              </div>
+              <div class="flex gap-1.5 pt-2 border-t border-[#dcded9]">
+                <button type="button" data-mod-approve="${item.id}" class="flex-1 bg-[#304b54] text-white py-1.5 text-[11px] font-bold cursor-pointer">✓ Approve Live</button>
+                <button type="button" data-mod-hide="${item.id}" class="border border-[#dcded9] bg-[#f8f7f3] text-[#304b54] px-2.5 py-1.5 text-[11px] font-bold cursor-pointer">Hide</button>
+                <button type="button" data-mod-del="${item.id}" class="border border-[#d8b4b4] bg-white text-[#8f2424] px-2.5 py-1.5 text-[11px] font-bold cursor-pointer">✕</button>
+              </div>
+            </div>`;
+          }).join("");
+
+      $("moderation-list").querySelectorAll("[data-mod-approve]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          await updateDoc(doc(db, "posts", btn.dataset.modApprove), { status: "APPROVED" });
+          $("studio-status").textContent = "✓ Approved for Past Trips gallery!";
+        });
+      });
+      $("moderation-list").querySelectorAll("[data-mod-hide]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          await updateDoc(doc(db, "posts", btn.dataset.modHide), { status: "REJECTED" });
+          $("studio-status").textContent = "Hidden from public gallery.";
+        });
+      });
+      $("moderation-list").querySelectorAll("[data-mod-del]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          await deleteDoc(doc(db, "posts", btn.dataset.modDel));
+          $("studio-status").textContent = "Deleted submission.";
+        });
+      });
+    });
+
     onSnapshot(query(collection(db, "leads"), orderBy("createdAt", "desc")), (snap) => {
       $("leads-list").innerHTML = snap.empty
         ? "<p>No leads or payment confirmations yet.</p>"
